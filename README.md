@@ -1,81 +1,86 @@
-# Enok 72 — The Truth Instrument
+# Enoch 72 — The Truth Instrument
 
-> Et interaktivt forskningsverktøy for Enoks bok 72 og 364-dagers solkalender.
+> An interactive research tool for the Book of Enoch chapter 72 and the 364-day solar calendar.
 
 **Live**: https://jone-aase.github.io/enok-72-truth-instrument/  
-**Arbeids-versjon (Perplexity)**: [Truth Instrument på pplx.app](https://www.perplexity.ai/computer/a/enoch-72-the-truth-instrument-OEcJXJkpSumshIfR5grJWg)
+**Working version (Perplexity Computer)**: [Truth Instrument on pplx.app](https://www.perplexity.ai/computer/a/enoch-72-the-truth-instrument-OEcJXJkpSumshIfR5grJWg)
 
 ---
 
-## Hva dette er
+## What this is
 
-En Three.js-basert visualisering av:
+A Three.js-based visualisation of:
 
-- **Azimuthal Equidistant-projeksjonen** av jorden (Enoks geometri)
-- **6 sol-porter** i øst og 6 i vest, slik beskrevet i Enok 72
-- **192 sol-baner** mellom Krepsens og Steinbukkens vendekretser
-- **De 4 ekstrarundene** ved solverv og jevndøgn (Enok 72:13, 19, 25, 31)
-- **364-dagers kalender** med Jubileene-strukturen
-- **Klokker, dag/natt-sone, atomur-takt** og live sol-posisjon
-- **Bevis-arkiv** med 5 kategorier av empiriske bekreftelser
+- **The azimuthal equidistant projection** of the earth (Enoch's geometry)
+- **6 solar gates in the east** and 6 in the west, as described in Enoch 72
+- **192 solar paths** between the tropics of Cancer and Capricorn
+- **The 4 extra rounds** at the solstices and equinoxes (Enoch 72:13, 19, 25, 31)
+- **The 364-day calendar** with the Jubilees structure
+- **Clocks, day/night zone, atomic-clock pace** and live solar position
+- **Evidence Archive** with 5 categories of empirical confirmations
 
-## Versjon
+## Version
 
-**v16.30** (26. mai 2026) — De 4 ekstrarundene implementert, wall-invisibility fjernet, Bevis-arkiv kategori 5 lagt til, Dokumenter-knapp lagt til.
+**v16.30** (May 26, 2026) — The 4 extra rounds implemented, wall-invisibility removed, Evidence Archive category 5 added, Documents button added.
 
-## Bruk
+## Usage
 
-Åpne `index.html` i en moderne nettleser (Chrome, Firefox, Edge, Safari). Ingen installasjon eller backend nødvendig.
+Open `index.html` in a modern browser (Chrome, Firefox, Edge, Safari). No installation or backend required.
 
-For offline-bruk: last ned hele repoet som ZIP, pakk ut, og dobbeltklikk `index.html`.
+For offline use: download the entire repository as ZIP, extract, and double-click `index.html`.
 
-## Knapper
+## Buttons
 
-| Knapp | Beskrivelse |
+| Button | Description |
 |---|---|
-| ✎ Enok 72 | Modal med alle 37 vers fra Enoks bok 72 |
-| ★ Bevis-arkiv | 5 kategorier av empiriske bevis |
-| ⧫ Dokumenter | Last ned prosjekt-dokumenter og team-instrukser |
-| ☉ Sol-klokke | 12-timers urskive i Enok-tid |
-| ⏱ Atom-klokke | 24-timers offisiell tid |
-| ↓ Ark T (V6) | Last ned master-Excel for sol-baner |
+| ✎ Enoch 72 | Modal with all 37 verses of Enoch chapter 72 |
+| ★ Evidence Archive | 5 categories of empirical evidence |
+| ⧫ Documents | Download project documents and team instructions |
+| ☉ Sun-clock | 12-hour dial in Enochian time |
+| ⏱ Atomic clock | 24-hour official time |
+| ↓ Sheet T (V6) | Download the master Excel for solar paths |
+| ✉ Contact | Research and collaboration inquiries |
 
-## Dokumentasjon
+## Documentation
 
-Alle prosjekt-dokumenter er i `dokumenter/`-mappen:
+All project documents are in the `dokumenter/` folder:
 
-- `AGENT-OPPSTART.md` — 6-stegs gjenoppvåkning for enhver AI-agent
-- `simulator-master-referanse.md` — Full driftshåndbok (16 seksjoner)
-- `instruks-grok-oppstart.md` — Oppstart for Grok som minne-lag
-- 8 flere team-instrukser for ChatGPT, Mistral, Copilot, Gemini, m.fl.
-- `AE-projeksjon-forklart.md` — Mattetisk grunnlag
+- `AGENT-OPPSTART.md` — 6-step re-awakening protocol for any AI agent
+- `simulator-master-referanse.md` — Full operations manual (16 sections)
+- `instruks-grok-oppstart.md` — Startup instructions for Grok as memory layer
+- 8 additional team instructions for ChatGPT, Mistral, Copilot, Gemini, etc.
+- `AE-projeksjon-forklart.md` — Mathematical foundation
 
-## Backup-strategi
+*(Note: internal working documents are written in Norwegian — the working language of the project.)*
 
-Dette repoet er **nivå 3** av en 3-nivå backup-strategi:
+## Backup strategy
 
-1. **Nivå 1** — Perplexity-hosting (pplx.app), daglig bruk
-2. **Nivå 2** — Lokal ZIP-pakke på din egen maskin
-3. **Nivå 3** — Dette GitHub-repoet (sikker offentlig backup, drevet av Microsoft)
+This repository is **level 3** of a 3-level backup strategy:
 
-## Lisens og bruk
+1. **Level 1** — Perplexity hosting (pplx.app), daily use
+2. **Level 2** — Local ZIP package on the researcher's own machine
+3. **Level 3** — This GitHub repository (secure public backup, hosted by Microsoft)
 
-Forsknings-prosjekt av **Jone-Aase**. Innholdet kan leses og lastes ned fritt for studieformål. For sitat eller publisering, vennligst kontakt eieren.
+## Licence and use
+
+Research project by **Jone-Aase**. Content may be read and downloaded freely for study purposes. For citation or publication, please contact the author.
 
 ## Team
 
-| Agent | Rolle |
+| Agent | Role |
 |---|---|
-| Jone-Aase | Forsker og prosjekt-leder |
-| Grok / Grok Heavy | Minne-lag, bredt-søker, regnemaskin |
-| Perplexity Computer | Utførelse — kode, deploy, fakta-sjekk |
-| ChatGPT | Kvalitetskontroll |
-| Mistral, Copilot, Gemini, Google AI, Justdone | Verifikasjon på spesialfelt |
+| Jone-Aase | Researcher and project lead |
+| Grok / Grok Heavy | Memory layer, broad searcher, calculator |
+| Perplexity Computer | Execution — code, deploy, fact-check |
+| ChatGPT | Quality control |
+| Mistral, Copilot, Gemini, Google AI, Justdone | Verification on specialised domains |
 
-## Kontakt
+## Contact
 
-GitHub: [@Jone-Aase](https://github.com/Jone-Aase)
+Email: [JoneAase@proton.me](mailto:JoneAase@proton.me)  
+GitHub: [@Jone-Aase](https://github.com/Jone-Aase)  
+Contact form: [contact page](https://jone-aase.github.io/enok-72-truth-instrument/contact.html)
 
 ---
 
-*"Premien er sannheten."*
+*"The prize is the truth."*
