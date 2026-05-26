@@ -1305,7 +1305,7 @@ function updateClockSol() {
     const hh = String(hour18).padStart(2,'0');
     const mm = String(minute).padStart(2,'0');
     const ss = String(second).padStart(2,'0');
-    dig.textContent = `${hh}:${mm}:${ss} Enok (18 t)`;
+    dig.textContent = `${hh}:${mm}:${ss} Enoch (18 h)`;
   }
 }
 
@@ -1319,12 +1319,12 @@ function updateRotationDisplay() {
   // Port-nummer fra DAG_NATT_DELER-tabellen
   let portTxt = '—';
   if (seg && typeof seg.port !== 'undefined') {
-    portTxt = `Port ${seg.port} · ${seg.day}/${seg.night} deler`;
+    portTxt = `Gate ${seg.port} · ${seg.day}/${seg.night} parts`;
   }
   const rd = document.getElementById('rotation-display');
-  if (rd) rd.textContent = `ROTASJON ${rot} / 364`;
+  if (rd) rd.textContent = `ROTATION ${rot} / 364`;
   const rs = document.getElementById('rotation-sub');
-  if (rs) rs.textContent = `År ${yr} · ${pct.toFixed(1)}% · ${portTxt}`;
+  if (rs) rs.textContent = `Year ${yr} · ${pct.toFixed(1)}% · ${portTxt}`;
 }
 
 // Atom-klokke: sann offisiell tid for valgt sone — BARE DIGITAL POPUP (24-timers).
@@ -1648,7 +1648,7 @@ function setDay(idx) {
   document.getElementById('cal-day-val').textContent = day.enoch_day_in_month;
   const dn = dagNattForDay(dayOfYear);
   document.getElementById('cal-info').textContent =
-    `${day.date} · ${day.enoch_month} d.${day.enoch_day_in_month} · Port ${day.sun_port_east}E · sol-lat ${sunLat.toFixed(1)}° · dag/natt ${dn.day}/${dn.night} (Enok ${dn.vers})`;
+    `${day.date} · ${day.enoch_month} d.${day.enoch_day_in_month} · Gate ${day.sun_port_east}E · sun lat ${sunLat.toFixed(1)}° · day/night ${dn.day}/${dn.night} (Enoch ${dn.vers})`;
   // v16: oppdater port-progresjons-indikatoren
   updatePortProgress(dayOfYear);
 }
@@ -2958,7 +2958,7 @@ function openEnok72Modal() {
   if (!backdrop || !content) return;
 
   if (!enok72Verses) {
-    content.innerHTML = '<div style="color:#888;text-align:center;padding:30px">Laster Enok-vers …</div>';
+    content.innerHTML = '<div style="color:#888;text-align:center;padding:30px">Loading Enoch verses …</div>';
   } else {
     const day = calendarData && calendarData.days[currentDayIdx];
     const dayOfYear = day ? day.enoch_year_day : 1;
@@ -2966,7 +2966,7 @@ function openEnok72Modal() {
     const segVersStart = parseInt(seg.vers.split(':')[1].split('-')[0]);
     const segVersEnd = parseInt(seg.vers.split(':')[1].split('-')[1]);
     if (day && subtitle) {
-      subtitle.textContent = `${day.date} · ${day.enoch_month} d.${day.enoch_day_in_month} · Port ${day.sun_port_east} · dag/natt ${seg.day}/${seg.night} — fremhevet: Enok ${seg.vers}`;
+      subtitle.textContent = `${day.date} · ${day.enoch_month} d.${day.enoch_day_in_month} · Gate ${day.sun_port_east} · day/night ${seg.day}/${seg.night} — highlighted: Enoch ${seg.vers}`;
     }
 
     // Bygg innhold: alle 37 vers, med dagens port-segment fremhevet
@@ -3003,7 +3003,7 @@ document.getElementById('enok72-modal-backdrop').addEventListener('click', (e) =
 });
 // Klikk på cal-info åpner også Enok 72-modal
 document.getElementById('cal-info').style.cursor = 'pointer';
-document.getElementById('cal-info').title = 'Klikk for å lese Enok 72-tekst for dagens port';
+document.getElementById('cal-info').title = 'Click to read Enoch 72 text for today\'s gate';
 document.getElementById('cal-info').addEventListener('click', openEnok72Modal);
 
 // =================================================================
