@@ -111,6 +111,8 @@ Disse fenomenene er fysisk målbare og uavhengige av hvilket rutenett vi bruker:
 
 ## 9. Referanser i prosjektet
 
+- **`solar-noon-verifikasjon.md`** — Trinn 1-b: hva solar noon-tabeller faktisk måler, sivil klokketid = solen rett opp, systematisk 3-min-avvik
+- **`hypotese-kontinent-forskyvning.md`** — Brukerens hypotese: lengdegradene er rett, men kontinentene er forskjevet i havområdene
 - **`sol-tider-fire-kritiske-punkter.md`** — Trinn 1-rapport: dokumenterte sol-tider for sommersolverv 21. juni 2026 ved de fire kritiske breddegradene + ekvator-referanse
 - **`breddegrad-beregning-fra-sommersolverv.md`** — konkret protokoll for korrekt breddegrad-beregning + dokumentert ÅPEN GÅTE om port-paradokset
 - `simulator-master-referanse.md` — kjernekonstanter, projeksjon, port-system
