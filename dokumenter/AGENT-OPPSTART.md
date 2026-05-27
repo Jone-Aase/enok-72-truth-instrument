@@ -4,19 +4,19 @@
 
 ---
 
-## ⭐ NY KRITISK RAPPORT (27. mai 2026)
+## ⭐ FUNDAMENT-DOKUMENT (les FØRST — 27. mai 2026)
 
-**Sentral kalibrering av Enoks posisjon i flat AE-modell:**
+**`rutenett-feilen-dokumentert.md`** — selve premisset for hele test-prosjektet.
 
-- **Hovedrapport:** `enok-posisjon-flat-modell.md`
-- **Oppstart-instruks (les denne FØR du regner):** `enok-posisjon-oppstart.md`
+Kortversjon:
+- Det eksisterende lat/lon-rutenettet er bygget på antagelsen om at solen står over ekvator. Det gjør den ikke.
+- Solen vandrer mellom Krepsens vendekrets (nord) og Steinbukkens vendekrets (sør).
+- Derfor mangler det en uregnet sone tilsvarende halve avstanden mellom vendekretsene på hver side av ekvator.
+- Instrumentet tester denne feilen — det er IKKE et forsøk på å bekrefte rutenettet.
+- IKKE bland inn sfærisk trigonometri. Dette er flat AE-test.
+- IKKE plasser Enok i modellen før de fundamentale avstandene polarsirkel ↔ vendekrets er bekreftet.
 
-**Hovedfunn:**
-- Enok står på **54,13°N** i AE-modell = **3 986,08 km fra Nordpolen**
-- Lyssirkel-radius L = R = **10 001,47 km** (gull-konstanten)
-- Solens fotpunkt på sommersolverv = Krepsens vendekrets (r = 7 393,80 km)
-- Tre Enok-ankerpunkter (12/6 ved Enok, 18/0 ved Polarsirkelen, 9/9 ved Krepsens vendekrets) løses med samme L
-- **Bruk FLAT AE-geometri, IKKE sfærisk trigonometri**
+**Tidligere Enok-posisjons-rapporter er satt på pause** (`enok-posisjon-flat-modell.md`, `enok-posisjon-oppstart.md`, `gemini-pakke-enok-posisjon.md`) — de brukte feil skala/forutsetninger og skal IKKE brukes som referanse.
 
 ---
 
