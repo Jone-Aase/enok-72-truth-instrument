@@ -7,7 +7,22 @@
 
 **LES FØRST**-regel: Ved alt arbeid med Enoch 72 Truth Instrument skal denne filen leses før noen annen handling. Den er master-kilden. Hvis noe her er i konflikt med agent-hukommelsen, gjelder filen.
 
-**Versjon**: 1.1 (25. mai 2026 — v16.24: Enok 18-timers urskive innført; tilbakeført min/sec-visere)
+**Versjon**: 1.2 (27. mai 2026 — Enoks posisjon i flat AE-modell verifisert: 54,13°N, r = 3 986,08 km)
+
+---
+
+## ⭐ NY KRITISK REFERANSE (27. mai 2026)
+
+Les først: **`enok-posisjon-flat-modell.md`** og **`enok-posisjon-oppstart.md`**
+
+Kjernefunn:
+- **Enoks observasjons-sted** = r = **3 986,08 km** fra Nordpolen = **54,13°N** (AE)
+- **Lyssirkel-radius L = R = 10 001,47 km** (gull-konstanten)
+- Tre Enok-ankerpunkter (sommersolverv) løses med samme L:
+  - Krepsens vendekrets (23,44°N): 9/9 (Enok-tekst) — modell gir 8,51/9,49 (åpen gåte)
+  - Polarsirkelen (66,56°N): 18/0 — modell gir 18/0 ✓
+  - Enok (54,13°N): 12/6 — modell gir 12/6 ✓
+- **Bruk flat AE-geometri og cosinus-setningen**, IKKE sfærisk trigonometri
 
 ---
 

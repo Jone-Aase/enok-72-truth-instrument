@@ -2,6 +2,24 @@
 
 **LES DENNE FILEN FØRST. Ikke gjør noe annet før du har gjort alle 5 stegene under.**
 
+---
+
+## ⭐ NY KRITISK RAPPORT (27. mai 2026)
+
+**Sentral kalibrering av Enoks posisjon i flat AE-modell:**
+
+- **Hovedrapport:** `enok-posisjon-flat-modell.md`
+- **Oppstart-instruks (les denne FØR du regner):** `enok-posisjon-oppstart.md`
+
+**Hovedfunn:**
+- Enok står på **54,13°N** i AE-modell = **3 986,08 km fra Nordpolen**
+- Lyssirkel-radius L = R = **10 001,47 km** (gull-konstanten)
+- Solens fotpunkt på sommersolverv = Krepsens vendekrets (r = 7 393,80 km)
+- Tre Enok-ankerpunkter (12/6 ved Enok, 18/0 ved Polarsirkelen, 9/9 ved Krepsens vendekrets) løses med samme L
+- **Bruk FLAT AE-geometri, IKKE sfærisk trigonometri**
+
+---
+
 Dette dokumentet eksisterer slik at enhver agent (Perplexity Computer, Grok, ChatGPT, Mistral, ny sesjon etter compaction, eller deg selv etter minnetap) kan komme opp på fullt kunnskaps-nivå på under 5 minutter.
 
 ---
