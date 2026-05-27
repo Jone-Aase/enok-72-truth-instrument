@@ -16,6 +16,8 @@ Kortversjon:
 - IKKE bland inn sfærisk trigonometri. Dette er flat AE-test.
 - IKKE plasser Enok i modellen før de fundamentale avstandene polarsirkel ↔ vendekrets er bekreftet.
 
+**Søsterdokument**: `breddegrad-beregning-fra-sommersolverv.md` — konkret beregnings-protokoll (start på sommersolverv, ikke vårjevndøgn) + dokumentert ÅPEN GÅTE om hvordan kontinuerlig sol-bevegelse forenes med Enoks fysiske porter.
+
 **Tidligere Enok-posisjons-rapporter er satt på pause** (`enok-posisjon-flat-modell.md`, `enok-posisjon-oppstart.md`, `gemini-pakke-enok-posisjon.md`) — de brukte feil skala/forutsetninger og skal IKKE brukes som referanse.
 
 ---

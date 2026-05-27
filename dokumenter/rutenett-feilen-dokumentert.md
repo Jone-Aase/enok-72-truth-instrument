@@ -111,6 +111,7 @@ Disse fenomenene er fysisk målbare og uavhengige av hvilket rutenett vi bruker:
 
 ## 9. Referanser i prosjektet
 
+- **`breddegrad-beregning-fra-sommersolverv.md`** — konkret protokoll for korrekt breddegrad-beregning + dokumentert ÅPEN GÅTE om port-paradokset
 - `simulator-master-referanse.md` — kjernekonstanter, projeksjon, port-system
 - `sol-zenith-og-porter-fundamenter.md` — sol-zenit og port-systemets fundament
 - `meridian-gull-rapport.md` — gull-konstantene og målingene
