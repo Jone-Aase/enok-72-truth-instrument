@@ -111,6 +111,7 @@ Disse fenomenene er fysisk målbare og uavhengige av hvilket rutenett vi bruker:
 
 ## 9. Referanser i prosjektet
 
+- **`sol-tider-fire-kritiske-punkter.md`** — Trinn 1-rapport: dokumenterte sol-tider for sommersolverv 21. juni 2026 ved de fire kritiske breddegradene + ekvator-referanse
 - **`breddegrad-beregning-fra-sommersolverv.md`** — konkret protokoll for korrekt breddegrad-beregning + dokumentert ÅPEN GÅTE om port-paradokset
 - `simulator-master-referanse.md` — kjernekonstanter, projeksjon, port-system
 - `sol-zenith-og-porter-fundamenter.md` — sol-zenit og port-systemets fundament

@@ -111,7 +111,7 @@ Hvis avviket viser seg, er rutenettet bevist feil. Hvis det ikke gjør det, må 
 
 ## 7. Rekkefølge for videre arbeid
 
-1. Verifiser de dokumenterte sol-tidene ved de fire kritiske punktene (egen oppgave).
+1. **✓ TRINN 1 FERDIG** — Verifiser de dokumenterte sol-tidene ved de fire kritiske punktene. Se `sol-tider-fire-kritiske-punkter.md` (27. mai 2026).
 2. Plot de fire punktene i instrumentet.
 3. Kjør sol-tidene gjennom protokollen i seksjon 3.
 4. Sammenlign med det moderne rutenettets prediksjoner.
