@@ -19,6 +19,14 @@
 - STATUS-NA.md oppdatert med tre søyler-strukturen og korrigert Cancer-tolkning
 - DECISIONS.md utvidet med beslutninger om bevisgrunnlag og korreksjon
 
+## docs/ — 28. mai 2026 (natt)
+
+- Tre tekniske kjernebeskrivelser pushet til `docs/`:
+  - `porter-layer-2-beskrivelse.md` (12 fysiske porter, 192 sol-baner, vegger)
+  - `rutenett-feil-deklinasjon.md` (hvorfor ekvator-konvensjonen er feil)
+  - `solklokken-18-timer.md` (Enok 18-timers urskive)
+- STATUS-NA.md utvidet med seksjon "Tekniske kjernebeskrivelser i docs/"
+
 ## v17 — under planlegging
 
 Grok-pipeline etablert 27. mai 2026. Kandidat-endringer kommer som zip-filer fra Grok, deployes til separat live-URL, mergres bare ved godkjenning.

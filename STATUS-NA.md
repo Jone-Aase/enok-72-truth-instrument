@@ -1,6 +1,6 @@
 # STATUS-NA.md — Nåværende tilstand
 
-Sist oppdatert: 2026-05-27 23:35 CEST
+Sist oppdatert: 2026-05-28 00:15 CEST
 
 ## Prosjekt
 
@@ -148,6 +148,14 @@ De tre nyleste rapportene (mai 2026) danner sammen instrumentets bevisstruktur:
 
 Referanse-rapport: `docs/omkrets-rapport-v3-1.pdf` (GE-kalibrering, 45°-regelen, 4 breddegrad-målinger).
 
+## Tekniske kjernebeskrivelser i docs/
+
+Tre dokumenter dekker de tekniske bestanddelene i instrumentet:
+
+1. **`docs/porter-layer-2-beskrivelse.md`** — 12 fysiske porter (6 øst på 60°-akse, 6 vest på 300°-akse), 192 sol-baner, 14 vegger, port-skifte ved nord-passering.
+2. **`docs/rutenett-feil-deklinasjon.md`** — hvorfor moderne bredde-grader er feilkalibrert: ekvator er midtlinje mellom vendekretsene, ikke solens primære akse. Daglig deklinasjon 0,2604°/dag over 47,4° årlig vandring.
+3. **`docs/solklokken-18-timer.md`** — Enok 18-timers urskive drevet av sunLonAngle, ikke av Date(). 72 tikk = 18×4 (sammenfaller med Enok 72-systemet). Konstant kjøring (v16.25-regel).
+
 ## Aktiv hypotese
 
 Verbatim Jone-Aase: *"Jeg tror at lengdegradene er rett men kontinentene er forskjøvet, i havområdene."*
@@ -166,6 +174,7 @@ Testes med fire Krepsen-observatorier (Aswan, Modhera, Chiayi, Ujjain — 88° l
 - **Grok-pipeline mot v17** etableres
 - Mappestruktur for grok-dialog/, grok-versjoner/, validation/, docs/ opprettet
 - Fire kjernerapporter pushet til `docs/` (omkrets-v3.1, vendekretser-vitnesbyrd-2, rangering-kriterier-zenith-1, meridian-gull-rapport-1)
+- Tre tekniske kjernebeskrivelser pushet til `docs/` (porter-layer-2, rutenett-feil-deklinasjon, solklokken-18-timer)
 - Første endring i pipeline: ikke valgt ennå (Grok foreslo glød/puls på 4 ekstrarunder som nr. 1)
 
 ## Godkjent / ikke godkjent

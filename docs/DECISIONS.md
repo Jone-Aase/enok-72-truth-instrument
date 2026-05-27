@@ -91,3 +91,17 @@ Hver beslutning logges med dato, hva, hvorfor og konsekvens. Eldste først.
 **Begrunnelse:** Per omkrets-rapport v3.1: WGS84 40 075 km krever radius 6 378 km, mens GE selv (kalibrert mot Pontchartrain) oppgir radius 10 001,47 km. Begge kan ikke være riktige samtidig. Cancer-testen kan derfor ikke isolert "støtte kule" når kule-radien er internt motsigelsesfull.
 
 **Konsekvens:** Funnet beholdes i tabellen, men med korrigert tolkning. 15 710,40 km settes som instrumentets falsifiserbare prediksjon (max solstråle-rekkevidde med GE-skalering).
+
+---
+
+## 2026-05-28 — Tre tekniske kjernebeskrivelser etablert
+
+**Beslutning:** Tre dokumenter pushes til `docs/` for å dekke tekniske bestanddeler som tidligere kun lå i kode:
+
+1. `porter-layer-2-beskrivelse.md` — 12 fysiske porter på øst-akse (60°) og vest-akse (300°).
+2. `rutenett-feil-deklinasjon.md` — Jone-Aases formulering: ekvator er midtlinje, ikke solens primære akse. Hver dag = 1° av 180-dagers vandring over 47,4°.
+3. `solklokken-18-timer.md` — Enok 18-timers urskive, 72 tikk, drevet av sunLonAngle.
+
+**Begrunnelse:** Subagent-gjennomgang (Gemini 3.1 Pro og GPT-5.5) viste at både portsystemet og solklokken eksisterer i kode, men ikke er forklart i prosjektdokumentasjonen. Rutenett-feilen var beskrevet som prinsipp, men ikke som formell mekanisme med daglig deklinasjon.
+
+**Konsekvens:** AI-agenter har nå fast referanse for alle tre systemdelene. Grok, Gemini og ChatGPT kan lese disse før v17-arbeidet starter. STATUS-NA.md utvidet med ny seksjon "Tekniske kjernebeskrivelser i docs/".
