@@ -66,3 +66,28 @@ Hver beslutning logges med dato, hva, hvorfor og konsekvens. Eldste først.
 **Begrunnelse:** Månesystemet i Enok er komplekst (vers 73-82) og må få eget instrument. Sammenblanding ville forurense sol-verifikasjonen.
 
 **Konsekvens:** Månen er senere arbeid. Solmodellen prioriteres.
+
+---
+
+## 2026-05-27 — Fire kjernerapporter etablert som bevisgrunnlag
+
+**Beslutning:** Fire rapporter pushes til `docs/` som referanse-bevis for alt videre arbeid:
+
+1. `omkrets-rapport-v3-1.pdf` (10 sider) — GE-rutenettet kalibrert mot Pontchartrain Causeway, 45°-regelen, 4 breddegrad-målinger.
+2. `vendekretser-vitnesbyrd-2.pdf` (6 sider) — 14 monumenter på 4 kontinenter, beviser ingen drift.
+3. `rangering-kriterier-zenith-1.pdf` (3 sider) — binært zenith-fenomen, 5 rangeringsnivåer.
+4. `meridian-gull-rapport-1.pdf` (8 sider) — CLIWOC 249 649 observasjoner, 15°/time empirisk.
+
+**Begrunnelse:** Tre søyler i instrumentet (fast geometri + målbar grense + empirisk rotasjon) trenger fast referanse-grunnlag som ikke ligger i flyktig dialog.
+
+**Konsekvens:** Alle AI-agenter (Grok, Gemini, ChatGPT, øvrige) skal lese disse fire før arbeid med v17. Tidligere agent-konklusjon "Cancer alene støtter kule" er KORRIGERT — kule-modellen har internt motsigelsesfull radius (omkrets-v3.1).
+
+---
+
+## 2026-05-27 — Korreksjon av tidligere Cancer-tolkning
+
+**Beslutning:** Tidligere konklusjon at "Cancer-test 19 punkter, omkrets 36 548 km, kule −0,60 % vs AE-Enok −21,35 %" støtter kule-modellen er KORRIGERT.
+
+**Begrunnelse:** Per omkrets-rapport v3.1: WGS84 40 075 km krever radius 6 378 km, mens GE selv (kalibrert mot Pontchartrain) oppgir radius 10 001,47 km. Begge kan ikke være riktige samtidig. Cancer-testen kan derfor ikke isolert "støtte kule" når kule-radien er internt motsigelsesfull.
+
+**Konsekvens:** Funnet beholdes i tabellen, men med korrigert tolkning. 15 710,40 km settes som instrumentets falsifiserbare prediksjon (max solstråle-rekkevidde med GE-skalering).

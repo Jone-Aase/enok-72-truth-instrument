@@ -9,6 +9,16 @@
 - 4 ekstrarunder integrert (dag 91, 182, 273, 364)
 - 23,7° vendekrets-mestermal låst fra Ark T H212
 
+## docs/ — 27. mai 2026 (kveld)
+
+- Fire kjernerapporter pushet til `docs/`:
+  - `omkrets-rapport-v3-1.pdf` (10 sider)
+  - `vendekretser-vitnesbyrd-2.pdf` (6 sider)
+  - `rangering-kriterier-zenith-1.pdf` (3 sider)
+  - `meridian-gull-rapport-1.pdf` (8 sider)
+- STATUS-NA.md oppdatert med tre søyler-strukturen og korrigert Cancer-tolkning
+- DECISIONS.md utvidet med beslutninger om bevisgrunnlag og korreksjon
+
 ## v17 — under planlegging
 
 Grok-pipeline etablert 27. mai 2026. Kandidat-endringer kommer som zip-filer fra Grok, deployes til separat live-URL, mergres bare ved godkjenning.

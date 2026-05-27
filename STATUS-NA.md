@@ -1,6 +1,6 @@
 # STATUS-NA.md — Nåværende tilstand
 
-Sist oppdatert: 2026-05-27 22:55 CEST
+Sist oppdatert: 2026-05-27 23:35 CEST
 
 ## Prosjekt
 
@@ -129,11 +129,24 @@ Begrunnelse: Månesystemet er komplekst og skal ikke blandes inn før solmodelle
 |---|---|
 | Polarsirkelen (Fort Yukon, Bodø, Grímsey) 24 t sol ved sommersolverv | Matcher Enok port 6 = 18/0 **100 %** |
 | Aswan +24,088° hadde 13 t 40 min dag | Avviker fra Enok 9/9 (12 t 00) med +1 t 40 min |
-| Cancer-test 19 punkter, omkrets 36 548 km | Kule −0,60 %, AE-Enok −21,35 % — Cancer alene støtter kule |
+| Cancer-test 19 punkter, omkrets 36 548 km | Tidligere tolket som "støtter kule" — KORRIGERT: kule-modellen har internt motsigelsesfull radius (se omkrets-v3.1) |
 | Cook RESOLUTION 1774 ved 53°S | AE-Enok krever 19,91 knop — fysisk umulig |
-| CLIWOC 249 649 observasjoner | Bekrefter 15°/time, kan ikke avsløre hav-forskyvning |
+| CLIWOC 249 649 observasjoner (TimeOB=12, HR=GMT) | Bekrefter 15°/time empirisk fra -180° til +180°. Gjennomsnittsavvik −0,1 min (statistisk null). 100 % innenfor ±30 min. Cook 1774 K1: 2 sek avvik |
 | Pontianak-Antofagasta-akse | 179,72° (avvik 0,28° fra perfekt 180°) |
-| Earth-circumference | GE-radius 10 001,47 km gir 62 841 km, WGS84 40 075 km gir radius 6 378 km — intern motsigelse |
+| Earth-circumference (omkrets-v3.1) | GE-rutenettet er KALIBRERT mot Pontchartrain Causeway (2 250 spann × 56 ft = 38 404,8 m vs rutenett 38 400 m, avvik 4,8 m på 38 km). GE-radius 10 001,47 km gir 62 841,09 km. WGS84 40 075 km krever radius 6 378 km. Begge kan ikke være riktige |
+| 14 vendekretsmonumenter på 4 kontinenter | Beviser ingen drift: hvis 15 m/år stemte, skulle Aswan ligget 34 km nord etter 2266 år. Capricorn (8): Antofagasta, Belén, Huacalera, São Paulo, Maringá, Rockhampton, Alice Springs, Solitaire. Cancer (6): San Luis Potosí, Santiago BCS, Aswan, Shantou, Nan'ao, Chiayi |
+| Binært zenith-fenomen | Nord for Cancer 0 dager, PÅ Cancer 1 dag (unikt), mellom 2 dager, PÅ ekvator 2 dager, mellom 2 dager, PÅ Capricorn 1 dag (unikt), sør for Capricorn 0 dager. 5 rangeringsnivåer: Rang-1 KJERNE → Rang-5 MODERNE MARKØR |
+| 15 710,40 km | Predikert max avstand solstrålene er synlige med GE-skalering. Instrumentets falsifiserbare prediksjon — solen som passer |
+
+## Tre søyler i instrumentet
+
+De tre nyleste rapportene (mai 2026) danner sammen instrumentets bevisstruktur:
+
+1. **Fast geometri** — `docs/vendekretser-vitnesbyrd-2.pdf`: 14 monumenter på 4 kontinenter dokumenterer at Cancer, ekvator og Capricorn ikke driver.
+2. **Målbar grense** — `docs/rangering-kriterier-zenith-1.pdf`: binær overgang fra 1 til 2 zenith-dager gjør vendekretsene målbare som faste linjer.
+3. **Empirisk rotasjon** — `docs/meridian-gull-rapport-1.pdf`: 249 649 CLIWOC-observasjoner over 100 år bekrefter sentrum-orientert sirkelbevegelse.
+
+Referanse-rapport: `docs/omkrets-rapport-v3-1.pdf` (GE-kalibrering, 45°-regelen, 4 breddegrad-målinger).
 
 ## Aktiv hypotese
 
@@ -152,6 +165,7 @@ Testes med fire Krepsen-observatorier (Aswan, Modhera, Chiayi, Ujjain — 88° l
 
 - **Grok-pipeline mot v17** etableres
 - Mappestruktur for grok-dialog/, grok-versjoner/, validation/, docs/ opprettet
+- Fire kjernerapporter pushet til `docs/` (omkrets-v3.1, vendekretser-vitnesbyrd-2, rangering-kriterier-zenith-1, meridian-gull-rapport-1)
 - Første endring i pipeline: ikke valgt ennå (Grok foreslo glød/puls på 4 ekstrarunder som nr. 1)
 
 ## Godkjent / ikke godkjent
