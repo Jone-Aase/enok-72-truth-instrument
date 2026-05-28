@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.35 (2026-05-28): Rydding-2 etter Jone-Aase: zt3 (Capricorn-antipode->Grimsey, oransje) fjernet, gul polarsirkel-til-polarsirkel-strek skjult som default, dupliserte ringer fjernet (en ring per breddegrad), latcircles-toggle fjernet.
 // v16.34 (2026-05-28): Rydding etter Jone-Aase: equator/cancer/capricorn/polarcircles flyttet fra Layer 2 til Layer 1, polaris-akse fjernet, zt1 (Aswan->Fort Yukon gul) og zt2 (Catequilla->Antipode bla) fjernet, Enoch 12 gates fikk egen toggle pa Layer 2.
 // v16.33 (2026-05-28): Lagt til 21 EK_Data-punkter (EK-01..21) fra One Voice V6 ark EK_Data kolonne AE-AL. Nye grupper: Havn-Sor, Meridian-110E/150E/149W.
 // v16.32 (2026-05-28): Plottet 14 vendekrets-monumenter (VKM-01..14) + empirisk ring 23.4409° / 23.5614° ved siden av Ark T 23.70°. Lokasjoner IKKE flyttet.
@@ -668,17 +669,10 @@ function rebuildSquareGrid(step) {
 rebuildSquareGrid(5);
 subMap.squareGrid.visible = false;  // av som default — brukeren skrur den på
 
-// Equator-ring (golden, alltid synlig på kartet)
-subMap.grid.add(makeRing(R_EQUATOR, 0xc9a247, 0.6));
-
-// Lat-sirkler (Cancer, Capricorn, Arctic, Antarctic) — Enoks vendekretser ved 23.7° (Excel master-kalender Ark T H212)
-subMap.latcircles.add(makeRing(latToR(23.7), 0x886633, 0.5));
-subMap.latcircles.add(makeRing(latToR(-23.7), 0x886633, 0.5));
-subMap.latcircles.add(makeRing(latToR(66.5634), 0x335577, 0.5));
-subMap.latcircles.add(makeRing(latToR(-66.5634), 0x335577, 0.5));
-// EMPIRISK vendekrets-snitt fra 14 monumenter (Capricorn -23.4409°, Cancer +23.5614°) — gul, tynnere
-subMap.latcircles.add(makeRing(latToR(23.5614), 0xffff00, 0.45));
-subMap.latcircles.add(makeRing(latToR(-23.4409), 0xffff00, 0.45));
+// v16.35: Duplikat-ringer fjernet etter Jone-Aase 2026-05-28.
+// Ekvator, vendekretser og polarsirkler vises na bare en gang, fra subCel.* gruppene (flyttet til Layer 1 i v16.34).
+// Empiriske vendekrets-monument-ringene (23.5614/-23.4409) er ogsa fjernet visuelt -
+// monumentene plottes fortsatt som individuelle gule markorer (VKM-01..14).
 
 // Meridianer (12 hovedmeridianer)
 subMap.meridians.add(makeMeridians(12, 0x556680, 0.45));
@@ -733,15 +727,14 @@ buildMarkers();
 // =================================================================
 // BYGG LAG 2 — SOL, MÅNE, RINGER
 // =================================================================
+// v16.35: En ring per breddegrad etter Jone-Aase 2026-05-28. Duplikater i subMap.grid og subMap.latcircles
+// er fjernet under. Ekvator, Cancer og Capricorn vises som EN ring her, ikke som Ark T + empirisk par.
 subCel.equator.add(makeRing(R_EQUATOR, 0x60c060, 0.85));
 // Krepsens og Steinbukkens vendekrets ved 23.7° (Enoks port-yttergrenser, master-kalender Ark T H212)
 subCel.cancer.add(makeRing(latToR(23.7), 0xe0c060, 0.85));
 subCel.capricorn.add(makeRing(latToR(-23.7), 0xc08040, 0.85));
-// EMPIRISK ring fra 14 monumenter — tynnere, gul, ligger like innenfor Ark T-ringen
-subCel.cancer.add(makeRing(latToR(23.5614), 0xffff00, 0.5));
-subCel.capricorn.add(makeRing(latToR(-23.4409), 0xffff00, 0.5));
-subCel.polarcircles.add(makeRing(latToR(66.5634), 0x7090c0, 0.7));
-subCel.polarcircles.add(makeRing(latToR(-66.5634), 0x7090c0, 0.7));
+subCel.polarcircles.add(makeRing(latToR(66.5634), 0x7090c0, 0.85));
+subCel.polarcircles.add(makeRing(latToR(-66.5634), 0x7090c0, 0.85));
 
 // Sol (v16.25: redusert til størrelsen på ark-T-sol-bane-prikken, 0.18)
 const sunMesh = new THREE.Mesh(
@@ -2085,6 +2078,11 @@ bindToggle('layer-outerring', subMap.outerring);
   const e1 = makeEndpoint(p1, 0xff5a5a);  // rød — nord
   const e2 = makeEndpoint(p2, 0x6abfff);  // blå — sør
   const eNP = makeEndpoint({x:0, z:0}, 0xa060ff);  // lilla — Nordpol
+  // v16.35: skjult som default etter Jone-Aase 2026-05-28 (siktlinje-show checkbox styrer visning)
+  siktLine.visible = false;
+  e1.visible = false;
+  e2.visible = false;
+  eNP.visible = false;
 
   // Beregn tall
   // v16 buestreng-uretting: r(lat) = R_OUTER_KM × (90-lat) / 180
@@ -2234,18 +2232,11 @@ bindToggle('layer-outerring', subMap.outerring);
 // midnattssol fra observasjonspunktet kl 00 lokal. Den rette linjen er
 // solens faktiske siktlinje gjennom flat-geometri.
 {
-  // v16.34: zt1 (Aswan->Fort Yukon, gul) og zt2 (Catequilla->Antipode, blå)
-  // fjernet etter Jone-Aase 2026-05-28 fordi strekene gikk gjennom
-  // ikke-objekter. zt3 (Capricorn-Grimsey) beholdes.
-  const tests = [
-    {
-      id: 'zt3',
-      labelA: 'Capricorn-zenith antipode', latA: -23.4373, lonA: 161.9833,
-      labelB: 'Grimsey, Island (midnattssol)', latB: 66.5636, lonB: -18.0167,
-      color: 0xff9060,
-      eventDate: 'Sommersolverv',
-    },
-  ];
+  // v16.34: zt1 (Aswan->Fort Yukon, gul) og zt2 (Catequilla->Antipode, bla) fjernet.
+  // v16.35: zt3 (Capricorn-antipode->Grimsey, oransje) ogsa fjernet etter Jone-Aase 2026-05-28
+  // fordi Capricorn-antipode-endepunktet ikke er et objekt. Beholder tom test-liste sa
+  // panel-id-er fortsatt fungerer (de tomme dom-elementene blir bare ikke oppdatert).
+  const tests = [];
 
   const zenithObjs = [];
 
