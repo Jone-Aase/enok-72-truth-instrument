@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.38 (2026-05-28): Ekvator-ring flyttet fra R_EQUATOR (10001 km, kule-radius) til latToR(0) (15710 km, buestreng-radius) sa ringen ligger pa samme posisjon som ekvator-punktene (Pyramid of Oyambaro, Pontianak Tugu Khatulistiwa, Quitsato). Click-treff-flate utvidet: usynlig hit-sphere radius 0.4 lagt rundt hver markor.
 // v16.37 (2026-05-28): Ekvator-ring byttet fra gronn (0x60c060) til gull (0xc9a247) etter Jone-Aase. Matcher Quitsato/Pontianak/Catequilla monumentene og vendekretsene.
 // v16.36 (2026-05-28): Rydding-3 etter Jone-Aase: lilla nordpol-glow fjernet (grpMagnet tom, layer-magnet toggle fjernet), port-progress-indikator (4,6,5,3,1,3) fjernet fra canvas.
 // v16.35 (2026-05-28): Rydding-2 etter Jone-Aase: zt3 (Capricorn-antipode->Grimsey, oransje) fjernet, gul polarsirkel-til-polarsirkel-strek skjult som default, dupliserte ringer fjernet (en ring per breddegrad), latcircles-toggle fjernet.
@@ -709,9 +710,18 @@ function buildMarkers() {
     const stalk = new THREE.Mesh(stalkGeom, stalkMat);
     stalk.position.set(0, 0.06, 0);
     pinGroup.add(stalk);
+    // v16.38: Usynlig hit-sphere for mye lettere klikk-treff (5x større radius)
+    const hitGeom = new THREE.SphereGeometry(0.4, 8, 8);
+    const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+    const hitMesh = new THREE.Mesh(hitGeom, hitMat);
+    hitMesh.position.set(0, 0.12, 0);
+    hitMesh.userData = m;
+    pinGroup.add(hitMesh);
     pinGroup.position.set(p.x, 0, p.z);
     markerGroup.add(pinGroup);
+    // Begge meshes legges i markerMeshes — raycaster treffer det som er nærmest
     markerMeshes.push(mesh);
+    markerMeshes.push(hitMesh);
   }
 }
 buildMarkers();
@@ -721,7 +731,7 @@ buildMarkers();
 // =================================================================
 // v16.35: En ring per breddegrad etter Jone-Aase 2026-05-28. Duplikater i subMap.grid og subMap.latcircles
 // er fjernet under. Ekvator, Cancer og Capricorn vises som EN ring her, ikke som Ark T + empirisk par.
-subCel.equator.add(makeRing(R_EQUATOR, 0xc9a247, 0.85));  // v16.37: gull, matcher monumentene Catequilla/Pontianak/Quitsato
+subCel.equator.add(makeRing(latToR(0), 0xc9a247, 0.85));  // v16.38: latToR(0) = 15710 km, samme radius som ekvator-punktene (Pyramid of Oyambaro, Pontianak, Quitsato). v16.37: gull.
 // Krepsens og Steinbukkens vendekrets ved 23.7° (Enoks port-yttergrenser, master-kalender Ark T H212)
 subCel.cancer.add(makeRing(latToR(23.7), 0xe0c060, 0.85));
 subCel.capricorn.add(makeRing(latToR(-23.7), 0xc08040, 0.85));
@@ -2146,7 +2156,7 @@ bindToggle('layer-outerring', subMap.outerring);
     grpMap.add(compareRing);
   }
   // Initial ring på ekvator
-  makeCompareRing(R_EQUATOR);
+  makeCompareRing(latToR(0));  // v16.38: buestreng-radius, ikke kule-radius
 
   const slider = document.getElementById('lat-slider');
   const elVal     = document.getElementById('lat-slider-val');
