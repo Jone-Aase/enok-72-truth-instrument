@@ -125,8 +125,9 @@
     font-size: 12px; padding: 0;
   }
   #calbar-close:hover { background: #2a2a2a; }
+  /* v16.40: Calendar-knapp flyttet til bunn-hoyre ved siden av kamera-panelet (cam-panel ligger bottom:14px;right:14px og er min-width:200px) */
   #btn-show-calbar {
-    position: fixed; left: 12px; top: 96px; z-index: 49;
+    position: fixed; right: 230px; bottom: 14px; z-index: 49;
     background: #1a1208; color: #c9a247; border: 1px solid #564018;
     padding: 6px 12px; border-radius: 3px; font-family: inherit;
     font-size: 12px; cursor: grab; display: none;
@@ -427,8 +428,7 @@
     <button class="toolbar-btn" id="btn-daynight" title="Show day/night zone on the map">☼ Day/night</button>
     <button class="toolbar-btn" id="btn-clock-sol" title="12-hour dial (Enochian time, driven by the sun's position)">☉ Sun-clock</button>
     <button class="toolbar-btn" id="btn-clock-atom" title="Atomic clock (official time for selected zone)">⏱ Atomic clock</button>
-    <button class="toolbar-btn" id="btn-enok72" title="Enoch 72 text for today's gate">✎ Enoch 72</button>
-    <button class="toolbar-btn gold" id="btn-evidence" title="Empirical evidence archive">★ Evidence Archive</button>
+    <!-- v16.40: Enoch 72 og Evidence Archive flyttet inn i Documents-modalen. Knappene 'btn-enok72' og 'btn-evidence' er skjult her men finnes fortsatt som id-elementer inne i Documents-modalen. -->
     <button class="toolbar-btn" id="btn-docs" title="Download project documents and instructions">⧫ Documents</button>
     <a href="contact.html" target="_blank" rel="noopener" class="toolbar-btn" id="btn-contact" title="Contact Jone-Aase — research and collaboration" style="text-decoration:none;display:inline-flex;align-items:center">✉ Contact</a>
     <button class="toolbar-btn gold" id="btn-share" title="Copy shareable link">Share</button>
@@ -446,6 +446,21 @@
         <button id="docs-close" style="background:transparent;border:1px solid #c9a247;color:#c9a247;padding:6px 14px;cursor:pointer;font-size:14px;border-radius:4px">Close</button>
       </div>
       <div style="padding:24px 28px;color:#ddd;font-size:13px;line-height:1.6">
+
+        <!-- v16.40: Snarveier til Enoch 72 og Evidence Archive (flyttet hit fra toolbar) -->
+        <section style="margin-bottom:28px">
+          <h2 style="color:#c9a247;font-size:14px;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid #c9a247;padding-bottom:6px;margin-bottom:14px">Quick access</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            <button id="btn-enok72" type="button" title="Enoch 72 text for today's gate" style="display:block;padding:14px;border:1px solid #c9a247;border-radius:6px;background:#161412;color:#ddd;text-align:left;font:inherit;cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#1a1610'" onmouseout="this.style.background='#161412'">
+              <div style="color:#c9a247;font-weight:600;margin-bottom:4px">✎ Enoch 72</div>
+              <div style="font-size:11px;color:#999">Enoch 72 text for today's gate.</div>
+            </button>
+            <button id="btn-evidence" type="button" title="Empirical evidence archive" style="display:block;padding:14px;border:1px solid #c9a247;border-radius:6px;background:#161412;color:#ddd;text-align:left;font:inherit;cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#1a1610'" onmouseout="this.style.background='#161412'">
+              <div style="color:#c9a247;font-weight:600;margin-bottom:4px">★ Evidence Archive</div>
+              <div style="font-size:11px;color:#999">Empirical evidence archive — ship logs, monuments, observations.</div>
+            </button>
+          </div>
+        </section>
 
         <!-- ============ MASTER-DOKUMENTER ============ -->
         <section style="margin-bottom:28px">

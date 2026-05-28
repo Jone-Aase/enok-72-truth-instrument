@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.40 (2026-05-28): UI-rydding etter Jone-Aase: Enoch 72 og Evidence Archive flyttet fra toolbar inn i Documents-modalen som 'Quick access'-seksjon. Calendar-knapp flyttet til bunn-hoyre ved siden av kamera-panelet.
 // v16.39 (2026-05-28): Hit-sphere redusert fra 0.4 til 0.18 (mindre 'klissete' click-omrade). compareRing (sammenligningsring under lat-slider) starter na skjult og kobles til ekvator-toggle nar den ligger pa ekvator-posisjon - faar synlighet styrt av slider-bevegelse. Lat-slider sjekkboks lagt til.
 // v16.38 (2026-05-28): Ekvator-ring flyttet fra R_EQUATOR (10001 km, kule-radius) til latToR(0) (15710 km, buestreng-radius) sa ringen ligger pa samme posisjon som ekvator-punktene (Pyramid of Oyambaro, Pontianak Tugu Khatulistiwa, Quitsato). Click-treff-flate utvidet: usynlig hit-sphere radius 0.4 lagt rundt hver markor.
 // v16.37 (2026-05-28): Ekvator-ring byttet fra gronn (0x60c060) til gull (0xc9a247) etter Jone-Aase. Matcher Quitsato/Pontianak/Catequilla monumentene og vendekretsene.
@@ -3043,7 +3044,12 @@ if (!supportsDocumentPiP()) {
   const btnClose = document.getElementById('btn-close-evidence');
   const overlay  = document.getElementById('evidence-overlay');
   if (btnOpen && overlay) {
-    btnOpen.addEventListener('click', () => { overlay.style.display = 'flex'; });
+    btnOpen.addEventListener('click', () => {
+      // v16.40: Lukk Documents-modal forst hvis den er aapen
+      const docsOv = document.getElementById('docs-overlay');
+      if (docsOv) docsOv.style.display = 'none';
+      overlay.style.display = 'flex';
+    });
   }
   if (btnClose && overlay) {
     btnClose.addEventListener('click', () => { overlay.style.display = 'none'; });
@@ -3135,7 +3141,12 @@ function closeEnok72Modal() {
   if (backdrop) backdrop.style.display = 'none';
 }
 
-document.getElementById('btn-enok72').addEventListener('click', openEnok72Modal);
+// v16.40: Wrap-handler lukker Documents-modal forst hvis den er aapen
+document.getElementById('btn-enok72').addEventListener('click', () => {
+  const docsOv = document.getElementById('docs-overlay');
+  if (docsOv) docsOv.style.display = 'none';
+  openEnok72Modal();
+});
 document.getElementById('enok72-close').addEventListener('click', closeEnok72Modal);
 document.getElementById('enok72-modal-backdrop').addEventListener('click', (e) => {
   if (e.target.id === 'enok72-modal-backdrop') closeEnok72Modal();
