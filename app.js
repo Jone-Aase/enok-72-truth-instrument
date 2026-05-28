@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.55 (2026-05-28): ALLE 72 GE-tall på SAMME ring (R_OUTER × 1.040) — også kardinalene 0°, 90E, 180°, 90W. Rektangulær canvas (3:1) + PlaneGeometry(3,1) slik at lange labels ("180°", "170W", "90E") får plass uten klipping. Kardinaler bold + lys cyan, 10°-tall medium, 5°-mellomtall mindre/mørkere.
 // v16.54 (2026-05-28): 5°- og 10°-tall (med E/W-suffiks) samlet på SAMME ring (R_OUTER × 1.040). Bare kardinalene (0°, 90E, 180°, 90W) ligger fortsatt på ytre ring (R_OUTER × 1.065). Resultat: én hovedring med alle tall + kardinaler utenfor som referansepunkter.
 // v16.53 (2026-05-28): GE-tallring FLYTTET UT av kompasset til egen subMap.geRing-gruppe — nå styres den KUN av layer-grid-toggelen, helt uavhengig av kompass og klokke. Kompassets gull-bakgrunnsringer (compassInnerR/compassOuterR) LAGT TILBAKE. Kompasset flyttet nærmere Antarctica igjen (ticks 1.085–1.155, tall 1.168–1.265) for å redusere overflødig luft — GE-tallene har nå sin egen plass mellom Antarctica (R_OUTER) og kompassets innerring (R_OUTER × 1.080). Nye GE-radier: 1.030–1.065 (innenfor kompassets gull-innerring).
 // v16.52 (2026-05-28): TRE UAVHENGIGE TOGGLES + omorganisert layout. (1) Kompass beholder sine 360 0–359° tall (lagt tilbake fra v16.51), men flyttet UTOVER så det er luft mellom Antarctica-ring og kompass. (2) GE-tallring flyttet til MELLOM Antarctica-ring og kompass (R_OUTER × 1.04 → 1.075), tilhører kun GE grid-toggelen. (3) Antarctica-ring beholder sin egen toggle 'layer-outerring' uavhengig. Klokkens gull-ringer (compassInnerR/compassOuterR) FJERNET så de ikke skjuler GE-tallene. Ny lagrekkefølge innenfra og ut: kart → Antarctica-ring (R_OUTER) → GE-tall (R_OUTER × 1.04–1.075) → kompass-ticks (1.105–1.175) → kompass-tall 0–359° (1.188–1.285).
@@ -1527,16 +1528,19 @@ function buildGeRing() {
     }
   }
 
-  // Lokal helper (kopi av makeDegreeText fra buildClock — selvstendig her).
+  // v16.55: Rektangulær canvas (3:1 bredde:høyde) og PlaneGeometry slik at lange labels
+  // som "180°", "170W", "90E" får plass uten å klippes.
   function makeGeText(text, color, weight, sizePx) {
     const SS = 4;
+    const WIDTH_RATIO = 3;  // canvas bredde = 3 × høyde
     const c = document.createElement('canvas');
-    c.width = sizePx * SS; c.height = sizePx * SS;
+    c.width = sizePx * WIDTH_RATIO * SS;
+    c.height = sizePx * SS;
     const ctx = c.getContext('2d');
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const fontPx = Math.floor(sizePx * SS * 0.7);
+    const fontPx = Math.floor(sizePx * SS * 0.8);
     ctx.font = `${weight} ${fontPx}px 'Cormorant Garamond', 'Times New Roman', serif`;
     const cx = c.width / 2, cy = c.height / 2;
     ctx.lineJoin = 'round';
@@ -1552,16 +1556,17 @@ function buildGeRing() {
     tex.generateMipmaps = true;
     tex.needsUpdate = true;
     const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: true, side: THREE.DoubleSide });
-    const geo = new THREE.PlaneGeometry(1, 1);
+    // PlaneGeometry med samme aspect ratio som canvas (3:1) — ingen klipping/strekking.
+    const geo = new THREE.PlaneGeometry(WIDTH_RATIO, 1);
     geo.rotateX(-Math.PI / 2);
     return new THREE.Mesh(geo, mat);
   }
 
-  // v16.54: 5°- og 10°-tall samlet på SAMME ring (geMidR). Bare kardinalene ligger på ytre ring.
-  // To konsentriske radier MELLOM Antarctica (R_OUTER) og kompass-innerring (R_OUTER × 1.080).
-  const geMidR      = R_OUTER * 1.040;  // 5° + 10°-tall samlet (litt løftet ut for mer pust)
-  const geMajorR    = R_OUTER * 1.040;  // SAMME som geMidR — 10°-tall (med E/W) ligger nå på samme ring som 5°-tall
-  const geCardinalR = R_OUTER * 1.065;  // 0°, 90°E, 180°, 90°W (ytterst, like under kompasset)
+  // v16.55: ALLE tall (5°, 10°E/W, og kardinaler 0°/90E/180°/90W) på SAMME ring (R_OUTER × 1.040).
+  // Én hovedring med 72 tall — ingen tall på forskjellige diametere lenger.
+  const geMidR      = R_OUTER * 1.040;  // 5°-tall
+  const geMajorR    = R_OUTER * 1.040;  // 10°-tall (med E/W)
+  const geCardinalR = R_OUTER * 1.040;  // v16.55: 0°, 90°E, 180°, 90°W — NÅ PÅ SAMME RING
 
   const yPos = 0.10;  // Y_MAP (0) + CLOCK_Y_SOL (0.05) + 0.05 buffer
 
@@ -1577,14 +1582,16 @@ function buildGeRing() {
     const isCardinal = (geLon === 0 || geLon === 90 || geLon === 180 || geLon === 270);
     const isMajor    = (geLon % 10 === 0);
 
-    let r, color, weight, sizePx, scaleSize, label;
+    // v16.55: Bredere canvas (sizePx = canvas-bredde) for å unngå at "10E", "90W", "180°" klippes.
+    // Faktisk skalering (scaleSize) bestemmer størrelsen i scenen — bredde-til-høyde 2:1 for tekst-mesh.
+    let r, color, weight, sizePx, scaleW, scaleH, label;
     if (isCardinal) {
       r = geCardinalR;
       color = '#9ee0ff';   // lys cyan — GE-kardinaler
       weight = 'bold';
-      sizePx = 112;
-      scaleSize = R_OUTER * 0.052;
-      // Tekst-label: 0°, 90°E, 180°, 90°W
+      sizePx = 160;
+      scaleW = R_OUTER * 0.090;  // bredere for "180°", "90E", "90W"
+      scaleH = R_OUTER * 0.045;
       if (geLon === 0) label = '0\u00b0';
       else if (geLon === 90) label = '90E';
       else if (geLon === 180) label = '180\u00b0';
@@ -1593,18 +1600,19 @@ function buildGeRing() {
       r = geMajorR;
       color = '#7ec8d8';
       weight = 'normal';
-      sizePx = 88;
-      scaleSize = R_OUTER * 0.038;
-      // 10°-tall med E/W-suffiks
+      sizePx = 144;
+      scaleW = R_OUTER * 0.075;  // bredere for tre-tegns labels ("10E", "170W")
+      scaleH = R_OUTER * 0.038;
       if (geLon < 180) label = String(geLon) + 'E';
       else label = String(360 - geLon) + 'W';
     } else {
-      // 5°-mellomtall
+      // 5°-mellomtall (rene tall uten suffiks)
       r = geMidR;
       color = '#5a96a8';
       weight = 'normal';
-      sizePx = 72;
-      scaleSize = R_OUTER * 0.028;
+      sizePx = 112;
+      scaleW = R_OUTER * 0.055;
+      scaleH = R_OUTER * 0.030;
       if (geLon < 180) label = String(geLon);
       else label = String(360 - geLon);
     }
@@ -1614,7 +1622,9 @@ function buildGeRing() {
 
     const mesh = makeGeText(label, color, weight, sizePx);
     mesh.position.set(x, yPos, z);
-    mesh.scale.set(scaleSize, scaleSize, scaleSize);
+    // v16.55: PlaneGeometry har allerede 3:1 aspect ratio — vi skalerer høyden
+    // og lar bredden følge automatisk (3 × scaleH = synlig bredde i scenen).
+    mesh.scale.set(scaleH, 1, scaleH);
     // Rotér slik at tallet "peker utover" fra senter (lesbar fra utsiden)
     mesh.rotation.y = -a;
     grp.add(mesh);
