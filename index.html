@@ -427,6 +427,7 @@
     </div>
     <button class="toolbar-btn" id="btn-daynight" title="Show day/night zone on the map">☼ Day/night</button>
     <button class="toolbar-btn" id="btn-clock-sol" title="12-hour dial (Enochian time, driven by the sun's position)">☉ Sun-clock</button>
+    <button class="toolbar-btn" id="btn-compass" title="360° compass ring (toggleable separately from the dial)">⌖ Compass</button>
     <button class="toolbar-btn" id="btn-clock-atom" title="Atomic clock (official time for selected zone)">⏱ Atomic clock</button>
     <!-- v16.40: Enoch 72 og Evidence Archive flyttet inn i Documents-modalen. Knappene 'btn-enok72' og 'btn-evidence' er skjult her men finnes fortsatt som id-elementer inne i Documents-modalen. -->
     <button class="toolbar-btn" id="btn-docs" title="Download project documents and instructions">⧫ Documents</button>
@@ -1167,6 +1168,11 @@
             <input type="range" id="map-opacity" min="0" max="100" value="85" style="flex:1">
             <span id="map-opacity-val" style="width:30px;text-align:right;font-family:monospace;color:#c9a247">85</span>
           </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#888;margin:4px 0" title="Rotate the UN map to align Greenwich with our AE coordinates (negative = clockwise)">
+            Map rotation
+            <input type="range" id="map-rotation" min="-180" max="180" step="0.5" value="0" style="flex:1">
+            <span id="map-rotation-val" style="width:42px;text-align:right;font-family:monospace;color:#c9a247">0°</span>
+          </label>
         </div>
         <label class="layer-toggle">
           <input type="checkbox" id="layer-ports" checked>
@@ -1177,6 +1183,11 @@
           <input type="checkbox" id="layer-meridians" checked>
           <span class="layer-color" style="background:#404060"></span>
           Meridians
+        </label>
+        <label class="layer-toggle" title="Fine 5° spider-web grid (72 meridians + 5° lat circles) and 5° ring on the compass">
+          <input type="checkbox" id="layer-grid-fine">
+          <span class="layer-color" style="background:#4a6878"></span>
+          Fine 5° grid (72)
         </label>
         <label class="layer-toggle">
           <input type="checkbox" id="layer-outerring" checked>

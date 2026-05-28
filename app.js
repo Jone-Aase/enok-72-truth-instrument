@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.49 (2026-05-28): Klokke og kompass kan toggles uavhengig (nye knapper btn-clock-sol og btn-compass). Finmasket 5°-edderkoppnett (subMap.gridFine, 72 meridianer + 5° lat-sirkler) som egen toggle 'layer-grid-fine' - aktiverer samtidig en ekstra 5°-tallring (72 tall) inni kompasset for finlesning. FN-kart-rotasjon-slider 'map-rotation' (-180° til +180°) lagt inn for å finjustere Greenwich-orientering ift våre AE-koordinater. Kayabwe Equator Monument bekreftet som AFR-030 (0°N, 32.04°E).
 // v16.48 (2026-05-28): Reversert v16.47 - Greenwich-linje, datolinje og 12 lengdegrad-labels fjernet igjen etter Jone-Aase. Sol-uret/klokken viser allerede gradene og kompasset bedre visuelt; to lag oppa hverandre var redundant.
 // v16.47 (2026-05-28): [REVERSERT i v16.48] Greenwich-meridian (0°, grønn) og datolinje (180°, kobolt-bla) markert som tydelige linjer. 12 lengdegrad-labels rundt yttersirkelen.
 // v16.46 (2026-05-28): Pin-storrelse 0.08 -> 0.13 (bedre synlighet pa utzoomet AE-disk, Afrika-punktene var for sma til a se). Calendar-knapp top:56px -> top:90px (toolbar bunn er 78px pga embedding, ikke 46px). Filter-label-tellere oppdatert: Equator (15), Cancer (22), Capricorn (10), Vendekrets-monumenter (16). Total markors: 101.
@@ -295,6 +296,7 @@ const subMap = {
   grid: new THREE.Group(), coast: new THREE.Group(), ports: new THREE.Group(),
   meridians: new THREE.Group(), latcircles: new THREE.Group(), outerring: new THREE.Group(),
   squareGrid: new THREE.Group(),  // Kartesisk referanse-rutenett (1° lat = 110.593 km, GE-skala)
+  gridFine: new THREE.Group(),    // v16.49: Finmasket 5°-edderkoppnett (72 meridianer + 5°-breddesirkler)
   daynight: new THREE.Group(),
   clockSol: new THREE.Group(),   // Sol-klokke (Enok-tid, drives av sunLonAngle)
   clockAtom: new THREE.Group(),  // Atom-klokke (sann tid, drives av Date)
@@ -546,6 +548,10 @@ grpCelest.add(subCel.ports);
 // Ytre kart-grense på emblemet = 60°S.
 // Etter buestreng-uretting (v16): r(-60°) = R_OUTER × 150/180 = 26.184.
 const UN_MAP_RADIUS = R_OUTER * 150 / 180;  // 26.184 — 60°S i buestreng-skala
+// v16.49: FN-kart-rotasjon (grader). Positiv = mot klokken når sett ovenfra.
+// Justerbart via UI-slider for å matche kartets Greenwich-meridian mot våre AE-koordinater.
+let unMapRotationDeg = 0;
+let unMapDiskRef = null;  // referanse til mesh slik at sliderene kan endre rotasjon uten ombygging
 {
   const loader = new THREE.TextureLoader();
   loader.load('un-map.png', (tex) => {
@@ -566,8 +572,11 @@ const UN_MAP_RADIUS = R_OUTER * 150 / 180;  // 26.184 — 60°S i buestreng-skal
     });
     const mapDisk = new THREE.Mesh(mapGeom, mapMat);
     mapDisk.rotation.x = -Math.PI / 2;  // legg flatt i XZ-planet
+    // v16.49: rotation.z brukes til finjustering av Greenwich-orientering ift våre koordinater.
+    mapDisk.rotation.z = unMapRotationDeg * Math.PI / 180;
     mapDisk.position.y = 0.04;
     mapDisk.userData.isUnMap = true;
+    unMapDiskRef = mapDisk;
     subMap.coast.add(mapDisk);
   }, undefined, (err) => {
     console.warn('UN map texture failed to load:', err);
@@ -625,6 +634,18 @@ function rebuildGrid(step) {
   subMap.grid.add(makeMeridians(36, 0x3a5070, 0.30));
 }
 rebuildGrid(5);
+
+// v16.49: FINMASKET 5°-EDDERKOPPNETT (72 meridianer + 5°-breddesirkler)
+// Aktiveres via egen toggle 'layer-grid-fine'. Uavhengig av standard-rutenettet.
+function rebuildGridFine() {
+  subMap.gridFine.clear();
+  // 72 meridianer (én hver 5°), dempet teal-farge for å skille fra blå standard-grid
+  subMap.gridFine.add(makeMeridians(72, 0x4a6878, 0.32));
+  // Ekstra 5°-breddesirkler (samme farge for visuell konsistens)
+  subMap.gridFine.add(makeLatGrid(5, 0x4a6878, 0.22));
+}
+rebuildGridFine();
+subMap.gridFine.visible = false;  // av som default — bruker slår på
 
 // =================================================================
 // FIRKANTET REFERANSE-RUTENETT (kartesisk, GE-skala)
@@ -1052,7 +1073,18 @@ function buildClock(group, opts) {
 
   // ────────────────────────────────────────────────────────────────
   // 360° kompass-skala (ytre ring, uten N/S/Ø/V-bokstaver)
+  // v16.49: Bygges som egen undergruppe slik at klokke og kompass kan toggles uavhengig.
+  // Funksjonsparameter 'group' rebindes til compassGroup i kompass-seksjonen,
+  // og restaureres til __origGroup før N-mesh og Enok-trekanter bygges (de hører til urskiven).
   // ────────────────────────────────────────────────────────────────
+  const __origGroup = group;
+  const compassGroup = new THREE.Group();
+  compassGroup.userData.isCompass = true;
+  __origGroup.add(compassGroup);
+  __origGroup.userData.compass = compassGroup;
+  // Rebind 'group' til compassGroup slik at alle 'group.add(...)' i denne seksjonen treffer kompasset.
+  group = compassGroup;
+
   function makeDegreeSprite(text, sizePx, color, weight) {
     const SS = 4;
     const c = document.createElement('canvas');
@@ -1199,6 +1231,55 @@ function buildClock(group, opts) {
     group.add(mesh);
   }
 
+  // ────────────────────────────────────────────────────────────────
+  // v16.49: EKSTRA FINMASKET 5°-RING (72 tall, kobles til 'gridFine'-toggle)
+  // Egen undergruppe slik at den kan toggles separat fra hovedkompasset.
+  // ────────────────────────────────────────────────────────────────
+  const fineRingGroup = new THREE.Group();
+  fineRingGroup.userData.isFineRing = true;
+  group.add(fineRingGroup);
+  __origGroup.userData.fineRing = fineRingGroup;
+  // Ring-radius mellom kompass-ytre og N-bokstav: bruk en sone nedover (nærmere disken)
+  const fineLabelR = radius * 0.97;  // litt innenfor compassInnerR (1.02) - mellom kart og kompass-ticks
+  const fineTickStartR = radius * 0.985;
+  const fineTickEndR   = radius * 0.998;
+  // 72 tick-merker (hver 5°)
+  for (let i = 0; i < 72; i++) {
+    const deg = i * 5;
+    const a = (deg / 360) * Math.PI * 2;
+    const x1 = Math.sin(a) * fineTickStartR;
+    const z1 = -Math.cos(a) * fineTickStartR;
+    const x2 = Math.sin(a) * fineTickEndR;
+    const z2 = -Math.cos(a) * fineTickEndR;
+    const isMajor = (deg % 10 === 0);
+    const g = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(x1, yPos + 0.045, z1),
+      new THREE.Vector3(x2, yPos + 0.045, z2),
+    ]);
+    const m = new THREE.LineBasicMaterial({
+      color: isMajor ? 0x80c8d0 : 0x4a8088,
+      transparent: true, opacity: isMajor ? 0.85 : 0.55,
+    });
+    fineRingGroup.add(new THREE.Line(g, m));
+  }
+  // 72 tall (hver 5°) i teal—cyan-tone for visuell adskillelse fra gull-kompasset
+  for (let i = 0; i < 72; i++) {
+    const deg = i * 5;
+    const a = (deg / 360) * Math.PI * 2;
+    const x = Math.sin(a) * fineLabelR;
+    const z = -Math.cos(a) * fineLabelR;
+    const isMajor = (deg % 10 === 0);
+    const color = isMajor ? '#80c8d0' : '#5a9098';
+    const scale = radius * (isMajor ? 0.024 : 0.018);
+    const mesh = makeDegreeText(String(deg), color, '400', 96);
+    mesh.scale.set(scale, 1, scale);
+    mesh.position.set(x, yPos + 0.055, z);
+    mesh.rotation.y = -a;
+    fineRingGroup.add(mesh);
+  }
+  // Av som default — styres av layer-grid-fine-toggle
+  fineRingGroup.visible = false;
+
   // N-bokstav i sentrum — ligger flatt over senterfestet (hub topp = yPos + 0.30)
   // Bruker en dedikert tegnefunksjon med kraftig kontrast mot gull-hubben
   function makeCenterN() {
@@ -1243,6 +1324,9 @@ function buildClock(group, opts) {
   nMesh.position.set(0, yPos + 0.34, 0);
   nMesh.rotation.y = Math.PI;
   group.add(nMesh);
+
+  // v16.49: Restaurer 'group' til urskiven før Jevndogn-trekanter og visere (de hører til klokken, ikke kompasset)
+  group = __origGroup;
 
   // Jevndogn-trekanter (små indikatorer på 0/18-aksen og 9-aksen)
   function jevndognTriangle(delPos, color) {
@@ -2055,6 +2139,37 @@ bindToggle('layer-square-grid', subMap.squareGrid);
 bindToggle('layer-meridians', subMap.meridians);
 bindToggle('layer-latcircles', subMap.latcircles);
 bindToggle('layer-coast', subMap.coast);
+// v16.49: Finmasket 5°-edderkoppnett (gridFine) + 5°-finring i kompasset toggles sammen
+{
+  const el = document.getElementById('layer-grid-fine');
+  if (el) {
+    const apply = () => {
+      subMap.gridFine.visible = el.checked;
+      // Hvis fineRing-undergruppen finnes på clockSol, koble den til samme toggle
+      const fr = subMap.clockSol.userData ? subMap.clockSol.userData.fineRing : null;
+      if (fr) fr.visible = el.checked;
+    };
+    el.addEventListener('change', apply);
+    apply();
+  }
+}
+// v16.49: FN-kart-rotasjon slider (for å finjustere Greenwich-orientering)
+{
+  const slider = document.getElementById('map-rotation');
+  const valEl  = document.getElementById('map-rotation-val');
+  if (slider) {
+    slider.addEventListener('input', () => {
+      const deg = parseFloat(slider.value);
+      unMapRotationDeg = deg;
+      if (valEl) valEl.textContent = deg.toFixed(1) + '\u00b0';
+      if (unMapDiskRef) {
+        // CircleGeometry roteres rundt sin egen normal-akse (z før rotation.x).
+        // Etter rotation.x = -PI/2 ligger normalen langs +Y, og rotation.z styrer spin i XZ-planet.
+        unMapDiskRef.rotation.z = deg * Math.PI / 180;
+      }
+    });
+  }
+}
 // FN-kart opacity-slider
 {
   const slider = document.getElementById('map-opacity');
@@ -2770,15 +2885,47 @@ requestAnimationFrame(loop);
 // =================================================================
 {
   // SOL-KLOKKE toggle
+  // v16.49: Klokken (urskive + visere) og kompasset toggles uavhengig.
+  // «Show-clock» = vise hele clockSol-gruppen OG vise dial-undergruppen.
+  // «Show-compass» = vise clockSol-gruppen OG vise compass-undergruppen.
+  // Hvis begge er av, skjules hele clockSol. Hvis bare én er på, skjules den andre delen.
+  let showDial = false;      // urskive (Enok-ring, visere, jevndogn-trekanter, sentrum-N)
+  let showCompass = false;   // 360° kompass-ring
+  function applyClockVisibility() {
+    const cg = subMap.clockSol.userData ? subMap.clockSol.userData.compass : null;
+    // clockSol som helhet er synlig hvis minst en av delene er på
+    subMap.clockSol.visible = showDial || showCompass;
+    // Skjul/vis kompass-undergruppen
+    if (cg) cg.visible = showCompass;
+    // Urskive-elementer ligger som direkte barn av clockSol (alt som ikke er compassGroup).
+    // Vi traverserer barn og skjuler/viser dem unntatt compassGroup.
+    for (const child of subMap.clockSol.children) {
+      if (child === cg) continue;
+      child.visible = showDial;
+    }
+    if (subMap.clockSol.visible) updateClockSol();
+  }
   const btnCS = document.getElementById('btn-clock-sol');
   if (btnCS) {
     btnCS.addEventListener('click', () => {
-      subMap.clockSol.visible = !subMap.clockSol.visible;
-      btnCS.style.background = subMap.clockSol.visible ? '#806020' : '';
-      btnCS.style.color = subMap.clockSol.visible ? '#fff' : '';
-      if (subMap.clockSol.visible) updateClockSol();
+      showDial = !showDial;
+      btnCS.style.background = showDial ? '#806020' : '';
+      btnCS.style.color = showDial ? '#fff' : '';
+      applyClockVisibility();
     });
   }
+  // v16.49: KOMPASS toggle (uavhengig av urskiven)
+  const btnCP = document.getElementById('btn-compass');
+  if (btnCP) {
+    btnCP.addEventListener('click', () => {
+      showCompass = !showCompass;
+      btnCP.style.background = showCompass ? '#806020' : '';
+      btnCP.style.color = showCompass ? '#fff' : '';
+      applyClockVisibility();
+    });
+  }
+  // Init: begge av (subMap.clockSol.visible = false er allerede satt), sett undergruppe-synlighet riktig
+  applyClockVisibility();
   // ATOM-KLOKKE toggle — styrer popup-vinduet, ikke 3D-laget
   const btnCA = document.getElementById('btn-clock-atom');
   const atomPopup = document.getElementById('atom-clock-popup');
@@ -2821,7 +2968,14 @@ requestAnimationFrame(loop);
       });
       const lbl = document.getElementById('clock-sol-radius-val');
       if (lbl) lbl.textContent = pct + '%';
-      if (subMap.clockSol.visible) updateClockSol();
+      // v16.49: Rebind 5°-finring til layer-grid-fine-toggle etter ombygging
+      const fineEl = document.getElementById('layer-grid-fine');
+      if (fineEl) {
+        const fr = subMap.clockSol.userData ? subMap.clockSol.userData.fineRing : null;
+        if (fr) fr.visible = fineEl.checked;
+      }
+      // v16.49: Reapply dial/compass-visning etter ombygging
+      applyClockVisibility();
     });
   }
 }
