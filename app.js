@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.41 (2026-05-28): Synlig kamera-panel (cam-panel nederst hoyre) fjernet etter Jone-Aase - kamera-kontroll finnes i View-menyen ved siden av Day/night. Calendar-knapp flyttet til bunn-hoyre der cam-panel sto.
 // v16.40 (2026-05-28): UI-rydding etter Jone-Aase: Enoch 72 og Evidence Archive flyttet fra toolbar inn i Documents-modalen som 'Quick access'-seksjon. Calendar-knapp flyttet til bunn-hoyre ved siden av kamera-panelet.
 // v16.39 (2026-05-28): Hit-sphere redusert fra 0.4 til 0.18 (mindre 'klissete' click-omrade). compareRing (sammenligningsring under lat-slider) starter na skjult og kobles til ekvator-toggle nar den ligger pa ekvator-posisjon - faar synlighet styrt av slider-bevegelse. Lat-slider sjekkboks lagt til.
 // v16.38 (2026-05-28): Ekvator-ring flyttet fra R_EQUATOR (10001 km, kule-radius) til latToR(0) (15710 km, buestreng-radius) sa ringen ligger pa samme posisjon som ekvator-punktene (Pyramid of Oyambaro, Pontianak Tugu Khatulistiwa, Quitsato). Click-treff-flate utvidet: usynlig hit-sphere radius 0.4 lagt rundt hver markor.
