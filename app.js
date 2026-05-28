@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.59 (2026-05-28): NY GRUPPE Meridian-70W (lyserosa #ff88ff) med 12 punkter langs 70°W-meridianen — MR70W-01 Póvalo Salcedo (Puno) -15.86°, MR70W-02 Orquidea Lodge -12.65°, MR70W-03 Punta Cardon +11.57°, MR70W-04 Barcadera Port Aruba +12.48°, MR70W-05 Santo Domingo +18.50°, MR70W-06 Cabot Ln Chatham MA +41.67°, MR70W-07 Topsham ME +43.93°, MR70W-08 Iqaluit +63.75°, MR70W-09 Clyde River Airport +70.49°, MR70W-10 Moriusaq Grønland +76.75°, MR70W-11 Herbert Ø 1967 +77.42°, MR70W-12 Rawlings Bay Ellesmere +80.31°. Pluss CAN-23 Hartswell Bahamas (23°27'N-presisjon), MEG-14 Auckland Island (NZ subantarktisk), EK-22 Lebo Java + EK-23 Yogyakarta Airport (110.03E). 6 duplikater hoppet over (Khatulistiwa Park=EKV-05, Beihai=EK-03, Hutou=EK-04, Xincun=EK-05, Itilleq=EK-20, Nedlung=EK-21). Total markørs: 120 (var 104).
 // v16.58 (2026-05-28): To nye markører fra Jone-Aase. EKV-07 Jardim Marco Zero (Macapá, Amapá Brasil, 0°00'02.66"N 51°04'41.27"W = +0.000739° -51.078131°) på_sirkel 82m nord for ekvator. CAP-10 Campo de Marte Airport (São Paulo SP Brasil, 23°30'26.23"S 46°38'02.14"W = -23.507286° -46.633928°) 8.2 km sør for Capricorn. Equator-teller 15→16, Capricorn-teller 10→11. Total markørs: 104 (var 102).
 // v16.57 (2026-05-28): VKM-17 Giant Crab Tropic of Capricorn (Mantos Blancos, Sierra Gorda, Antofagasta Chile, 23°29'13.72"S 70°00'00.01"W = -23.487144° -70.000003°) lagt inn etter Jone-Aase. Vendekrets-monumenter teller nå 17 (var 16). Total markørs: 102 (var 101). Huacalera-sundial (-23.447769° -65.351686°) ikke lagt inn — ligger 1 km fra eksisterende VKM-03 Monolito sin sombra Huacalera, samme monument.
 // v16.56 (2026-05-28): aeProject() oppdatert til å matche GE-tallringens formel eksakt — lon=0° (Greenwich) ligger nå NEDE på skjermen (+Z), 90°E høyre (+X), 180° oppe (-Z), 90°W venstre (-X). Alle 101 markørene flyttes automatisk til riktig posisjon på kontinent-kartet. Eksempel: Kayabwe (32°E) treffer nå Afrika ekvator i bunn-høyre, Catequilla (78W) treffer Ecuador i bunn-venstre.
@@ -107,6 +108,30 @@ const MARKERS = [
   { id:"CAP-08", g:"Capricorn", n:"Antofagasta", lat:-23.65, lon:-70.40, type:"havn", info:"Chilensk." },
   { id:"CAP-09", g:"Capricorn", n:"Pretoria", lat:-25.74, lon:28.19, type:"by", info:"Sør-Afrika." },
   { id:"CAP-10", g:"Capricorn", n:"Campo de Marte Airport (São Paulo)", lat:-23.507286, lon:-46.633928, type:"flyplass", info:"Av. Santos Dumont 1979, Santana, São Paulo SP 02012-010, Brasil. 23°30'26.23\"S 46°38'02.14\"W. 8.2 km sør for nominell Capricorn-sirkel (-23.4333\u00b0).", src:"https://maps.google.com/?q=-23.507286,-46.633928" },
+  // CAN-23: Hartswell (Bahamas/Cancer) — 23°27'N-presisjon, ikke på 70W
+  { id:"CAN-23", g:"Cancer", n:"Hartswell (Bahamas)", lat:23.449894, lon:-75.671764, type:"cancer-presisjon", info:"Bahamas, Long Island/Exuma-området. 23°26'59.62\"N 75°40'18.35\"W. På_sirkel (23°27'-presisjon).", src:"https://maps.google.com/?q=23.449894,-75.671764" },
+  // =================================================================
+  // MERIDIAN-70W — 10 punkter langs 70°W-meridianen (Jone-Aase 2026-05-28)
+  // Fra -16°S (Peru) til +80°N (Ellesmere Island). Testserie for AE-projeksjon.
+  // =================================================================
+  { id:"MR70W-01", g:"Meridian-70W", n:"Póvalo Salcedo (Puno, Peru)", lat:-15.862547, lon:-70.000003, type:"meridian-70w", info:"Puno 21002, Peru. Plus 42P3+729. 15°51'45.17\"S 70°00'00.01\"W. Eksakt på 70W (avvik 3 cm).", src:"https://maps.google.com/?q=-15.862547,-70.000003" },
+  { id:"MR70W-02", g:"Meridian-70W", n:"Orquidea Lodge (Puerto Maldonado, Peru)", lat:-12.652161, lon:-70.000031, type:"meridian-70w", info:"Rio Madre de Dios, Tambopata, Puerto Maldonado, Peru. 12°39'07.78\"S 70°00'00.11\"W. Eksakt på 70W (avvik 3 m).", src:"https://maps.google.com/?q=-12.652161,-70.000031" },
+  { id:"MR70W-03", g:"Meridian-70W", n:"Punta Cardon (Venezuela)", lat:11.570117, lon:-70.000008, type:"meridian-70w", info:"Falcón, Venezuela. 11°34'12.42\"N 70°00'00.03\"W. Eksakt på 70W (avvik 1 m).", src:"https://maps.google.com/?q=11.570117,-70.000008" },
+  { id:"MR70W-04", g:"Meridian-70W", n:"Barcadera Port (Aruba)", lat:12.480906, lon:-70.000008, type:"meridian-70w", info:"Aruba (NL Karibien). 12°28'51.26\"N 70°00'00.03\"W. Eksakt på 70W (avvik 1 m).", src:"https://maps.google.com/?q=12.480906,-70.000008" },
+  { id:"MR70W-05", g:"Meridian-70W", n:"Santo Domingo (DR)", lat:18.501275, lon:-70.000181, type:"meridian-70w", info:"Dominikanske Republikk. 18°30'04.59\"N 70°00'00.65\"W. Eksakt på 70W (avvik 19 m).", src:"https://maps.google.com/?q=18.501275,-70.000181" },
+  { id:"MR70W-06", g:"Meridian-70W", n:"32 Cabot Ln, Chatham MA", lat:41.670867, lon:-70.000206, type:"meridian-70w", info:"Cape Cod, Massachusetts, USA. 41°40'15.12\"N 70°00'00.74\"W. Eksakt på 70W (avvik 17 m).", src:"https://maps.google.com/?q=41.670867,-70.000206" },
+  { id:"MR70W-07", g:"Meridian-70W", n:"Topsham, ME", lat:43.934017, lon:-70.000011, type:"meridian-70w", info:"Maine, USA. 43°56'02.46\"N 70°00'00.04\"W. Eksakt på 70W (avvik 1 m).", src:"https://maps.google.com/?q=43.934017,-70.000011" },
+  { id:"MR70W-08", g:"Meridian-70W", n:"Iqaluit (Nunavut, Canada)", lat:63.749292, lon:-68.520197, type:"meridian-70w-naer", info:"Hovedstad i Nunavut. 63°44'57.45\"N 68°31'12.71\"W. Nær 70W (~73 km øst).", src:"https://maps.google.com/?q=63.749292,-68.520197" },
+  { id:"MR70W-09", g:"Meridian-70W", n:"Clyde River Airport (Nunavut)", lat:70.485461, lon:-68.511117, type:"meridian-70w-naer", info:"Clyde River, NU X0A 0A7, Canada. 70°29'07.66\"N 68°30'40.02\"W. Nær 70W (~56 km øst på 70.5°N).", src:"https://maps.google.com/?q=70.485461,-68.511117" },
+  { id:"MR70W-10", g:"Meridian-70W", n:"Moriusaq (Grønland)", lat:76.753342, lon:-69.846903, type:"meridian-70w-naer", info:"Avalannguaq-området, Grønland. Plus Q538+9QP. 76°45'12.03\"N 69°50'48.85\"W. Nær 70W (~4 km øst).", src:"https://maps.google.com/?q=76.753342,-69.846903" },
+  { id:"MR70W-11", g:"Meridian-70W", n:"Herbert Ø 1967 (Grønland)", lat:77.420631, lon:-70.172181, type:"meridian-70w-naer", info:"Herbert Island, Grønland. 1967 ekspedisjon. 77°25'14.27\"N 70°10'19.85\"W. Eksakt på 70W (~4 km vest).", src:"https://maps.google.com/?q=77.420631,-70.172181" },
+  { id:"MR70W-12", g:"Meridian-70W", n:"Rawlings Bay (Ellesmere, Canada)", lat:80.305603, lon:-70.000094, type:"meridian-70w", info:"Ellesmere Island, Nunavut, Canada. 80°18'20.17\"N 70°00'00.34\"W. Eksakt på 70W (avvik 9 m).", src:"https://maps.google.com/?q=80.305603,-70.000094" },
+  // Auckland Island — megalitisk/Maori-arkeologi i sørhavet (Jone-Aase 2026-05-28)
+  { id:"MEG-14", g:"Megalithic", n:"Auckland Island / Motu Maha (NZ)", lat:-50.732353, lon:166.094872, type:"subantarktisk", info:"Auckland Islands, New Zealand. Maori-navn: Motu Maha. 50°43'56.47\"S 166°05'41.54\"E. Subantarktisk øgruppe.", src:"https://maps.google.com/?q=-50.732353,166.094872" },
+  // Ekvator-monument: Itilleq Arsaattar (=EK-20), Pontianak Khatulistiwa Park (=EKV-05), Beihai (=EK-03), Hainan/Hutou (=EK-04), Xincun (=EK-05), Nedlung (=EK-21) hoppes over (eksisterer allerede).
+  // Lebo og Yogyakarta International Airport: 110°02'E, ikke 110°00'E — ligger ca 4 km øst for 110E-meridianen.
+  { id:"EK-22", g:"Meridian-110E", n:"Lebo (Java)", lat:-6.963539, lon:110.033475, type:"meridian-110-east-naer", info:"Lebo, Sentral-Java, Indonesia. 6\u00b057'48.74\"S 110\u00b002'00.51\"E. Nær 110E (~3.7 km øst).", src:"https://maps.google.com/?q=-6.963539,110.033475" },
+  { id:"EK-23", g:"Meridian-110E", n:"Yogyakarta International Airport", lat:-7.896131, lon:110.034731, type:"meridian-110-east-naer", info:"YIA flyplass, Kulon Progo, Yogyakarta, Indonesia. 7\u00b053'46.07\"S 110\u00b002'05.03\"E. Nær 110E (~3.8 km øst).", src:"https://maps.google.com/?q=-7.896131,110.034731" },
   // AFRIKA-MARKORER (v16.44) - 23 punkter fra afrika-markorer-perplexity.csv (Ekvator/Cancer/Capricorn)
   { id:"AFR-005", g:"Ekvator", n:"Semliki Base", lat:0.850000, lon:30.100000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 94 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
   { id:"AFR-006", g:"Ekvator", n:"Omunturok", lat:0.300000, lon:30.050000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 33 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
@@ -213,6 +238,7 @@ const FARGER = {
   "Meridian-110E": "#44ddff",  // cyan — 110°E (Kina-aksen)
   "Meridian-150E": "#88ffaa",  // lysegrønn — 150°E (Russland-aksen)
   "Meridian-149W": "#ffaa44",  // oransje — 149.5°W (Alaska / Polynesia-aksen)
+  "Meridian-70W":  "#ff88ff",  // lyserosa/lilla — 70°W (Peru/Karibien/Maine/Ellesmere-aksen) v16.59
 };
 
 const FILTER_KEY = {
@@ -227,6 +253,7 @@ const FILTER_KEY = {
   "Meridian-110E": "filt-mer-110e",
   "Meridian-150E": "filt-mer-150e",
   "Meridian-149W": "filt-mer-149w",
+  "Meridian-70W":  "filt-mer-70w",  // v16.59
 };
 
 // =================================================================
