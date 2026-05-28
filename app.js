@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.36 (2026-05-28): Rydding-3 etter Jone-Aase: lilla nordpol-glow fjernet (grpMagnet tom, layer-magnet toggle fjernet), port-progress-indikator (4,6,5,3,1,3) fjernet fra canvas.
 // v16.35 (2026-05-28): Rydding-2 etter Jone-Aase: zt3 (Capricorn-antipode->Grimsey, oransje) fjernet, gul polarsirkel-til-polarsirkel-strek skjult som default, dupliserte ringer fjernet (en ring per breddegrad), latcircles-toggle fjernet.
 // v16.34 (2026-05-28): Rydding etter Jone-Aase: equator/cancer/capricorn/polarcircles flyttet fra Layer 2 til Layer 1, polaris-akse fjernet, zt1 (Aswan->Fort Yukon gul) og zt2 (Catequilla->Antipode bla) fjernet, Enoch 12 gates fikk egen toggle pa Layer 2.
 // v16.33 (2026-05-28): Lagt til 21 EK_Data-punkter (EK-01..21) fra One Voice V6 ark EK_Data kolonne AE-AL. Nye grupper: Havn-Sor, Meridian-110E/150E/149W.
@@ -495,20 +496,10 @@ grpCelest.add(subCel.ports);
 })();
 
 // =================================================================
-// MAGNETISK NORD = AE-SENTRUM (integrert i kartsenter, ikke eget lag)
+// MAGNETISK NORD / AE-SENTRUM
+// v16.36: Lilla glow-sirkel fjernet etter Jone-Aase 2026-05-28. grpMagnet beholdes tom.
+// v16.34: Polaris-akse fjernet etter Jone-Aase 2026-05-28.
 // =================================================================
-{
-  // Tett glød i sentrum av kartet — markerer magnetisk nord / AE-sentrum
-  const glow = new THREE.Mesh(
-    new THREE.CircleGeometry(R_EQUATOR * 0.35, 64),
-    new THREE.MeshBasicMaterial({ color: 0xa060ff, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
-  );
-  glow.rotation.x = -Math.PI / 2;
-  glow.position.y = 0.02;
-  grpMagnet.add(glow);
-  // v16.34: Polaris-akse fjernet etter Jone-Aase 2026-05-28.
-  // Kartsenteret er fortsatt markert med lilla glød (glow ovenfor).
-}
 
 // =================================================================
 // FN-AE-KART (tekstur å legge på Lag 1)
@@ -2011,7 +2002,7 @@ function bindToggle(id, group, prop = 'visible') {
   el.addEventListener('change', () => { group[prop] = el.checked; });
   group[prop] = el.checked;
 }
-bindToggle('layer-magnet', grpMagnet);
+// v16.36: layer-magnet toggle fjernet (grpMagnet er tom etter at glow ble fjernet).
 bindToggle('layer-grid', subMap.grid);
 bindToggle('layer-square-grid', subMap.squareGrid);
 bindToggle('layer-meridians', subMap.meridians);

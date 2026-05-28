@@ -1170,13 +1170,7 @@
         </label>
       </div>
 
-      <div class="panel-section">
-        <label class="layer-toggle">
-          <input type="checkbox" id="layer-magnet" checked>
-          <span class="layer-color" style="background:#a060ff"></span>
-          Magnetic North = AE center = Polaris axis
-        </label>
-      </div>
+      <!-- v16.36: Magnetic North toggle fjernet etter Jone-Aase 2026-05-28 (lilla glow-sirkel borte). -->
 
       <div class="panel-section">
         <h2>Marker filters</h2>
@@ -1201,15 +1195,7 @@
       <canvas id="cv"></canvas>
       <div id="tooltip"></div>
       <div id="zoom-indicator">100% · Enoch scale</div>
-      <!-- Port-progresjons-indikator (12 segmenter) — viser solens vandring gjennom året -->
-      <div id="port-progress" style="position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:rgba(10,10,15,0.75);border:1px solid #2a2a35;border-radius:4px;padding:4px 8px;font-family:monospace;font-size:11px;color:#aaa;pointer-events:none;z-index:5">
-        <span data-port-seg="0" title="Day 1–60 · Gate 4 · day/night 10/8 · winter→spring">4</span>
-        <span data-port-seg="1" title="Day 61–121 · Gate 6 · day/night 12/6 · Tropic of Cancer 61 d">6</span>
-        <span data-port-seg="2" title="Day 122–182 · Gate 5 · day/night 10/8 · summer→autumn">5</span>
-        <span data-port-seg="3" title="Day 183–242 · Gate 3 · day/night 8/10 · autumn equinox">3</span>
-        <span data-port-seg="4" title="Day 243–303 · Gate 1 · day/night 6/12 · Tropic of Capricorn 61 d">1</span>
-        <span data-port-seg="5" title="Day 304–364 · Gate 3 · day/night 8/10 · winter→spring equinox">3</span>
-      </div>
+      <!-- v16.36: Port-progresjons-indikator fjernet etter Jone-Aase 2026-05-28. -->
       <!-- Camera controls moved to View menu in toolbar -->
       <!-- Synlig kamera-panel: alltid tilgjengelig, flyttbart (drag på "KAMERA"-tittelen) -->
       <div id="cam-panel" style="position:absolute;bottom:14px;right:14px;background:rgba(10,10,15,0.85);border:1px solid #2a2a35;border-radius:6px;padding:10px 12px;font-size:11px;color:#ccc;z-index:6;min-width:200px;backdrop-filter:blur(4px);user-select:none;">
