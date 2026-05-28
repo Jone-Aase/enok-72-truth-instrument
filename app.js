@@ -1,6 +1,7 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
-// v16.47 (2026-05-28): Greenwich-meridian (0°, grønn) og datolinje (180°, kobolt-bla) markert som tydelige linjer. 12 lengdegrad-labels (0°, 30°E..150°E, 180°, 150°W..30°W) plassert rundt yttersirkelen, hver 30°. Etter Jone-Aase for a verifisere at Afrika-pins ligger pa riktig lengdegrad ift FN-kartet.
+// v16.48 (2026-05-28): Reversert v16.47 - Greenwich-linje, datolinje og 12 lengdegrad-labels fjernet igjen etter Jone-Aase. Sol-uret/klokken viser allerede gradene og kompasset bedre visuelt; to lag oppa hverandre var redundant.
+// v16.47 (2026-05-28): [REVERSERT i v16.48] Greenwich-meridian (0°, grønn) og datolinje (180°, kobolt-bla) markert som tydelige linjer. 12 lengdegrad-labels rundt yttersirkelen.
 // v16.46 (2026-05-28): Pin-storrelse 0.08 -> 0.13 (bedre synlighet pa utzoomet AE-disk, Afrika-punktene var for sma til a se). Calendar-knapp top:56px -> top:90px (toolbar bunn er 78px pga embedding, ikke 46px). Filter-label-tellere oppdatert: Equator (15), Cancer (22), Capricorn (10), Vendekrets-monumenter (16). Total markors: 101.
 // v16.45 (2026-05-28): VKM-15 Trópico de Cáncer Plaza del Pueblo (Cabo San Lucas, 23.447875°N -109.703106°W) og VKM-16 Trópico de Cáncer C. Centenario 8 (El Centro BCS, 23.450006°N -110.225467°W) lagt inn etter Jone-Aase. Begge på_sirkel (1.6/1.9 km fra nominell 23.4333°).
 // v16.44 (2026-05-28): Lagt inn 23 Afrika-markorer (9 Ekvator, 9 Cancer, 5 Capricorn) fra afrika-markorer-perplexity.csv. Inkluderer på_sirkel (Kayabwe Uganda, Namibia/Botswana/Limpopo/Mosambik/Madagaskar), nær_sirkel (Uganda triangulering, Aswan) og langt_fra (Sudan/Egypt triangulering). Pretoria CAP-09 og Aswan CAN-04/VKM-11 bevares.
@@ -704,84 +705,6 @@ subMap.squareGrid.visible = false;  // av som default — brukeren skrur den på
 
 // Meridianer (12 hovedmeridianer)
 subMap.meridians.add(makeMeridians(12, 0x556680, 0.45));
-
-// =================================================================
-// v16.47: GREENWICH-MERIDIAN (0°) og DATOLINJE (180°) - tydelig markert
-// =================================================================
-function makeMeridianLine(lon, color, opacity, width) {
-  const p1 = aeProject(89.99, lon);
-  const p2 = aeProject(-89.99, lon);
-  const geom = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(p1.x, 0, p1.z),
-    new THREE.Vector3(p2.x, 0, p2.z),
-  ]);
-  const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity, linewidth: width });
-  return new THREE.Line(geom, mat);
-}
-// Greenwich (0°): klar grønn linje fra senter ut mot Afrika-retningen
-subMap.meridians.add(makeMeridianLine(0, 0x4caf50, 0.95, 3));
-// Datolinje (180°): kobolt-blå motsatt side
-subMap.meridians.add(makeMeridianLine(180, 0x4488ff, 0.85, 2));
-
-// =================================================================
-// v16.47: LENGDEGRAD-LABELS rundt yttersirkelen (12 stk, hver 30°)
-// =================================================================
-{
-  const labelR = R_OUTER * 1.04;  // litt utenfor outerring
-  const yLabel = 0.08;
-  function makeLonText(text, color, sizePx) {
-    const SS = 4;
-    const c = document.createElement('canvas');
-    c.width = sizePx * SS; c.height = sizePx * SS;
-    const ctx = c.getContext('2d');
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const fontPx = Math.floor(sizePx * SS * 0.62);
-    ctx.font = `600 ${fontPx}px 'Cormorant Garamond', 'Times New Roman', serif`;
-    const cx = c.width / 2, cy = c.height / 2;
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = 'rgba(0,0,0,0.85)';
-    ctx.lineWidth = Math.max(2.0, fontPx * 0.04);
-    ctx.strokeText(text, cx, cy);
-    ctx.fillStyle = color;
-    ctx.fillText(text, cx, cy);
-    const tex = new THREE.CanvasTexture(c);
-    tex.anisotropy = 16;
-    tex.minFilter = THREE.LinearMipmapLinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    tex.needsUpdate = true;
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: true, side: THREE.DoubleSide });
-    const geo = new THREE.PlaneGeometry(1, 1);
-    geo.rotateX(-Math.PI / 2);
-    return new THREE.Mesh(geo, mat);
-  }
-  // lengdegrader: 0, ±30, ±60, ±90, ±120, ±150, 180
-  const lonValues = [0, 30, 60, 90, 120, 150, 180, -150, -120, -90, -60, -30];
-  for (const lon of lonValues) {
-    const p = aeProject(89.99, lon);  // retning fra senter ut mot ytterkant
-    const norm = Math.hypot(p.x, p.z);
-    // bruk samme retning men ved labelR
-    const x = labelR * 1.0 / 1.0 * (p.x / norm) * (R_OUTER / labelR) * (labelR / R_OUTER);
-    // forenklet: regn ut direkte
-    const theta = lon * Math.PI / 180;
-    const px = labelR * Math.sin(theta);
-    const pz = -labelR * Math.cos(theta);
-    let text;
-    if (lon === 0) text = '0°';
-    else if (lon === 180 || lon === -180) text = '180°';
-    else if (lon > 0) text = lon + '°E';
-    else text = (-lon) + '°W';
-    const color = (lon === 0) ? '#4caf50' : ((lon === 180) ? '#4488ff' : '#ffd54a');
-    const mesh = makeLonText(text, color, 96);
-    const scale = R_OUTER * 0.045;
-    mesh.scale.set(scale, 1, scale);
-    mesh.position.set(px, yLabel, pz);
-    // Roter sa teksten star riktig opp (lesbar fra senter ut)
-    mesh.rotation.y = -theta;
-    subMap.meridians.add(mesh);
-  }
-}
 
 // Ytterring — den nye disk-grensen (31420.55 km = -90°S etter buestreng-uretting)
 {
