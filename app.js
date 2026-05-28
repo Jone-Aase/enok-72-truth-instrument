@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.52 (2026-05-28): TRE UAVHENGIGE TOGGLES + omorganisert layout. (1) Kompass beholder sine 360 0–359° tall (lagt tilbake fra v16.51), men flyttet UTOVER så det er luft mellom Antarctica-ring og kompass. (2) GE-tallring flyttet til MELLOM Antarctica-ring og kompass (R_OUTER × 1.04 → 1.075), tilhører kun GE grid-toggelen. (3) Antarctica-ring beholder sin egen toggle 'layer-outerring' uavhengig. Klokkens gull-ringer (compassInnerR/compassOuterR) FJERNET så de ikke skjuler GE-tallene. Ny lagrekkefølge innenfra og ut: kart → Antarctica-ring (R_OUTER) → GE-tall (R_OUTER × 1.04–1.075) → kompass-ticks (1.105–1.175) → kompass-tall 0–359° (1.188–1.285).
 // v16.51 (2026-05-28): Konsolidert tallskala — ETT sett GE-tall plassert UTENFOR ytre ring (R_OUTER × 1.03). Fjernet alle gamle 360 grad-tall inni kompasset (kardinaler N/E/S/W, hver 1°, hver 5°, hver 10°) OG fjernet 5°-finringens 72 teal-tall inni klokken. Ticks (gull-streker for 1°/5°/10°/90° + teal 5°-ticks) beholdes som visuell skala uten tall. Formel uendret: kompass_vinkel = (180 - GE_lon) mod 360. Nå er det bare ETT tallsett som viser kompassets 360° — det ligger rett utenfor ytre ring (Antarctica 197 421 km / 31 420 km AE-radius).
 // v16.50 (2026-05-28): GE-lengdegrad-tallring lagt inn inni kompasset (hver 5°, 72 tall). Greenwich (0° GE) plassert på vårt kompass-180° (bunn der Afrika ligger). Formel: kompass_vinkel = (180 - GE_lon) mod 360. 10°E -> kompass 170°, 10°W -> kompass 190°, 90°E -> kompass 90°. Slått sammen toggles: 'GE grid (lat/long reference)' styrer nå standardrutenett + 5°-edderkoppnett + 5°-finring i kompasset + GE-tallring. 'Fine 5° grid (72)'-checkbox fjernet (redundant).
 // v16.49 (2026-05-28): Klokke og kompass kan toggles uavhengig (nye knapper btn-clock-sol og btn-compass). Finmasket 5°-edderkoppnett (subMap.gridFine, 72 meridianer + 5° lat-sirkler) som egen toggle 'layer-grid-fine' - aktiverer samtidig en ekstra 5°-tallring (72 tall) inni kompasset for finlesning. FN-kart-rotasjon-slider 'map-rotation' (-180° til +180°) lagt inn for å finjustere Greenwich-orientering ift våre AE-koordinater. Kayabwe Equator Monument bekreftet som AFR-030 (0°N, 32.04°E).
@@ -1114,34 +1115,18 @@ function buildClock(group, opts) {
     return spr;
   }
 
-  // Kompass-ring radius og soner
-  const compassInnerR  = radius * 1.02;   // innerring (mot disken)
-  const compassOuterR  = radius * 1.245;   // ytterring (begrensning, utenfor kardinal-tall)
-  const tickStartR     = radius * 1.025;
-  const tickEndMinor   = radius * 1.045;  // 1° ticks
-  const tickEndMid     = radius * 1.060;  // 5° ticks
-  const tickEndMajor   = radius * 1.080;  // 10° ticks
-  const tickEndCardinal= radius * 1.095;  // 90° ticks (kardinaler)
-  const degLabelR      = radius * 1.135;  // alle 360 grad-tall
-  const cardinalR      = radius * 1.180;  // ekstra fremheving for 0/90/180/270
-
-  // Indre og ytre gull-sirkel som rammer kompass-ringen
-  function makeRingCircle(r, color, opacity, y) {
-    const segments = 720;
-    const pts = [];
-    for (let i = 0; i <= segments; i++) {
-      const a = (i / segments) * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.sin(a) * r, y, -Math.cos(a) * r));
-    }
-    const g = new THREE.BufferGeometry().setFromPoints(pts);
-    const m = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
-    return new THREE.Line(g, m);
-  }
-  group.add(makeRingCircle(compassInnerR, 0xffd54a, 0.85, yPos + 0.035));
-  group.add(makeRingCircle(compassOuterR, 0xffd54a, 0.85, yPos + 0.035));
-  // To tynne dempede mellomringer for ekstra dybde
-  group.add(makeRingCircle(radius * 1.100, 0x8a7048, 0.35, yPos + 0.035)); // skille mellom ticks og 1°-tall
-  group.add(makeRingCircle(radius * 1.190, 0x8a7048, 0.30, yPos + 0.035)); // skille mellom 10° og kardinaler
+  // v16.52: Kompass flyttet UTOVER for å gi plass til GE-tallring mellom Antarctica (R_OUTER) og kompass.
+  // Ny rekkefølge innenfra og ut:
+  //   kart → Antarctica-ring (R_OUTER) → GE-tall (1.04–1.075) → kompass-ticks (1.105–1.175) → kompass-tall (1.188–1.285)
+  // Klokkens to gull-sirkler (compassInnerR/compassOuterR) er fjernet så GE-tallene ikke skjules.
+  // Mellomringene (dempet gull-streker) er også fjernet av samme grunn.
+  const tickStartR     = radius * 1.105;
+  const tickEndMinor   = radius * 1.125;  // 1° ticks
+  const tickEndMid     = radius * 1.140;  // 5° ticks
+  const tickEndMajor   = radius * 1.160;  // 10° ticks
+  const tickEndCardinal= radius * 1.175;  // 90° ticks (kardinaler)
+  const degLabelR      = radius * 1.215;  // alle 360 grad-tall
+  const cardinalR      = radius * 1.260;  // ekstra fremheving for 0/90/180/270
 
   // 360 tick-merker, ett per grad. Hver 10. er lang, hver 90. (kardinal) ekstra lang.
   for (let deg = 0; deg < 360; deg++) {
@@ -1200,9 +1185,38 @@ function buildClock(group, opts) {
     return new THREE.Mesh(geo, mat);
   }
 
-  // v16.51: Gamle 360 grad-tall (kardinaler, hver 1°/5°/10°) FJERNET fra inni kompasset.
-  // Tick-merkene (gull-strekene) ovenfor beholdes som visuell gradskala uten tall.
-  // Det eneste tallsettet ligger nå UTENFOR ytre ring — se v16.51 GE-ring lenger ned.
+  // v16.52: 360 grad-tall (0–359) LAGT TILBAKE inni kompasset — dette er kompassets egne tall,
+  // separat fra GE-tallringen som nå ligger inni mellom Antarctica-ring og kompasset.
+  // Radius-soner for grad-tallene (nærmere ticks = mindre tall)
+  const r1deg  = radius * 1.188;  // hver 1° — små tall like utenfor ticks
+  const r5deg  = radius * 1.222;  // hver 5°
+  const r10deg = radius * 1.255;  // hver 10°
+  const rCard  = radius * 1.285;  // kardinaler
+
+  for (let deg = 0; deg < 360; deg++) {
+    const a = (deg / 360) * Math.PI * 2;
+    const isCardinal = (deg % 90 === 0);
+    const isMajor = (deg % 10 === 0);
+    const isMid   = (deg % 5 === 0);
+    let r, scale, weight, color;
+    if (isCardinal) {
+      r = rCard; scale = radius * 0.080; weight = '500'; color = '#ffe680';
+    } else if (isMajor) {
+      r = r10deg; scale = radius * 0.052; weight = '500'; color = '#ffd54a';
+    } else if (isMid) {
+      r = r5deg; scale = radius * 0.034; weight = '400'; color = '#c8a060';
+    } else {
+      r = r1deg; scale = radius * 0.018; weight = '400'; color = '#9a7e50';
+    }
+    const x = Math.sin(a) * r;
+    const z = -Math.cos(a) * r;
+    const mesh = makeDegreeText(String(deg), color, weight, 96);
+    mesh.scale.set(scale, 1, scale);
+    mesh.position.set(x, yPos + 0.06, z);
+    // Roter slik at teksten peker radielt utover ("bunnen mot sentrum")
+    mesh.rotation.y = -a;
+    group.add(mesh);
+  }
 
   // ────────────────────────────────────────────────────────────────
   // v16.49: EKSTRA FINMASKET 5°-RING (72 tall, kobles til 'gridFine'-toggle)
@@ -1239,17 +1253,21 @@ function buildClock(group, opts) {
   // GE-tallringen (under) er nå den eneste numeriske skalaen, plassert UTENFOR ytre ring.
 
   // ────────────────────────────────────────────────────────────────
-  // v16.51: GE-LENGDEGRAD-RING (Google Earth-konvensjon, hver 5°)
-  // Plassert RETT UTENFOR ytre ring (Antarctica, R_OUTER) på R_OUTER × 1.03.
+  // v16.52: GE-LENGDEGRAD-RING (Google Earth-konvensjon, hver 5°)
+  // Plassert MELLOM Antarctica-ringen (R_OUTER) og kompass-tickene (radius * 1.105).
   // Greenwich (0° GE) lander på vårt kompass-180° (sone der Afrika ligger, bunn av disken).
   // Formel: kompass_vinkel = (180° - GE_lon) mod 360°
   //   0°   GE  -> 180° kompass (bunn)         | 10°E -> 170° kompass
   //   90°E GE  -> 90°  kompass (høyre)        | 10°W -> 190° kompass
   //   180° GE  -> 0°   kompass (topp/datolinje)| 90°W -> 270° kompass
-  // Dette er nå det ENESTE numeriske tallsettet — gamle kardinaler og 5°-tall inni klokken er fjernet.
+  // Hører til GE grid-toggelen (fineRingGroup), helt separat fra kompasset.
   // Bruker R_OUTER direkte (ikke 'radius') så GE-skalaen er stabil uavhengig av klokkens radius-slider.
   // ────────────────────────────────────────────────────────────────
-  const geLabelR = R_OUTER * 1.03;  // tett inntil, men UTENFOR ytre ring (Antarctica)
+  // Tre konsentriske radier for hierarki: kardinaler ytterst, hovedmeridianer midten, 5°-mellomtall innerst.
+  // Alle ligger MELLOM Antarctica-ring (1.00) og kompass-ticks (1.105).
+  const geCardinalR = R_OUTER * 1.075;  // 0°, 90°E, 180°, 90°W (kardinaler) — ytterst
+  const geMajorR    = R_OUTER * 1.060;  // hver 10°
+  const geMidR      = R_OUTER * 1.045;  // 5°-mellomtall — innerst, tett på Antarctica-ring
   for (let i = 0; i < 72; i++) {
     const geLon = i * 5;  // 0, 5, 10, ..., 355
     // Konverter GE-konvensjon (0-360 østover) til signed lon (-180..180)
@@ -1258,8 +1276,6 @@ function buildClock(group, opts) {
     let compassDeg = (180 - signedLon) % 360;
     if (compassDeg < 0) compassDeg += 360;
     const a = (compassDeg / 360) * Math.PI * 2;
-    const x = Math.sin(a) * geLabelR;
-    const z = -Math.cos(a) * geLabelR;
     // Bygg label-tekst i GE-stil: 0°, 5°E, 10°E... 180°, 175°W... 5°W
     let text;
     if (signedLon === 0) text = '0°';
@@ -1269,12 +1285,13 @@ function buildClock(group, opts) {
     // Markere hovedmeridianer (hver 10°) større, og kardinaler (0, 90, 180, 270) ekstra fremhevet
     const isCardinal = (geLon === 0 || geLon === 90 || geLon === 180 || geLon === 270);
     const isMajor = (geLon % 10 === 0);
-    // Større skala siden tallene nå er det eneste tallsettet og ligger lenger ute.
-    // Skalert mot R_OUTER (faktisk plasseringsradius), ikke 'radius' (klokken).
-    let color, scale;
-    if (isCardinal) { color = '#ffe680'; scale = R_OUTER * 0.060; }
-    else if (isMajor) { color = '#ffd54a'; scale = R_OUTER * 0.045; }
-    else { color = '#c8a060'; scale = R_OUTER * 0.030; }
+    // Velg radius og størrelse basert på hierarki. Skala holdes liten så tallene passer i tomrommet.
+    let r, color, scale;
+    if (isCardinal) { r = geCardinalR; color = '#80e0e8'; scale = R_OUTER * 0.024; }
+    else if (isMajor) { r = geMajorR; color = '#5ab0c0'; scale = R_OUTER * 0.018; }
+    else { r = geMidR; color = '#4a8090'; scale = R_OUTER * 0.013; }
+    const x = Math.sin(a) * r;
+    const z = -Math.cos(a) * r;
     const mesh = makeDegreeText(text, color, isMajor ? '500' : '400', 128);
     mesh.scale.set(scale, 1, scale);
     mesh.position.set(x, yPos + 0.052, z);
