@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.57 (2026-05-28): VKM-17 Giant Crab Tropic of Capricorn (Mantos Blancos, Sierra Gorda, Antofagasta Chile, 23°29'13.72"S 70°00'00.01"W = -23.487144° -70.000003°) lagt inn etter Jone-Aase. Vendekrets-monumenter teller nå 17 (var 16). Total markørs: 102 (var 101). Huacalera-sundial (-23.447769° -65.351686°) ikke lagt inn — ligger 1 km fra eksisterende VKM-03 Monolito sin sombra Huacalera, samme monument.
 // v16.56 (2026-05-28): aeProject() oppdatert til å matche GE-tallringens formel eksakt — lon=0° (Greenwich) ligger nå NEDE på skjermen (+Z), 90°E høyre (+X), 180° oppe (-Z), 90°W venstre (-X). Alle 101 markørene flyttes automatisk til riktig posisjon på kontinent-kartet. Eksempel: Kayabwe (32°E) treffer nå Afrika ekvator i bunn-høyre, Catequilla (78W) treffer Ecuador i bunn-venstre.
 // v16.55 (2026-05-28): ALLE 72 GE-tall på SAMME ring (R_OUTER × 1.040) — også kardinalene 0°, 90E, 180°, 90W. Rektangulær canvas (3:1) + PlaneGeometry(3,1) slik at lange labels ("180°", "170W", "90E") får plass uten klipping. Kardinaler bold + lys cyan, 10°-tall medium, 5°-mellomtall mindre/mørkere.
 // v16.54 (2026-05-28): 5°- og 10°-tall (med E/W-suffiks) samlet på SAMME ring (R_OUTER × 1.040). Bare kardinalene (0°, 90E, 180°, 90W) ligger fortsatt på ytre ring (R_OUTER × 1.065). Resultat: én hovedring med alle tall + kardinaler utenfor som referansepunkter.
@@ -169,6 +170,7 @@ const MARKERS = [
   { id:"VKM-12", g:"Vendekrets-Monument", n:"Symbolic Tower of Tropic of Cancer (Shantou)", lat:23.44240, lon:116.58885, type:"vendekrets-monument", info:"Cancer-tårn, Guangdong Kina, Jilong-fjellet. 23°26'33\"N.", src:"https://en.wikipedia.org/wiki/Shantou" },
   { id:"VKM-13", g:"Vendekrets-Monument", n:"Gate of Nature Tropic Tower (Nan'ao)", lat:23.43300, lon:117.01700, type:"vendekrets-monument", info:"Cancer-tårn, Nan'ao øy Guangdong Kina, Qing'ao Bay. 23°25'58.8\"N.", src:"https://en.wikipedia.org/wiki/Nan%27ao_County" },
   { id:"VKM-14", g:"Vendekrets-Monument", n:"Tropic of Cancer Solar Exploration Center (Chiayi)", lat:23.45462, lon:120.41697, type:"vendekrets-monument", info:"Cancer-senter, Shuishang Taiwan. 23°27'16.63\"N.", src:"https://jotarofootsteps.blogspot.com/" },
+  { id:"VKM-17", g:"Vendekrets-Monument", n:"Giant Crab Tropic of Capricorn (Mantos Blancos)", lat:-23.487144, lon:-70.000003, type:"vendekrets-monument", info:"Capricorn-monument, Sierra Gorda Antofagasta Chile. Historical landmark, G273+44. 23°29'13.72\"S 70°00'00.01\"W.", src:"https://maps.google.com/?q=-23.487144,-70.000003" },
   // =================================================================
   // EK_DATA V6 — 21 punkter fra One Voice V6, arket EK_Data, kolonne AE-AL
   // Empiriske Google Earth-observasjoner langs meridianer (110°E, 150°E, 149.5°W), polarsirkler og sørlige havner
