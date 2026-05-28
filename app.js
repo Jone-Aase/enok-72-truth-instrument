@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.50 (2026-05-28): GE-lengdegrad-tallring lagt inn inni kompasset (hver 5°, 72 tall). Greenwich (0° GE) plassert på vårt kompass-180° (bunn der Afrika ligger). Formel: kompass_vinkel = (180 - GE_lon) mod 360. 10°E -> kompass 170°, 10°W -> kompass 190°, 90°E -> kompass 90°. Slått sammen toggles: 'GE grid (lat/long reference)' styrer nå standardrutenett + 5°-edderkoppnett + 5°-finring i kompasset + GE-tallring. 'Fine 5° grid (72)'-checkbox fjernet (redundant).
 // v16.49 (2026-05-28): Klokke og kompass kan toggles uavhengig (nye knapper btn-clock-sol og btn-compass). Finmasket 5°-edderkoppnett (subMap.gridFine, 72 meridianer + 5° lat-sirkler) som egen toggle 'layer-grid-fine' - aktiverer samtidig en ekstra 5°-tallring (72 tall) inni kompasset for finlesning. FN-kart-rotasjon-slider 'map-rotation' (-180° til +180°) lagt inn for å finjustere Greenwich-orientering ift våre AE-koordinater. Kayabwe Equator Monument bekreftet som AFR-030 (0°N, 32.04°E).
 // v16.48 (2026-05-28): Reversert v16.47 - Greenwich-linje, datolinje og 12 lengdegrad-labels fjernet igjen etter Jone-Aase. Sol-uret/klokken viser allerede gradene og kompasset bedre visuelt; to lag oppa hverandre var redundant.
 // v16.47 (2026-05-28): [REVERSERT i v16.48] Greenwich-meridian (0°, grønn) og datolinje (180°, kobolt-bla) markert som tydelige linjer. 12 lengdegrad-labels rundt yttersirkelen.
@@ -1277,7 +1278,49 @@ function buildClock(group, opts) {
     mesh.rotation.y = -a;
     fineRingGroup.add(mesh);
   }
-  // Av som default — styres av layer-grid-fine-toggle
+
+  // ────────────────────────────────────────────────────────────────
+  // v16.50: GE-LENGDEGRAD-RING (Google Earth-konvensjon, hver 5°)
+  // Greenwich (0° GE) lander på vårt kompass-180° (sone der Afrika ligger, bunn av disken).
+  // Formel: kompass_vinkel = (180° - GE_lon) mod 360°
+  //   0°   GE  -> 180° kompass (bunn)         | 10°E -> 170° kompass
+  //   90°E GE  -> 90°  kompass (høyre)        | 10°W -> 190° kompass
+  //   180° GE  -> 0°   kompass (topp/datolinje)| 90°W -> 270° kompass
+  // Plasseres innenfor 5°-finringen for å ligge mellom kart og standardkompass.
+  // ────────────────────────────────────────────────────────────────
+  const geLabelR = radius * 0.93;  // litt innenfor fineLabelR (0.97), nærmere disken
+  for (let i = 0; i < 72; i++) {
+    const geLon = i * 5;  // 0, 5, 10, ..., 355
+    // Konverter GE-konvensjon (0-360 østover) til signed lon (-180..180)
+    const signedLon = geLon > 180 ? geLon - 360 : geLon;
+    // Kompass-vinkel: (180 - signedLon) mod 360
+    let compassDeg = (180 - signedLon) % 360;
+    if (compassDeg < 0) compassDeg += 360;
+    const a = (compassDeg / 360) * Math.PI * 2;
+    const x = Math.sin(a) * geLabelR;
+    const z = -Math.cos(a) * geLabelR;
+    // Bygg label-tekst i GE-stil: 0°, 5°E, 10°E... 180°, 175°W... 5°W
+    let text;
+    if (signedLon === 0) text = '0°';
+    else if (signedLon === 180 || signedLon === -180) text = '180°';
+    else if (signedLon > 0) text = signedLon + '°E';
+    else text = (-signedLon) + '°W';
+    // Markere hovedmeridianer (hver 10°) større, og kardinaler (0, 90, 180) ekstra fremhevet
+    const isCardinal = (geLon === 0 || geLon === 90 || geLon === 180 || geLon === 270);
+    const isMajor = (geLon % 10 === 0);
+    let color, scale;
+    if (isCardinal) { color = '#ffd860'; scale = radius * 0.028; }
+    else if (isMajor) { color = '#e0c060'; scale = radius * 0.022; }
+    else { color = '#a08440'; scale = radius * 0.016; }
+    const mesh = makeDegreeText(text, color, isMajor ? '500' : '400', 128);
+    mesh.scale.set(scale, 1, scale);
+    mesh.position.set(x, yPos + 0.052, z);
+    // Roter teksten slik at den står radielt utover (samme retning som de andre tallene)
+    mesh.rotation.y = -a;
+    fineRingGroup.add(mesh);
+  }
+
+  // Av som default — styres av layer-grid-toggle (slått sammen med GE grid)
   fineRingGroup.visible = false;
 
   // N-bokstav i sentrum — ligger flatt over senterfestet (hub topp = yPos + 0.30)
@@ -2134,16 +2177,13 @@ function bindToggle(id, group, prop = 'visible') {
   group[prop] = el.checked;
 }
 // v16.36: layer-magnet toggle fjernet (grpMagnet er tom etter at glow ble fjernet).
-bindToggle('layer-grid', subMap.grid);
-bindToggle('layer-square-grid', subMap.squareGrid);
-bindToggle('layer-meridians', subMap.meridians);
-bindToggle('layer-latcircles', subMap.latcircles);
-bindToggle('layer-coast', subMap.coast);
-// v16.49: Finmasket 5°-edderkoppnett (gridFine) + 5°-finring i kompasset toggles sammen
+// v16.50: 'GE grid (lat/long reference)'-toggle styrer nå også 5°-edderkoppnettet (subMap.gridFine)
+// og 5°-finringen + GE-tallringen inni kompasset. Tidligere 'layer-grid-fine'-checkbox fjernet.
 {
-  const el = document.getElementById('layer-grid-fine');
+  const el = document.getElementById('layer-grid');
   if (el) {
     const apply = () => {
+      subMap.grid.visible = el.checked;
       subMap.gridFine.visible = el.checked;
       // Hvis fineRing-undergruppen finnes på clockSol, koble den til samme toggle
       const fr = subMap.clockSol.userData ? subMap.clockSol.userData.fineRing : null;
@@ -2153,6 +2193,10 @@ bindToggle('layer-coast', subMap.coast);
     apply();
   }
 }
+bindToggle('layer-square-grid', subMap.squareGrid);
+bindToggle('layer-meridians', subMap.meridians);
+bindToggle('layer-latcircles', subMap.latcircles);
+bindToggle('layer-coast', subMap.coast);
 // v16.49: FN-kart-rotasjon slider (for å finjustere Greenwich-orientering)
 {
   const slider = document.getElementById('map-rotation');
@@ -2968,11 +3012,11 @@ requestAnimationFrame(loop);
       });
       const lbl = document.getElementById('clock-sol-radius-val');
       if (lbl) lbl.textContent = pct + '%';
-      // v16.49: Rebind 5°-finring til layer-grid-fine-toggle etter ombygging
-      const fineEl = document.getElementById('layer-grid-fine');
-      if (fineEl) {
+      // v16.50: Rebind 5°-finring og GE-tallring til layer-grid-toggle etter ombygging
+      const gridEl = document.getElementById('layer-grid');
+      if (gridEl) {
         const fr = subMap.clockSol.userData ? subMap.clockSol.userData.fineRing : null;
-        if (fr) fr.visible = fineEl.checked;
+        if (fr) fr.visible = gridEl.checked;
       }
       // v16.49: Reapply dial/compass-visning etter ombygging
       applyClockVisibility();
