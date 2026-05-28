@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.34 (2026-05-28): Rydding etter Jone-Aase: equator/cancer/capricorn/polarcircles flyttet fra Layer 2 til Layer 1, polaris-akse fjernet, zt1 (Aswan->Fort Yukon gul) og zt2 (Catequilla->Antipode bla) fjernet, Enoch 12 gates fikk egen toggle pa Layer 2.
 // v16.33 (2026-05-28): Lagt til 21 EK_Data-punkter (EK-01..21) fra One Voice V6 ark EK_Data kolonne AE-AL. Nye grupper: Havn-Sor, Meridian-110E/150E/149W.
 // v16.32 (2026-05-28): Plottet 14 vendekrets-monumenter (VKM-01..14) + empirisk ring 23.4409° / 23.5614° ved siden av Ark T 23.70°. Lokasjoner IKKE flyttet.
 // v16.31 (2026-05-28): Lagt til firkantet Cartesian referanse-rutenett (GE-skala 110.593 km/°)
@@ -264,7 +265,14 @@ const subCel = {
   equator: new THREE.Group(), cancer: new THREE.Group(), capricorn: new THREE.Group(),
   polarcircles: new THREE.Group(), sun: new THREE.Group(), moon: new THREE.Group(),
 };
-Object.values(subCel).forEach(g => grpCelest.add(g));
+// v16.34: equator/cancer/capricorn/polarcircles flyttet til Layer 1 (grpMap) etter Jone-Aase 2026-05-28.
+// Sun og moon forblir på Layer 2 (grpCelest).
+grpMap.add(subCel.equator);
+grpMap.add(subCel.cancer);
+grpMap.add(subCel.capricorn);
+grpMap.add(subCel.polarcircles);
+grpCelest.add(subCel.sun);
+grpCelest.add(subCel.moon);
 
 const subFirma = { polaris: new THREE.Group(), stars: new THREE.Group() };
 Object.values(subFirma).forEach(g => grpFirma.add(g));
@@ -497,12 +505,8 @@ grpCelest.add(subCel.ports);
   glow.rotation.x = -Math.PI / 2;
   glow.position.y = 0.02;
   grpMagnet.add(glow);
-  // Tynn lilla akse fra kartsenter opp gjennom Polaris
-  const axisGeom = new THREE.CylinderGeometry(0.05, 0.05, Y_FIRMA, 8);
-  const axisMat  = new THREE.MeshBasicMaterial({ color: 0xa060ff, transparent: true, opacity: 0.35 });
-  const axis = new THREE.Mesh(axisGeom, axisMat);
-  axis.position.y = Y_FIRMA / 2;
-  grpMagnet.add(axis);
+  // v16.34: Polaris-akse fjernet etter Jone-Aase 2026-05-28.
+  // Kartsenteret er fortsatt markert med lilla glød (glow ovenfor).
 }
 
 // =================================================================
@@ -2230,21 +2234,10 @@ bindToggle('layer-outerring', subMap.outerring);
 // midnattssol fra observasjonspunktet kl 00 lokal. Den rette linjen er
 // solens faktiske siktlinje gjennom flat-geometri.
 {
+  // v16.34: zt1 (Aswan->Fort Yukon, gul) og zt2 (Catequilla->Antipode, blå)
+  // fjernet etter Jone-Aase 2026-05-28 fordi strekene gikk gjennom
+  // ikke-objekter. zt3 (Capricorn-Grimsey) beholdes.
   const tests = [
-    {
-      id: 'zt1',
-      labelA: 'Aswan (zenith)', latA:  24.0880, lonA:  32.8990,
-      labelB: 'Fort Yukon (midnattssol)', latB: 66.5636, lonB: -145.2611,
-      color: 0xc9a247,
-      eventDate: '19. juni 2026',
-    },
-    {
-      id: 'zt2',
-      labelA: 'Catequilla (ekvator-zenith)', latA: 0.0, lonA: -78.4956,
-      labelB: 'Antipode (midnatt)', latB: 0.0, lonB: 101.5044,
-      color: 0x6abfff,
-      eventDate: 'Jevndøgn',
-    },
     {
       id: 'zt3',
       labelA: 'Capricorn-zenith antipode', latA: -23.4373, lonA: 161.9833,
@@ -2323,6 +2316,7 @@ bindToggle('layer-capricorn', subCel.capricorn);
 bindToggle('layer-polarcircles', subCel.polarcircles);
 bindToggle('layer-sun', subCel.sun);
 bindToggle('layer-moon', subCel.moon);
+bindToggle('layer-enoch-gates', subCel.ports);
 
 bindToggle('layer-polaris', subFirma.polaris);
 bindToggle('layer-stars', subFirma.stars);
