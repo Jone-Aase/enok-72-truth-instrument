@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.32 (2026-05-28): Plottet 14 vendekrets-monumenter (VKM-01..14) + empirisk ring 23.4409° / 23.5614° ved siden av Ark T 23.70°. Lokasjoner IKKE flyttet.
 // v16.31 (2026-05-28): Lagt til firkantet Cartesian referanse-rutenett (GE-skala 110.593 km/°)
 // 4 lag stacket i Y-akse, fri kamera, ny radius = halve omkretsen
 // =================================================================
@@ -88,6 +89,25 @@ const MARKERS = [
   { id:"OBS-07", g:"Megalithic", n:"Abu Simbel", lat:22.33750, lon:31.62583, type:"soltempel", info:"1264 f.Kr." },
   { id:"OBS-08", g:"Megalithic", n:"Tikal Mundo Perdido", lat:17.22194, lon:-89.62361, type:"observatorium", info:"Maya." },
   { id:"OBS-09", g:"Megalithic", n:"Ahu Akivi", lat:-27.11528, lon:-109.41472, type:"moai", info:"Rapa Nui 1500-tallet." },
+  // =================================================================
+  // VENDEKRETS-MONUMENTER (14) — fysiske monumenter satt opp PÅ vendekretsene
+  // Empirisk snitt: Capricorn -23.4409° (spredning 13.5 km), Cancer +23.5614° (Aswan utligger)
+  // Match mot Ark T 23.70°: avvik 15-29 km systematisk. Plottes med eksakte GPS-koordinater.
+  // =================================================================
+  { id:"VKM-01", g:"Vendekrets-Monument", n:"Hito al Trópico de Capricornio (Antofagasta)", lat:-23.44310, lon:-70.42827, type:"vendekrets-monument", info:"Capricorn-monument, Chile. Eksakt 23°26'35.16\"S.", src:"https://www.wikidata.org/wiki/Q9004360" },
+  { id:"VKM-02", g:"Vendekrets-Monument", n:"Monolito del Trópico de Capricornio (Belén)", lat:-23.43752, lon:-57.27018, type:"vendekrets-monument", info:"Capricorn-monolitt, Paraguay. 23°26'15.07\"S.", src:"https://mapcarta.com/N4939298321" },
+  { id:"VKM-03", g:"Vendekrets-Monument", n:"Monolito sin sombra (Huacalera)", lat:-23.43830, lon:-65.35080, type:"vendekrets-monument", info:"Capricorn-monolitt, Argentina, Ruta Nacional 9. 23°26'17.88\"S.", src:"https://es.wikipedia.org/wiki/Huacalera" },
+  { id:"VKM-04", g:"Vendekrets-Monument", n:"Museu Florestal Octávio Vecchi (São Paulo)", lat:-23.46257, lon:-46.63707, type:"vendekrets-monument", info:"Capricorn-marker, Brasil, Parque Alberto Löfgren. 23°27'45.25\"S.", src:"https://en.wikipedia.org/wiki/Albert_L%C3%B6fgren_State_Park" },
+  { id:"VKM-05", g:"Vendekrets-Monument", n:"Marco do Trópico de Capricórnio (Maringá)", lat:-23.42530, lon:-51.93860, type:"vendekrets-monument", info:"Capricorn-marker, Paraná Brasil, Avenida Cerro Azul. 23°25'31.08\"S.", src:"https://time-ok.com/coordinates/maringa" },
+  { id:"VKM-06", g:"Vendekrets-Monument", n:"Tropic of Capricorn Spire (Rockhampton)", lat:-23.37810, lon:150.51360, type:"vendekrets-monument", info:"Capricorn-spire, QLD Australia. Gladstone Rd Allenstown. 23°22'41.16\"S.", src:"https://en.wikipedia.org/wiki/Rockhampton" },
+  { id:"VKM-07", g:"Vendekrets-Monument", n:"Tropic of Capricorn Marker (Alice Springs)", lat:-23.44189, lon:133.83280, type:"vendekrets-monument", info:"Capricorn-marker, NT Australia, Stuart Highway. 23°26'30.80\"S.", src:"https://www.monumentaustralia.org/themes/landscape/settlement/display/101471" },
+  { id:"VKM-08", g:"Vendekrets-Monument", n:"Tropic of Capricorn Sign (Solitaire)", lat:-23.50023, lon:15.77214, type:"vendekrets-monument", info:"Capricorn-skilt, Khomas Namibia, Rute C14. 23°30'00.83\"S.", src:"https://www.findlatitudeandlongitude.com/" },
+  { id:"VKM-09", g:"Vendekrets-Monument", n:"Monumento al Trópico de Cáncer (San Luis Potosí)", lat:23.44944, lon:-100.60500, type:"vendekrets-monument", info:"Cancer-monument, Mexico, Carretera 57. 23°26'58\"N.", src:"http://wikimapia.org/34376176" },
+  { id:"VKM-10", g:"Vendekrets-Monument", n:"Plaza Turística Trópico de Cáncer (Santiago BCS)", lat:23.50000, lon:-109.71667, type:"vendekrets-monument", info:"Cancer-plaza, Baja California Sur Mexico, km 81.5 Hwy 1. 23°30'00\"N.", src:"https://www.loscabosguide.com/tropic-of-cancer-monument/" },
+  { id:"VKM-11", g:"Vendekrets-Monument", n:"Aswan/Syene Eratosthenes-brønn", lat:24.08889, lon:32.89972, type:"vendekrets-monument", info:"Cancer-observasjon, Egypt. Eratosthenes' brønn 240 f.Kr. Utligger 24.089°N.", src:"https://en.wikipedia.org/wiki/Aswan" },
+  { id:"VKM-12", g:"Vendekrets-Monument", n:"Symbolic Tower of Tropic of Cancer (Shantou)", lat:23.44240, lon:116.58885, type:"vendekrets-monument", info:"Cancer-tårn, Guangdong Kina, Jilong-fjellet. 23°26'33\"N.", src:"https://en.wikipedia.org/wiki/Shantou" },
+  { id:"VKM-13", g:"Vendekrets-Monument", n:"Gate of Nature Tropic Tower (Nan'ao)", lat:23.43300, lon:117.01700, type:"vendekrets-monument", info:"Cancer-tårn, Nan'ao øy Guangdong Kina, Qing'ao Bay. 23°25'58.8\"N.", src:"https://en.wikipedia.org/wiki/Nan%27ao_County" },
+  { id:"VKM-14", g:"Vendekrets-Monument", n:"Tropic of Cancer Solar Exploration Center (Chiayi)", lat:23.45462, lon:120.41697, type:"vendekrets-monument", info:"Cancer-senter, Shuishang Taiwan. 23°27'16.63\"N.", src:"https://jotarofootsteps.blogspot.com/" },
 ];
 
 const FARGER = {
@@ -97,6 +117,7 @@ const FARGER = {
   "Struve":      "#ffcc88",
   "Megalithic":  "#cc99ff",
   "Polarsirkel": "#ffff88",
+  "Vendekrets-Monument": "#ffff00",  // klar gul — fysiske monumenter på vendekretsene
 };
 
 const FILTER_KEY = {
@@ -106,6 +127,7 @@ const FILTER_KEY = {
   "Polarsirkel": "filt-arctic",
   "Struve":      "filt-port",
   "Megalithic":  "filt-megalithic",
+  "Vendekrets-Monument": "filt-vendekretsmon",
 };
 
 // =================================================================
@@ -611,11 +633,14 @@ subMap.squareGrid.visible = false;  // av som default — brukeren skrur den på
 // Equator-ring (golden, alltid synlig på kartet)
 subMap.grid.add(makeRing(R_EQUATOR, 0xc9a247, 0.6));
 
-// Lat-sirkler (Cancer, Capricorn, Arctic, Antarctic) — Enoks vendekretser ved 23.7° (Excel master-kalender)
+// Lat-sirkler (Cancer, Capricorn, Arctic, Antarctic) — Enoks vendekretser ved 23.7° (Excel master-kalender Ark T H212)
 subMap.latcircles.add(makeRing(latToR(23.7), 0x886633, 0.5));
 subMap.latcircles.add(makeRing(latToR(-23.7), 0x886633, 0.5));
 subMap.latcircles.add(makeRing(latToR(66.5634), 0x335577, 0.5));
 subMap.latcircles.add(makeRing(latToR(-66.5634), 0x335577, 0.5));
+// EMPIRISK vendekrets-snitt fra 14 monumenter (Capricorn -23.4409°, Cancer +23.5614°) — gul, tynnere
+subMap.latcircles.add(makeRing(latToR(23.5614), 0xffff00, 0.45));
+subMap.latcircles.add(makeRing(latToR(-23.4409), 0xffff00, 0.45));
 
 // Meridianer (12 hovedmeridianer)
 subMap.meridians.add(makeMeridians(12, 0x556680, 0.45));
@@ -671,9 +696,12 @@ buildMarkers();
 // BYGG LAG 2 — SOL, MÅNE, RINGER
 // =================================================================
 subCel.equator.add(makeRing(R_EQUATOR, 0x60c060, 0.85));
-// Krepsens og Steinbukkens vendekrets ved 23.7° (Enoks port-yttergrenser, master-kalender)
+// Krepsens og Steinbukkens vendekrets ved 23.7° (Enoks port-yttergrenser, master-kalender Ark T H212)
 subCel.cancer.add(makeRing(latToR(23.7), 0xe0c060, 0.85));
 subCel.capricorn.add(makeRing(latToR(-23.7), 0xc08040, 0.85));
+// EMPIRISK ring fra 14 monumenter — tynnere, gul, ligger like innenfor Ark T-ringen
+subCel.cancer.add(makeRing(latToR(23.5614), 0xffff00, 0.5));
+subCel.capricorn.add(makeRing(latToR(-23.4409), 0xffff00, 0.5));
 subCel.polarcircles.add(makeRing(latToR(66.5634), 0x7090c0, 0.7));
 subCel.polarcircles.add(makeRing(latToR(-66.5634), 0x7090c0, 0.7));
 
@@ -2452,7 +2480,7 @@ function applyFilters() {
     if (mesh.parent) mesh.parent.visible = visible;
   }
 }
-['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic'].forEach(id => {
+['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', applyFilters);
 });
