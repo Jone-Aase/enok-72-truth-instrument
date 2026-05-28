@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.33 (2026-05-28): Lagt til 21 EK_Data-punkter (EK-01..21) fra One Voice V6 ark EK_Data kolonne AE-AL. Nye grupper: Havn-Sor, Meridian-110E/150E/149W.
 // v16.32 (2026-05-28): Plottet 14 vendekrets-monumenter (VKM-01..14) + empirisk ring 23.4409° / 23.5614° ved siden av Ark T 23.70°. Lokasjoner IKKE flyttet.
 // v16.31 (2026-05-28): Lagt til firkantet Cartesian referanse-rutenett (GE-skala 110.593 km/°)
 // 4 lag stacket i Y-akse, fri kamera, ny radius = halve omkretsen
@@ -108,6 +109,31 @@ const MARKERS = [
   { id:"VKM-12", g:"Vendekrets-Monument", n:"Symbolic Tower of Tropic of Cancer (Shantou)", lat:23.44240, lon:116.58885, type:"vendekrets-monument", info:"Cancer-tårn, Guangdong Kina, Jilong-fjellet. 23°26'33\"N.", src:"https://en.wikipedia.org/wiki/Shantou" },
   { id:"VKM-13", g:"Vendekrets-Monument", n:"Gate of Nature Tropic Tower (Nan'ao)", lat:23.43300, lon:117.01700, type:"vendekrets-monument", info:"Cancer-tårn, Nan'ao øy Guangdong Kina, Qing'ao Bay. 23°25'58.8\"N.", src:"https://en.wikipedia.org/wiki/Nan%27ao_County" },
   { id:"VKM-14", g:"Vendekrets-Monument", n:"Tropic of Cancer Solar Exploration Center (Chiayi)", lat:23.45462, lon:120.41697, type:"vendekrets-monument", info:"Cancer-senter, Shuishang Taiwan. 23°27'16.63\"N.", src:"https://jotarofootsteps.blogspot.com/" },
+  // =================================================================
+  // EK_DATA V6 — 21 punkter fra One Voice V6, arket EK_Data, kolonne AE-AL
+  // Empiriske Google Earth-observasjoner langs meridianer (110°E, 150°E, 149.5°W), polarsirkler og sørlige havner
+  // =================================================================
+  { id:"EK-01", g:"Havn-Sor", n:"Punta Arenas", lat:-53.15052, lon:-70.90298, type:"skipslogg-referanse", info:"EK_Data V6. Raw GE: 53°9'1.88\"S 70°54'10.74\"W" },
+  { id:"EK-02", g:"Havn-Sor", n:"Puerto Harris", lat:-53.84006, lon:-70.44378, type:"skipslogg-referanse", info:"EK_Data V6. Raw GE: 53°50'24.23\"S 70°26'37.61\"W" },
+  { id:"EK-03", g:"Meridian-110E", n:"Beihai Port", lat:20.27938, lon:110.00001, type:"meridian-110-east", info:"EK_Data V6. Raw GE: 20°16'45.77\"N 110°0'0.04\"E" },
+  { id:"EK-04", g:"Meridian-110E", n:"Hainan", lat:19.93009, lon:110.00000, type:"meridian-110-east", info:"EK_Data V6. Raw GE: 19°55'48.34\"N 110°0'0.00\"E" },
+  { id:"EK-05", g:"Meridian-110E", n:"Xincun Habor Yanjincun", lat:18.43403, lon:110.00017, type:"meridian-110-east", info:"EK_Data V6. Raw GE: 18°26'2.52\"N 110°0'0.60\"E" },
+  { id:"EK-06", g:"Meridian-150E", n:"Urup (Kuril-øyene)", lat:46.20177, lon:150.50465, type:"meridian-150-east", info:"EK_Data V6. Raw GE: 46°12'6.39\"N 150°30'16.75\"E" },
+  { id:"EK-07", g:"Meridian-150E", n:"Magadan Oblast", lat:59.54829, lon:150.78977, type:"meridian-150-east", info:"EK_Data V6. Raw GE: 59°32'53.86\"N 150°47'23.19\"E" },
+  { id:"EK-08", g:"Meridian-150E", n:"Sinegor'e (Magadan)", lat:62.07863, lon:150.50553, type:"meridian-150-east", info:"EK_Data V6. Raw GE: 62°4'43.07\"N 150°30'19.89\"E" },
+  { id:"EK-09", g:"Meridian-150E", n:"Tumannyi", lat:62.68097, lon:150.50514, type:"meridian-150-east", info:"EK_Data V6. Raw GE: 62°40'51.48\"N 150°30'18.52\"E" },
+  { id:"EK-10", g:"Meridian-150E", n:"Usun-Kiuell", lat:66.34406, lon:150.50526, type:"meridian-150-east", info:"EK_Data V6. Raw GE: 66°20'38.62\" 150°30'18.92\"E" },
+  { id:"EK-11", g:"Capricorn", n:"Tubuai (Fransk Polynesia)", lat:-23.37577, lon:-149.46830, type:"capricorn-punkt", info:"EK_Data V6. Raw GE: 23°22'32.76\"S 149°28'5.87\"W" },
+  { id:"EK-12", g:"Meridian-149W", n:"Michou (Fransk Polynesia)", lat:-17.50682, lon:-149.46826, type:"meridian-149-west", info:"EK_Data V6. Raw GE: 17°30'24.56\"S 149°28'5.73\"W" },
+  { id:"EK-13", g:"Meridian-149W", n:"Seward (Alaska)", lat:60.12090, lon:-149.46848, type:"meridian-149-west", info:"EK_Data V6. Raw GE: 60°7'15.25\"N 149°28'6.54\"W" },
+  { id:"EK-14", g:"Meridian-149W", n:"Kongiganak Anchorage (Alaska)", lat:60.97331, lon:-149.46826, type:"meridian-149-west", info:"EK_Data V6. Raw GE: 60°58'23.92\"N 149°28'5.74\"W" },
+  { id:"EK-15", g:"Meridian-149W", n:"Chugiak Birchwood Loop (Alaska)", lat:61.40395, lon:-149.46826, type:"meridian-149-west", info:"EK_Data V6. Raw GE: 61°24'14.21\"N 149°28'5.74\"W" },
+  { id:"EK-16", g:"Polarsirkel", n:"Toolik Lake Field Station", lat:68.62758, lon:-149.59427, type:"polarsirkel-punkt", info:"EK_Data V6. Raw GE: 68°37'39.30\"N 149°35'39.38\"W" },
+  { id:"EK-17", g:"Meridian-149W", n:"Kuparuk Rd (Alaska)", lat:70.32616, lon:-149.59595, type:"meridian-149-west", info:"EK_Data V6. Raw GE: 70°19'34.16\"N 149°35'45.43\"W" },
+  { id:"EK-18", g:"Polarsirkel", n:"Hestmona Storselsøy", lat:66.55002, lon:12.84714, type:"polarsirkel-punkt", info:"EK_Data V6. Raw GE: 66°33'0.08\"N 12°50'49.72\"E" },
+  { id:"EK-19", g:"Polarsirkel", n:"Raudskjærholmen", lat:66.54329, lon:12.16575, type:"polarsirkel-punkt", info:"EK_Data V6. Raw GE: 66°32'35.83\"N 12°9'56.69\"E" },
+  { id:"EK-20", g:"Polarsirkel", n:"Itilleq Arsaattarfik (Grønland)", lat:66.57695, lon:-53.49841, type:"polarsirkel-punkt", info:"EK_Data V6. Raw GE: 66°34'37.01\"N 53°29'54.27\"W" },
+  { id:"EK-21", g:"Polarsirkel", n:"Nedlung", lat:66.54316, lon:-71.32839, type:"polarsirkel-punkt", info:"EK_Data V6. Raw GE: 66°32'35.39\"N 71°19'42.20\"W" },
 ];
 
 const FARGER = {
@@ -118,6 +144,10 @@ const FARGER = {
   "Megalithic":  "#cc99ff",
   "Polarsirkel": "#ffff88",
   "Vendekrets-Monument": "#ffff00",  // klar gul — fysiske monumenter på vendekretsene
+  "Havn-Sor":      "#ff44aa",  // magenta — sørlige skipslogg-havner (Punta Arenas, Puerto Harris)
+  "Meridian-110E": "#44ddff",  // cyan — 110°E (Kina-aksen)
+  "Meridian-150E": "#88ffaa",  // lysegrønn — 150°E (Russland-aksen)
+  "Meridian-149W": "#ffaa44",  // oransje — 149.5°W (Alaska / Polynesia-aksen)
 };
 
 const FILTER_KEY = {
@@ -128,6 +158,10 @@ const FILTER_KEY = {
   "Struve":      "filt-port",
   "Megalithic":  "filt-megalithic",
   "Vendekrets-Monument": "filt-vendekretsmon",
+  "Havn-Sor":      "filt-havn-sor",
+  "Meridian-110E": "filt-mer-110e",
+  "Meridian-150E": "filt-mer-150e",
+  "Meridian-149W": "filt-mer-149w",
 };
 
 // =================================================================
@@ -2480,7 +2514,7 @@ function applyFilters() {
     if (mesh.parent) mesh.parent.visible = visible;
   }
 }
-['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon'].forEach(id => {
+['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', applyFilters);
 });
