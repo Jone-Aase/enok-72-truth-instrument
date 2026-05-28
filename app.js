@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.39 (2026-05-28): Hit-sphere redusert fra 0.4 til 0.18 (mindre 'klissete' click-omrade). compareRing (sammenligningsring under lat-slider) starter na skjult og kobles til ekvator-toggle nar den ligger pa ekvator-posisjon - faar synlighet styrt av slider-bevegelse. Lat-slider sjekkboks lagt til.
 // v16.38 (2026-05-28): Ekvator-ring flyttet fra R_EQUATOR (10001 km, kule-radius) til latToR(0) (15710 km, buestreng-radius) sa ringen ligger pa samme posisjon som ekvator-punktene (Pyramid of Oyambaro, Pontianak Tugu Khatulistiwa, Quitsato). Click-treff-flate utvidet: usynlig hit-sphere radius 0.4 lagt rundt hver markor.
 // v16.37 (2026-05-28): Ekvator-ring byttet fra gronn (0x60c060) til gull (0xc9a247) etter Jone-Aase. Matcher Quitsato/Pontianak/Catequilla monumentene og vendekretsene.
 // v16.36 (2026-05-28): Rydding-3 etter Jone-Aase: lilla nordpol-glow fjernet (grpMagnet tom, layer-magnet toggle fjernet), port-progress-indikator (4,6,5,3,1,3) fjernet fra canvas.
@@ -710,8 +711,8 @@ function buildMarkers() {
     const stalk = new THREE.Mesh(stalkGeom, stalkMat);
     stalk.position.set(0, 0.06, 0);
     pinGroup.add(stalk);
-    // v16.38: Usynlig hit-sphere for mye lettere klikk-treff (5x større radius)
-    const hitGeom = new THREE.SphereGeometry(0.4, 8, 8);
+    // v16.39: Usynlig hit-sphere for lettere klikk-treff (~2x større radius enn synlig pin)
+    const hitGeom = new THREE.SphereGeometry(0.18, 8, 8);
     const hitMat = new THREE.MeshBasicMaterial({ visible: false });
     const hitMesh = new THREE.Mesh(hitGeom, hitMat);
     hitMesh.position.set(0, 0.12, 0);
@@ -2140,6 +2141,8 @@ bindToggle('layer-outerring', subMap.outerring);
   const R_SPHERE_KM = 6371;  // standard kule-radius
   // Bygg ringen én gang, oppdater radius via scale eller geometry-rebuild
   let compareRing = null;
+  // v16.39: compareRing skjult som default - vises bare nar brukeren aktiverer 'Show compare ring'
+  let compareRingEnabled = false;
   function makeCompareRing(radius) {
     if (compareRing) {
       grpMap.remove(compareRing);
@@ -2153,9 +2156,10 @@ bindToggle('layer-outerring', subMap.outerring);
     compareRing = new THREE.Mesh(geom, mat);
     compareRing.rotation.x = -Math.PI / 2;
     compareRing.position.y = 0.06;  // over kartet og rutenettet
+    compareRing.visible = compareRingEnabled;  // v16.39: respekter toggle
     grpMap.add(compareRing);
   }
-  // Initial ring på ekvator
+  // Initial ring på ekvator (men skjult inntil brukeren skrur den pa)
   makeCompareRing(latToR(0));  // v16.38: buestreng-radius, ikke kule-radius
 
   const slider = document.getElementById('lat-slider');
@@ -2224,6 +2228,15 @@ bindToggle('layer-outerring', subMap.outerring);
       updateCompare(parseFloat(slider.value));
     });
     updateCompare(parseFloat(slider.value));
+  }
+
+  // v16.39: Toggle for compareRing
+  const compareToggle = document.getElementById('lc-show-ring');
+  if (compareToggle) {
+    compareToggle.addEventListener('change', () => {
+      compareRingEnabled = compareToggle.checked;
+      if (compareRing) compareRing.visible = compareRingEnabled;
+    });
   }
 }
 
