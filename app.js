@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.53 (2026-05-28): GE-tallring FLYTTET UT av kompasset til egen subMap.geRing-gruppe — nå styres den KUN av layer-grid-toggelen, helt uavhengig av kompass og klokke. Kompassets gull-bakgrunnsringer (compassInnerR/compassOuterR) LAGT TILBAKE. Kompasset flyttet nærmere Antarctica igjen (ticks 1.085–1.155, tall 1.168–1.265) for å redusere overflødig luft — GE-tallene har nå sin egen plass mellom Antarctica (R_OUTER) og kompassets innerring (R_OUTER × 1.080). Nye GE-radier: 1.030–1.065 (innenfor kompassets gull-innerring).
 // v16.52 (2026-05-28): TRE UAVHENGIGE TOGGLES + omorganisert layout. (1) Kompass beholder sine 360 0–359° tall (lagt tilbake fra v16.51), men flyttet UTOVER så det er luft mellom Antarctica-ring og kompass. (2) GE-tallring flyttet til MELLOM Antarctica-ring og kompass (R_OUTER × 1.04 → 1.075), tilhører kun GE grid-toggelen. (3) Antarctica-ring beholder sin egen toggle 'layer-outerring' uavhengig. Klokkens gull-ringer (compassInnerR/compassOuterR) FJERNET så de ikke skjuler GE-tallene. Ny lagrekkefølge innenfra og ut: kart → Antarctica-ring (R_OUTER) → GE-tall (R_OUTER × 1.04–1.075) → kompass-ticks (1.105–1.175) → kompass-tall 0–359° (1.188–1.285).
 // v16.51 (2026-05-28): Konsolidert tallskala — ETT sett GE-tall plassert UTENFOR ytre ring (R_OUTER × 1.03). Fjernet alle gamle 360 grad-tall inni kompasset (kardinaler N/E/S/W, hver 1°, hver 5°, hver 10°) OG fjernet 5°-finringens 72 teal-tall inni klokken. Ticks (gull-streker for 1°/5°/10°/90° + teal 5°-ticks) beholdes som visuell skala uten tall. Formel uendret: kompass_vinkel = (180 - GE_lon) mod 360. Nå er det bare ETT tallsett som viser kompassets 360° — det ligger rett utenfor ytre ring (Antarctica 197 421 km / 31 420 km AE-radius).
 // v16.50 (2026-05-28): GE-lengdegrad-tallring lagt inn inni kompasset (hver 5°, 72 tall). Greenwich (0° GE) plassert på vårt kompass-180° (bunn der Afrika ligger). Formel: kompass_vinkel = (180 - GE_lon) mod 360. 10°E -> kompass 170°, 10°W -> kompass 190°, 90°E -> kompass 90°. Slått sammen toggles: 'GE grid (lat/long reference)' styrer nå standardrutenett + 5°-edderkoppnett + 5°-finring i kompasset + GE-tallring. 'Fine 5° grid (72)'-checkbox fjernet (redundant).
@@ -300,6 +301,7 @@ const subMap = {
   meridians: new THREE.Group(), latcircles: new THREE.Group(), outerring: new THREE.Group(),
   squareGrid: new THREE.Group(),  // Kartesisk referanse-rutenett (1° lat = 110.593 km, GE-skala)
   gridFine: new THREE.Group(),    // v16.49: Finmasket 5°-edderkoppnett (72 meridianer + 5°-breddesirkler)
+  geRing: new THREE.Group(),      // v16.53: GE-lengdegrad-tallring (0°, 5°E…) MELLOM Antarctica og kompass. Helt uavhengig av kompass/klokke.
   daynight: new THREE.Group(),
   clockSol: new THREE.Group(),   // Sol-klokke (Enok-tid, drives av sunLonAngle)
   clockAtom: new THREE.Group(),  // Atom-klokke (sann tid, drives av Date)
@@ -1115,18 +1117,37 @@ function buildClock(group, opts) {
     return spr;
   }
 
-  // v16.52: Kompass flyttet UTOVER for å gi plass til GE-tallring mellom Antarctica (R_OUTER) og kompass.
+  // v16.53: Kompass tilbake til strammere posisjon (GE-tall ligger nå i egen subMap.geRing-gruppe utenfor).
   // Ny rekkefølge innenfra og ut:
-  //   kart → Antarctica-ring (R_OUTER) → GE-tall (1.04–1.075) → kompass-ticks (1.105–1.175) → kompass-tall (1.188–1.285)
-  // Klokkens to gull-sirkler (compassInnerR/compassOuterR) er fjernet så GE-tallene ikke skjules.
-  // Mellomringene (dempet gull-streker) er også fjernet av samme grunn.
-  const tickStartR     = radius * 1.105;
-  const tickEndMinor   = radius * 1.125;  // 1° ticks
-  const tickEndMid     = radius * 1.140;  // 5° ticks
-  const tickEndMajor   = radius * 1.160;  // 10° ticks
-  const tickEndCardinal= radius * 1.175;  // 90° ticks (kardinaler)
-  const degLabelR      = radius * 1.215;  // alle 360 grad-tall
-  const cardinalR      = radius * 1.260;  // ekstra fremheving for 0/90/180/270
+  //   kart → Antarctica-ring (R_OUTER) → GE-tall (subMap.geRing, R_OUTER × 1.030–1.065) → kompass-innerring (1.080) → kompass-ticks (1.085–1.155) → kompass-tall (1.168–1.265) → kompass-ytterring (1.295)
+  // Kompassets to gull-sirkler er LAGT TILBAKE som bakgrunn rundt kompassdelen.
+  const compassInnerR  = radius * 1.080;  // gull-bakgrunnsring innerst rundt kompasset
+  const compassOuterR  = radius * 1.295;  // gull-bakgrunnsring ytterst
+  const tickStartR     = radius * 1.085;
+  const tickEndMinor   = radius * 1.105;  // 1° ticks
+  const tickEndMid     = radius * 1.120;  // 5° ticks
+  const tickEndMajor   = radius * 1.140;  // 10° ticks
+  const tickEndCardinal= radius * 1.155;  // 90° ticks (kardinaler)
+  const degLabelR      = radius * 1.195;  // alle 360 grad-tall (mellomradius for 1°)
+  const cardinalR      = radius * 1.240;  // ekstra fremheving for 0/90/180/270
+
+  // Indre og ytre gull-sirkel som rammer kompass-ringen (v16.53: tilbake fra v16.52)
+  function makeRingCircle(r, color, opacity, y) {
+    const segments = 720;
+    const pts = [];
+    for (let i = 0; i <= segments; i++) {
+      const a = (i / segments) * Math.PI * 2;
+      pts.push(new THREE.Vector3(Math.sin(a) * r, y, -Math.cos(a) * r));
+    }
+    const g = new THREE.BufferGeometry().setFromPoints(pts);
+    const m = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+    return new THREE.Line(g, m);
+  }
+  group.add(makeRingCircle(compassInnerR, 0xffd54a, 0.85, yPos + 0.035));
+  group.add(makeRingCircle(compassOuterR, 0xffd54a, 0.85, yPos + 0.035));
+  // To tynne dempede mellomringer for ekstra dybde
+  group.add(makeRingCircle(radius * 1.160, 0x8a7048, 0.35, yPos + 0.035)); // skille mellom ticks og 1°-tall
+  group.add(makeRingCircle(radius * 1.220, 0x8a7048, 0.30, yPos + 0.035)); // skille mellom 5° og 10°/kardinaler
 
   // 360 tick-merker, ett per grad. Hver 10. er lang, hver 90. (kardinal) ekstra lang.
   for (let deg = 0; deg < 360; deg++) {
@@ -1185,13 +1206,13 @@ function buildClock(group, opts) {
     return new THREE.Mesh(geo, mat);
   }
 
-  // v16.52: 360 grad-tall (0–359) LAGT TILBAKE inni kompasset — dette er kompassets egne tall,
-  // separat fra GE-tallringen som nå ligger inni mellom Antarctica-ring og kompasset.
+  // v16.52: 360 grad-tall (0–359) LAGT TILBAKE inni kompasset — dette er kompassets egne tall.
+  // v16.53: GE-tallringen flyttet til egen subMap.geRing-gruppe (utenfor kompasset) — helt uavhengig.
   // Radius-soner for grad-tallene (nærmere ticks = mindre tall)
-  const r1deg  = radius * 1.188;  // hver 1° — små tall like utenfor ticks
-  const r5deg  = radius * 1.222;  // hver 5°
-  const r10deg = radius * 1.255;  // hver 10°
-  const rCard  = radius * 1.285;  // kardinaler
+  const r1deg  = radius * 1.168;  // hver 1° — små tall like utenfor ticks
+  const r5deg  = radius * 1.198;  // hver 5°
+  const r10deg = radius * 1.230;  // hver 10°
+  const rCard  = radius * 1.265;  // kardinaler
 
   for (let deg = 0; deg < 360; deg++) {
     const a = (deg / 360) * Math.PI * 2;
@@ -1253,52 +1274,10 @@ function buildClock(group, opts) {
   // GE-tallringen (under) er nå den eneste numeriske skalaen, plassert UTENFOR ytre ring.
 
   // ────────────────────────────────────────────────────────────────
-  // v16.52: GE-LENGDEGRAD-RING (Google Earth-konvensjon, hver 5°)
-  // Plassert MELLOM Antarctica-ringen (R_OUTER) og kompass-tickene (radius * 1.105).
-  // Greenwich (0° GE) lander på vårt kompass-180° (sone der Afrika ligger, bunn av disken).
-  // Formel: kompass_vinkel = (180° - GE_lon) mod 360°
-  //   0°   GE  -> 180° kompass (bunn)         | 10°E -> 170° kompass
-  //   90°E GE  -> 90°  kompass (høyre)        | 10°W -> 190° kompass
-  //   180° GE  -> 0°   kompass (topp/datolinje)| 90°W -> 270° kompass
-  // Hører til GE grid-toggelen (fineRingGroup), helt separat fra kompasset.
-  // Bruker R_OUTER direkte (ikke 'radius') så GE-skalaen er stabil uavhengig av klokkens radius-slider.
+  // v16.53: GE-LENGDEGRAD-RING er FLYTTET UT av buildClock() til egen funksjon buildGeRing()
+  // som plasserer tallene i subMap.geRing (helt uavhengig av kompass/klokke).
+  // Se buildGeRing() nedenfor (kjeres en gang fra init). Den styres KUN av layer-grid-toggelen.
   // ────────────────────────────────────────────────────────────────
-  // Tre konsentriske radier for hierarki: kardinaler ytterst, hovedmeridianer midten, 5°-mellomtall innerst.
-  // Alle ligger MELLOM Antarctica-ring (1.00) og kompass-ticks (1.105).
-  const geCardinalR = R_OUTER * 1.075;  // 0°, 90°E, 180°, 90°W (kardinaler) — ytterst
-  const geMajorR    = R_OUTER * 1.060;  // hver 10°
-  const geMidR      = R_OUTER * 1.045;  // 5°-mellomtall — innerst, tett på Antarctica-ring
-  for (let i = 0; i < 72; i++) {
-    const geLon = i * 5;  // 0, 5, 10, ..., 355
-    // Konverter GE-konvensjon (0-360 østover) til signed lon (-180..180)
-    const signedLon = geLon > 180 ? geLon - 360 : geLon;
-    // Kompass-vinkel: (180 - signedLon) mod 360
-    let compassDeg = (180 - signedLon) % 360;
-    if (compassDeg < 0) compassDeg += 360;
-    const a = (compassDeg / 360) * Math.PI * 2;
-    // Bygg label-tekst i GE-stil: 0°, 5°E, 10°E... 180°, 175°W... 5°W
-    let text;
-    if (signedLon === 0) text = '0°';
-    else if (signedLon === 180 || signedLon === -180) text = '180°';
-    else if (signedLon > 0) text = signedLon + '°E';
-    else text = (-signedLon) + '°W';
-    // Markere hovedmeridianer (hver 10°) større, og kardinaler (0, 90, 180, 270) ekstra fremhevet
-    const isCardinal = (geLon === 0 || geLon === 90 || geLon === 180 || geLon === 270);
-    const isMajor = (geLon % 10 === 0);
-    // Velg radius og størrelse basert på hierarki. Skala holdes liten så tallene passer i tomrommet.
-    let r, color, scale;
-    if (isCardinal) { r = geCardinalR; color = '#80e0e8'; scale = R_OUTER * 0.024; }
-    else if (isMajor) { r = geMajorR; color = '#5ab0c0'; scale = R_OUTER * 0.018; }
-    else { r = geMidR; color = '#4a8090'; scale = R_OUTER * 0.013; }
-    const x = Math.sin(a) * r;
-    const z = -Math.cos(a) * r;
-    const mesh = makeDegreeText(text, color, isMajor ? '500' : '400', 128);
-    mesh.scale.set(scale, 1, scale);
-    mesh.position.set(x, yPos + 0.052, z);
-    // Roter teksten slik at den står radielt utover ("bunnen mot sentrum")
-    mesh.rotation.y = -a;
-    fineRingGroup.add(mesh);
-  }
 
   // Av som default — styres av layer-grid-toggle (slått sammen med GE grid)
   fineRingGroup.visible = false;
@@ -1523,6 +1502,126 @@ function buildClock(group, opts) {
 // Initial radius for sol-klokken — dekker hele AE-disken (ytterste diameter = R_OUTER).
 // Bruker uttrykt prosent av R_OUTER (default 100% = hele disken).
 let clockSolRadius = R_OUTER * 1.00;
+
+// =================================================================
+// v16.53: GE-LENGDEGRAD-TALLRING — egen gruppe (subMap.geRing)
+// =================================================================
+// 72 tall plassert MELLOM Antarctica-ring (R_OUTER) og kompass-innerring (R_OUTER × 1.080).
+// Helt uavhengig av klokke/kompass — styres KUN av layer-grid-toggelen.
+// Formel: kompass_vinkel = (180 - GE_lon_signert) mod 360
+//   0° GE  → kompass 180° (nede, mot Afrika)
+//  90°E   → kompass 90°  (høyre)
+//  90°W   → kompass 270° (venstre)
+// 180°   → kompass 0°   (toppen, Greenwich-meridianen på antipoden)
+function buildGeRing() {
+  const grp = subMap.geRing;
+  // Tøm gruppen først (idempotent — kan kalles flere ganger)
+  while (grp.children.length > 0) {
+    const child = grp.children[0];
+    grp.remove(child);
+    if (child.geometry) child.geometry.dispose();
+    if (child.material) {
+      if (child.material.map) child.material.map.dispose();
+      child.material.dispose();
+    }
+  }
+
+  // Lokal helper (kopi av makeDegreeText fra buildClock — selvstendig her).
+  function makeGeText(text, color, weight, sizePx) {
+    const SS = 4;
+    const c = document.createElement('canvas');
+    c.width = sizePx * SS; c.height = sizePx * SS;
+    const ctx = c.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const fontPx = Math.floor(sizePx * SS * 0.7);
+    ctx.font = `${weight} ${fontPx}px 'Cormorant Garamond', 'Times New Roman', serif`;
+    const cx = c.width / 2, cy = c.height / 2;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = 'rgba(0,20,30,0.75)';
+    ctx.lineWidth = Math.max(1.0, fontPx * 0.025);
+    ctx.strokeText(text, cx, cy);
+    ctx.fillStyle = color;
+    ctx.fillText(text, cx, cy);
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 16;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.generateMipmaps = true;
+    tex.needsUpdate = true;
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: true, side: THREE.DoubleSide });
+    const geo = new THREE.PlaneGeometry(1, 1);
+    geo.rotateX(-Math.PI / 2);
+    return new THREE.Mesh(geo, mat);
+  }
+
+  // Tre konsentriske radier MELLOM Antarctica (R_OUTER) og kompass-innerring (R_OUTER × 1.080).
+  const geMidR      = R_OUTER * 1.030;  // 5°-mellomtall (innerst, tett på Antarctica)
+  const geMajorR    = R_OUTER * 1.050;  // hver 10°
+  const geCardinalR = R_OUTER * 1.065;  // 0°, 90°E, 180°, 90°W (ytterst, like under kompasset)
+
+  const yPos = 0.10;  // Y_MAP (0) + CLOCK_Y_SOL (0.05) + 0.05 buffer
+
+  // 72 tall: hver 5° GE-lengdegrad (0, 5, 10, ..., 355)
+  for (let geLon = 0; geLon < 360; geLon += 5) {
+    // GE-lengdegrad → signert (-180..180)
+    const signedLon = geLon > 180 ? geLon - 360 : geLon;
+    // Vår kompass-vinkel (180° = Greenwich/0° GE nederst)
+    let compassDeg = (180 - signedLon) % 360;
+    if (compassDeg < 0) compassDeg += 360;
+    const a = (compassDeg / 360) * Math.PI * 2;
+
+    const isCardinal = (geLon === 0 || geLon === 90 || geLon === 180 || geLon === 270);
+    const isMajor    = (geLon % 10 === 0);
+
+    let r, color, weight, sizePx, scaleSize, label;
+    if (isCardinal) {
+      r = geCardinalR;
+      color = '#9ee0ff';   // lys cyan — GE-kardinaler
+      weight = 'bold';
+      sizePx = 112;
+      scaleSize = R_OUTER * 0.052;
+      // Tekst-label: 0°, 90°E, 180°, 90°W
+      if (geLon === 0) label = '0\u00b0';
+      else if (geLon === 90) label = '90E';
+      else if (geLon === 180) label = '180\u00b0';
+      else label = '90W';
+    } else if (isMajor) {
+      r = geMajorR;
+      color = '#7ec8d8';
+      weight = 'normal';
+      sizePx = 88;
+      scaleSize = R_OUTER * 0.038;
+      // 10°-tall med E/W-suffiks
+      if (geLon < 180) label = String(geLon) + 'E';
+      else label = String(360 - geLon) + 'W';
+    } else {
+      // 5°-mellomtall
+      r = geMidR;
+      color = '#5a96a8';
+      weight = 'normal';
+      sizePx = 72;
+      scaleSize = R_OUTER * 0.028;
+      if (geLon < 180) label = String(geLon);
+      else label = String(360 - geLon);
+    }
+
+    const x = Math.sin(a) * r;
+    const z = -Math.cos(a) * r;
+
+    const mesh = makeGeText(label, color, weight, sizePx);
+    mesh.position.set(x, yPos, z);
+    mesh.scale.set(scaleSize, scaleSize, scaleSize);
+    // Rotér slik at tallet "peker utover" fra senter (lesbar fra utsiden)
+    mesh.rotation.y = -a;
+    grp.add(mesh);
+  }
+}
+
+buildGeRing();
+// Default: følger layer-grid-toggle (av som default — se binding lenger ned)
+subMap.geRing.visible = false;
 
 // v16.24: Enok-urskive — 18 likestore deler per rotasjon (én dag = 18 timer).
 // 18 øverst (kl 0 / midnatt), tellingen går med klokken: 1,2,3,...,9 (middag, kl 6-posisjon),...,17,18.
@@ -2159,13 +2258,15 @@ function bindToggle(id, group, prop = 'visible') {
 // v16.36: layer-magnet toggle fjernet (grpMagnet er tom etter at glow ble fjernet).
 // v16.50: 'GE grid (lat/long reference)'-toggle styrer nå også 5°-edderkoppnettet (subMap.gridFine)
 // og 5°-finringen + GE-tallringen inni kompasset. Tidligere 'layer-grid-fine'-checkbox fjernet.
+// v16.53: GE-tallringen er nå EGEN gruppe (subMap.geRing) — også styrt av layer-grid (uavhengig av klokke/kompass).
 {
   const el = document.getElementById('layer-grid');
   if (el) {
     const apply = () => {
       subMap.grid.visible = el.checked;
       subMap.gridFine.visible = el.checked;
-      // Hvis fineRing-undergruppen finnes på clockSol, koble den til samme toggle
+      subMap.geRing.visible = el.checked;   // v16.53: GE-tallring følger nå GE-grid-toggelen uavhengig
+      // Bakoverkompatibel kobling — hvis fineRing-undergruppen finnes på clockSol, koble den også
       const fr = subMap.clockSol.userData ? subMap.clockSol.userData.fineRing : null;
       if (fr) fr.visible = el.checked;
     };
@@ -2992,7 +3093,9 @@ requestAnimationFrame(loop);
       });
       const lbl = document.getElementById('clock-sol-radius-val');
       if (lbl) lbl.textContent = pct + '%';
-      // v16.50: Rebind 5°-finring og GE-tallring til layer-grid-toggle etter ombygging
+      // v16.50: Rebind 5°-finring til layer-grid-toggle etter ombygging.
+      // v16.53: GE-tallringen er flyttet ut til subMap.geRing og bygges KUN én gang fra init —
+      // den påvirkes IKKE av radius-slider lenger (helt uavhengig av klokken).
       const gridEl = document.getElementById('layer-grid');
       if (gridEl) {
         const fr = subMap.clockSol.userData ? subMap.clockSol.userData.fineRing : null;
