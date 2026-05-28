@@ -1,6 +1,6 @@
 # STATUS-NA.md — Nåværende tilstand
 
-Sist oppdatert: 2026-05-28 00:15 CEST
+Sist oppdatert: 2026-05-28 02:05 CEST
 
 ## Prosjekt
 
@@ -103,7 +103,7 @@ Hovedankere (kjente sol-bane-punkter):
 | 91 | Sommersolverv | 6 | +23,7° |
 | 182 | Høstjevndøgn | 4 | 0° |
 | 273 | Vintersolverv | 1 | −23,7° |
-| 364 | Tilbake til vårjevndøgn | 4 | 0° |
+| 364 | Siste dag, Adar | 3 | 0° | (Ark T celle AC125)
 
 Pluss 4 ekstrarunder (dag 91, 182, 273, 364) → 368 reelle sol-runder.
 

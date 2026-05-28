@@ -2,8 +2,8 @@
 
 **Formål:** Låse nåværende tilstand i tilfelle Perplexity-agenten resettes. Skal leses **først** ved oppstart av ny sesjon.
 
-**Sist oppdatert:** 2026-05-28 01:25 CEST
-**Skrevet av:** Perplexity-agent etter Jone-Aase-avklaring 2026-05-28 01:23 CEST
+**Sist oppdatert:** 2026-05-28 02:05 CEST
+**Skrevet av:** Perplexity-agent etter Jone-Aase-avklaring 2026-05-28 01:23 og 02:02 CEST
 
 ---
 
@@ -27,7 +27,7 @@
 - **364 kalenderdager + 4 ekstrarunder = 368 sol-runder** per år
 - **23,7° = Ark T H212** (er øverst i hierarkiet — gjelder uansett hva matematikken sier)
 - **sunMesh.visible = true alltid** (master-regel 5)
-- **GE-radius ved ekvator: 10 001,56 km** per Jone-Aase 2026-05-28 (TIDLIGERE 10 001,47 km i koden — må rettes)
+- **GE-radius ved ekvator: 10 001,47 km** beholdes i kode (Jone-Aase 2026-05-28 02:02: 90 m avvik mot 10 001,56 er innenfor hypoteseusikkerheten, begge er hypoteser, ingen endring nå)
 
 ### Det som er hypotese basert på GE-skalering
 - Cancer/Capricorn-radius i km (11 608 / 19 812 i dagens STATUS-NA — feil per GPT)
@@ -54,28 +54,24 @@
 
 ## NESTE STEG (i rekkefølge)
 
-### Steg 1: Cancer/Capricorn-radius (HIT VI ER NÅ)
-**Var dette vi jobbet med i går før jeg ble resatt.**
+### Steg 1: Plotte inn alle bekreftede lokasjoner (HIT VI ER NÅ)
+**Endret rekkefolge per Jone-Aase 2026-05-28 02:02:**
 
-Problemet:
+> *"For vi fastsetter disse radiusene, må vi plotte inn alle bekreftede lokasjoner som jeg skal gi deg."*
+
+Dette er vitenskapelig riktig rekkefolge: lokasjonene styrer radiusene, ikke omvendt. Vi venter pa Jone-Aase sin liste av bekreftede lokasjoner. Hver lokasjon skal ha:
+- Navn
+- Koordinater (lat/lon)
+- Kategori (Cancer-monument, Capricorn-monument, ekvator-zenith, polarsirkel, observatorium, havn, etc.)
+- Kilde/referanse
+- Hvilken Ark T-rad den knyttes til (hvis aktuelt)
+
+Nar lokasjonene er plottet, kan vi beregne radiusene empirisk fra observerte data.
+
+### Steg 2: Cancer/Capricorn-radius (kommer etter lokasjons-plotting)
 - STATUS-NA og kode bruker Cancer-radius **11 608 km** og Capricorn-radius **19 812 km**
-- Med 23,7° og formelen `R_OUTER × (90 − lat) / 180` skulle de vært **11 573,24 km** og **19 847,31 km**
-- Tallene 11 608 og 19 812 passer matematisk med ±23,5° (ikke ±23,7°)
-
-Mulige forklaringer:
-- (a) Tallene fra v15-formelen (før buestreng-uretting)
-- (b) Tallene tatt fra astronomisk standard (23,5°) ikke Ark T (23,7°)
-- (c) En annen referanse vi ikke har dokumentert
-
-**Det vi må gjøre:**
-1. Åpne `Ark-T-V6-uttrekk.xlsx`, sjekke rad 31 og rad 222 (innerste/ytterste sol-bane) for hva Ark T faktisk sier
-2. Avklare hvilken radius som er primær — Ark T eller formelen
-3. Oppdatere koden, STATUS-NA, port-dokumentet og rutenett-dokumentet konsistent
-
-### Steg 2: GE-radius-korreksjon
-- Endre `R_EQUATOR_KM = 10001.47` → `10001.56` i app.js
-- Reberegne R_OUTER, omkrets, og alle posisjoner
-- Oppdatere STATUS-NA og dokumenter
+- Med 23,7° og formelen `R_OUTER × (90 − lat) / 180` skulle de vaert **11 573,24 km** og **19 847,31 km**
+- Sannheten avgjores empirisk via lokasjonene fra steg 1, ikke ved formel-aritmetikk
 
 ### Steg 3: Omskrive grader → baner som primær enhet
 - Rutenett-dokumentet skrives om: 180 baner er fakta, gradene er GE-hypotese
@@ -123,9 +119,9 @@ Grok sender første endring (foreslått: glød + puls på de 4 ekstrarundedagene
 
 ## Åpne arbeidsspørsmål til Jone-Aase
 
-1. Skal `R_EQUATOR_KM` i koden endres fra 10 001,47 til 10 001,56?
-2. Skal jeg åpne `Ark-T-V6-uttrekk.xlsx` og lese rad 31 og 222 for å finne riktig Cancer/Capricorn-radius?
-3. Når Ark T er sjekket: hvis den sier radius som ikke passer med formelen R_OUTER × (90 − 23,7) / 180, hvilken vinner — Ark T eller formelen?
+1. ~~Skal `R_EQUATOR_KM` i koden endres fra 10 001,47 til 10 001,56?~~ AVKLART 02:02: beholdes 10 001,47, 90 m avvik er innenfor hypoteseusikkerhet.
+2. ~~Dag 364 — port 3 eller port 4?~~ AVKLART 02:02: Port 3 (Ark T celle AC125).
+3. Venter pa Jone-Aase sin liste av bekreftede lokasjoner som skal plottes inn for empirisk radius-bestemmelse.
 
 ---
 
