@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.51 (2026-05-28): Konsolidert tallskala — ETT sett GE-tall plassert UTENFOR ytre ring (R_OUTER × 1.03). Fjernet alle gamle 360 grad-tall inni kompasset (kardinaler N/E/S/W, hver 1°, hver 5°, hver 10°) OG fjernet 5°-finringens 72 teal-tall inni klokken. Ticks (gull-streker for 1°/5°/10°/90° + teal 5°-ticks) beholdes som visuell skala uten tall. Formel uendret: kompass_vinkel = (180 - GE_lon) mod 360. Nå er det bare ETT tallsett som viser kompassets 360° — det ligger rett utenfor ytre ring (Antarctica 197 421 km / 31 420 km AE-radius).
 // v16.50 (2026-05-28): GE-lengdegrad-tallring lagt inn inni kompasset (hver 5°, 72 tall). Greenwich (0° GE) plassert på vårt kompass-180° (bunn der Afrika ligger). Formel: kompass_vinkel = (180 - GE_lon) mod 360. 10°E -> kompass 170°, 10°W -> kompass 190°, 90°E -> kompass 90°. Slått sammen toggles: 'GE grid (lat/long reference)' styrer nå standardrutenett + 5°-edderkoppnett + 5°-finring i kompasset + GE-tallring. 'Fine 5° grid (72)'-checkbox fjernet (redundant).
 // v16.49 (2026-05-28): Klokke og kompass kan toggles uavhengig (nye knapper btn-clock-sol og btn-compass). Finmasket 5°-edderkoppnett (subMap.gridFine, 72 meridianer + 5° lat-sirkler) som egen toggle 'layer-grid-fine' - aktiverer samtidig en ekstra 5°-tallring (72 tall) inni kompasset for finlesning. FN-kart-rotasjon-slider 'map-rotation' (-180° til +180°) lagt inn for å finjustere Greenwich-orientering ift våre AE-koordinater. Kayabwe Equator Monument bekreftet som AFR-030 (0°N, 32.04°E).
 // v16.48 (2026-05-28): Reversert v16.47 - Greenwich-linje, datolinje og 12 lengdegrad-labels fjernet igjen etter Jone-Aase. Sol-uret/klokken viser allerede gradene og kompasset bedre visuelt; to lag oppa hverandre var redundant.
@@ -1167,9 +1168,8 @@ function buildClock(group, opts) {
     group.add(new THREE.Line(g, m));
   }
 
-  // Alle 360 grad-tall — hierarki: kardinaler størst, hver 10. medium, mellomliggende små,
-  // hver 1° ekstra liten. Tallene roterer slik at de står vinkelrett på ringen.
-  // Vi bruker mesh i stedet for sprite for hver-grad-tallene så de kan roteres riktig.
+  // v16.51: Helper beholdes (brukes av GE-tallringen utenfor R_OUTER lenger ned).
+  // De gamle 360 grad-tallene inni kompasset er fjernet — kun ticks/streker beholdes som skala.
   function makeDegreeText(text, color, weight, sizePx) {
     // Returnerer et plant mesh som ligger flatt i xz-planet og kan roteres rundt y.
     const SS = 4;
@@ -1200,37 +1200,9 @@ function buildClock(group, opts) {
     return new THREE.Mesh(geo, mat);
   }
 
-  // Radius-soner for grad-tallene (nærmere ringen = mindre tall)
-  // Plassert utenfor lengste tick (tickEndCardinal = 1.095) med god marg
-  const r1deg  = radius * 1.108;  // hver 1° — små tall like utenfor ticks
-  const r5deg  = radius * 1.142;  // hver 5°
-  const r10deg = radius * 1.175;  // hver 10°
-  const rCard  = radius * 1.205;  // kardinaler
-
-  for (let deg = 0; deg < 360; deg++) {
-    const a = (deg / 360) * Math.PI * 2;
-    const isCardinal = (deg % 90 === 0);
-    const isMajor = (deg % 10 === 0);
-    const isMid   = (deg % 5 === 0);
-    let r, scale, weight, color;
-    if (isCardinal) {
-      r = rCard; scale = radius * 0.080; weight = '500'; color = '#ffe680';
-    } else if (isMajor) {
-      r = r10deg; scale = radius * 0.052; weight = '500'; color = '#ffd54a';
-    } else if (isMid) {
-      r = r5deg; scale = radius * 0.034; weight = '400'; color = '#c8a060';
-    } else {
-      r = r1deg; scale = radius * 0.018; weight = '400'; color = '#9a7e50';
-    }
-    const x = Math.sin(a) * r;
-    const z = -Math.cos(a) * r;
-    const mesh = makeDegreeText(String(deg), color, weight, 96);
-    mesh.scale.set(scale, 1, scale);
-    mesh.position.set(x, yPos + 0.06, z);
-    // Roter slik at teksten peker radielt utover ("bunnen mot sentrum")
-    mesh.rotation.y = -a;
-    group.add(mesh);
-  }
+  // v16.51: Gamle 360 grad-tall (kardinaler, hver 1°/5°/10°) FJERNET fra inni kompasset.
+  // Tick-merkene (gull-strekene) ovenfor beholdes som visuell gradskala uten tall.
+  // Det eneste tallsettet ligger nå UTENFOR ytre ring — se v16.51 GE-ring lenger ned.
 
   // ────────────────────────────────────────────────────────────────
   // v16.49: EKSTRA FINMASKET 5°-RING (72 tall, kobles til 'gridFine'-toggle)
@@ -1263,32 +1235,21 @@ function buildClock(group, opts) {
     });
     fineRingGroup.add(new THREE.Line(g, m));
   }
-  // 72 tall (hver 5°) i teal—cyan-tone for visuell adskillelse fra gull-kompasset
-  for (let i = 0; i < 72; i++) {
-    const deg = i * 5;
-    const a = (deg / 360) * Math.PI * 2;
-    const x = Math.sin(a) * fineLabelR;
-    const z = -Math.cos(a) * fineLabelR;
-    const isMajor = (deg % 10 === 0);
-    const color = isMajor ? '#80c8d0' : '#5a9098';
-    const scale = radius * (isMajor ? 0.024 : 0.018);
-    const mesh = makeDegreeText(String(deg), color, '400', 96);
-    mesh.scale.set(scale, 1, scale);
-    mesh.position.set(x, yPos + 0.055, z);
-    mesh.rotation.y = -a;
-    fineRingGroup.add(mesh);
-  }
+  // v16.51: 72 teal 5°-tall FJERNET — kun ticks beholdes som skala.
+  // GE-tallringen (under) er nå den eneste numeriske skalaen, plassert UTENFOR ytre ring.
 
   // ────────────────────────────────────────────────────────────────
-  // v16.50: GE-LENGDEGRAD-RING (Google Earth-konvensjon, hver 5°)
+  // v16.51: GE-LENGDEGRAD-RING (Google Earth-konvensjon, hver 5°)
+  // Plassert RETT UTENFOR ytre ring (Antarctica, R_OUTER) på R_OUTER × 1.03.
   // Greenwich (0° GE) lander på vårt kompass-180° (sone der Afrika ligger, bunn av disken).
   // Formel: kompass_vinkel = (180° - GE_lon) mod 360°
   //   0°   GE  -> 180° kompass (bunn)         | 10°E -> 170° kompass
   //   90°E GE  -> 90°  kompass (høyre)        | 10°W -> 190° kompass
   //   180° GE  -> 0°   kompass (topp/datolinje)| 90°W -> 270° kompass
-  // Plasseres innenfor 5°-finringen for å ligge mellom kart og standardkompass.
+  // Dette er nå det ENESTE numeriske tallsettet — gamle kardinaler og 5°-tall inni klokken er fjernet.
+  // Bruker R_OUTER direkte (ikke 'radius') så GE-skalaen er stabil uavhengig av klokkens radius-slider.
   // ────────────────────────────────────────────────────────────────
-  const geLabelR = radius * 0.93;  // litt innenfor fineLabelR (0.97), nærmere disken
+  const geLabelR = R_OUTER * 1.03;  // tett inntil, men UTENFOR ytre ring (Antarctica)
   for (let i = 0; i < 72; i++) {
     const geLon = i * 5;  // 0, 5, 10, ..., 355
     // Konverter GE-konvensjon (0-360 østover) til signed lon (-180..180)
@@ -1305,17 +1266,19 @@ function buildClock(group, opts) {
     else if (signedLon === 180 || signedLon === -180) text = '180°';
     else if (signedLon > 0) text = signedLon + '°E';
     else text = (-signedLon) + '°W';
-    // Markere hovedmeridianer (hver 10°) større, og kardinaler (0, 90, 180) ekstra fremhevet
+    // Markere hovedmeridianer (hver 10°) større, og kardinaler (0, 90, 180, 270) ekstra fremhevet
     const isCardinal = (geLon === 0 || geLon === 90 || geLon === 180 || geLon === 270);
     const isMajor = (geLon % 10 === 0);
+    // Større skala siden tallene nå er det eneste tallsettet og ligger lenger ute.
+    // Skalert mot R_OUTER (faktisk plasseringsradius), ikke 'radius' (klokken).
     let color, scale;
-    if (isCardinal) { color = '#ffd860'; scale = radius * 0.028; }
-    else if (isMajor) { color = '#e0c060'; scale = radius * 0.022; }
-    else { color = '#a08440'; scale = radius * 0.016; }
+    if (isCardinal) { color = '#ffe680'; scale = R_OUTER * 0.060; }
+    else if (isMajor) { color = '#ffd54a'; scale = R_OUTER * 0.045; }
+    else { color = '#c8a060'; scale = R_OUTER * 0.030; }
     const mesh = makeDegreeText(text, color, isMajor ? '500' : '400', 128);
     mesh.scale.set(scale, 1, scale);
     mesh.position.set(x, yPos + 0.052, z);
-    // Roter teksten slik at den står radielt utover (samme retning som de andre tallene)
+    // Roter teksten slik at den står radielt utover ("bunnen mot sentrum")
     mesh.rotation.y = -a;
     fineRingGroup.add(mesh);
   }
