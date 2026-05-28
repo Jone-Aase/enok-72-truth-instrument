@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.42 (2026-05-28): Calendar-vindu skjult som default (apnes via Calendar-knappen, lukkes som klokke/day-night). Calendar-knapp festet fast i hjornet (ikke draggable lenger).
 // v16.41 (2026-05-28): Synlig kamera-panel (cam-panel nederst hoyre) fjernet etter Jone-Aase - kamera-kontroll finnes i View-menyen ved siden av Day/night. Calendar-knapp flyttet til bunn-hoyre der cam-panel sto.
 // v16.40 (2026-05-28): UI-rydding etter Jone-Aase: Enoch 72 og Evidence Archive flyttet fra toolbar inn i Documents-modalen som 'Quick access'-seksjon. Calendar-knapp flyttet til bunn-hoyre ved siden av kamera-panelet.
 // v16.39 (2026-05-28): Hit-sphere redusert fra 0.4 til 0.18 (mindre 'klissete' click-omrade). compareRing (sammenligningsring under lat-slider) starter na skjult og kobles til ekvator-toggle nar den ligger pa ekvator-posisjon - faar synlighet styrt av slider-bevegelse. Lat-slider sjekkboks lagt til.
@@ -2844,7 +2845,7 @@ function makeDraggable(elemId, handleId, opts = {}) {
 
 // Aktiver drag for kamera-panel og kalender-knapp
 makeDraggable('cam-panel', 'cam-panel-handle');
-makeDraggable('btn-show-calbar', 'btn-show-calbar');
+// v16.42: makeDraggable for btn-show-calbar fjernet - knappen er fast i hjornet
 
 // =================================================================
 // POP-UT TIL EGET VINDU — Document Picture-in-Picture API
@@ -3000,14 +3001,15 @@ if (!supportsDocumentPiP()) {
     });
     window.addEventListener('mouseup', () => { drag = null; });
   }
-  if (closeBtn && calbar && showBtn) {
+  // v16.42: Knappen er alltid synlig. Lukkeknapp skjuler calbar, show-knapp aapner.
+  if (closeBtn && calbar) {
     closeBtn.addEventListener('click', () => {
       calbar.style.display = 'none';
-      showBtn.classList.add('visible');
     });
+  }
+  if (showBtn && calbar) {
     showBtn.addEventListener('click', () => {
       calbar.style.display = 'flex';
-      showBtn.classList.remove('visible');
     });
   }
 }

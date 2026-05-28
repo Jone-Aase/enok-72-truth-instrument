@@ -95,13 +95,14 @@
   /* Calendar window — flyttbart og resizable */
   #calbar {
     /* v16.27: top flyttet fra 56px til 110px slik at calbar ikke dekker timeline-bar (Play-knappen) */
+    /* v16.42: display:none som default - aapnes via Calendar-knappen */
     position: fixed; left: 50%; top: 110px;
     transform: translateX(-50%);
     width: min(1200px, calc(100vw - 40px));
     min-width: 600px; min-height: 56px;
     max-width: calc(100vw - 20px); max-height: 80vh;
     background: rgba(10,10,10,0.92); backdrop-filter: blur(6px);
-    height: auto; display: flex; align-items: center;
+    height: auto; display: none; align-items: center;
     padding: 10px 50px 10px 40px; gap: 14px;
     border: 1px solid #2a2a2a; border-radius: 6px;
     box-shadow: 0 6px 24px rgba(0,0,0,0.6);
@@ -125,16 +126,15 @@
     font-size: 12px; padding: 0;
   }
   #calbar-close:hover { background: #2a2a2a; }
-  /* v16.41: Calendar-knapp i bunn-hoyre (cam-panel er fjernet, View-meny brukes for kamera-kontroll) */
+  /* v16.42: Calendar-knapp fast i bunn-hoyre, alltid synlig, ikke draggable */
   #btn-show-calbar {
     position: fixed; right: 14px; bottom: 14px; z-index: 49;
     background: #1a1208; color: #c9a247; border: 1px solid #564018;
     padding: 6px 12px; border-radius: 3px; font-family: inherit;
-    font-size: 12px; cursor: grab; display: none;
+    font-size: 12px; cursor: pointer; display: block;
     user-select: none;
   }
-  #btn-show-calbar:active { cursor: grabbing; }
-  #btn-show-calbar.visible { display: block; }
+  #btn-show-calbar:hover { background: #2a1c10; }
   #calbar select, #calbar input[type=number] {
     background: #1a1a1a; color: #e0e0e0; border: 1px solid #333;
     padding: 6px 10px; font-size: 14px; font-family: inherit;
