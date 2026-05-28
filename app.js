@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.56 (2026-05-28): aeProject() oppdatert til å matche GE-tallringens formel eksakt — lon=0° (Greenwich) ligger nå NEDE på skjermen (+Z), 90°E høyre (+X), 180° oppe (-Z), 90°W venstre (-X). Alle 101 markørene flyttes automatisk til riktig posisjon på kontinent-kartet. Eksempel: Kayabwe (32°E) treffer nå Afrika ekvator i bunn-høyre, Catequilla (78W) treffer Ecuador i bunn-venstre.
 // v16.55 (2026-05-28): ALLE 72 GE-tall på SAMME ring (R_OUTER × 1.040) — også kardinalene 0°, 90E, 180°, 90W. Rektangulær canvas (3:1) + PlaneGeometry(3,1) slik at lange labels ("180°", "170W", "90E") får plass uten klipping. Kardinaler bold + lys cyan, 10°-tall medium, 5°-mellomtall mindre/mørkere.
 // v16.54 (2026-05-28): 5°- og 10°-tall (med E/W-suffiks) samlet på SAMME ring (R_OUTER × 1.040). Bare kardinalene (0°, 90E, 180°, 90W) ligger fortsatt på ytre ring (R_OUTER × 1.065). Resultat: én hovedring med alle tall + kardinaler utenfor som referansepunkter.
 // v16.53 (2026-05-28): GE-tallring FLYTTET UT av kompasset til egen subMap.geRing-gruppe — nå styres den KUN av layer-grid-toggelen, helt uavhengig av kompass og klokke. Kompassets gull-bakgrunnsringer (compassInnerR/compassOuterR) LAGT TILBAKE. Kompasset flyttet nærmere Antarctica igjen (ticks 1.085–1.155, tall 1.168–1.265) for å redusere overflødig luft — GE-tallene har nå sin egen plass mellom Antarctica (R_OUTER) og kompassets innerring (R_OUTER × 1.080). Nye GE-radier: 1.030–1.065 (innenfor kompassets gull-innerring).
@@ -47,12 +48,23 @@ function latToR(lat) {
   return R_OUTER * (90 - lat) / 180;
 }
 // (lat, lon) -> { x, z } på disken (y = 0)
+// v16.56: Matcher GE-tallringens formel eksakt (lon=0 ligger NEDE på skjermen, ikke oppe).
+// Formel: kompass_vinkel = (180 - signedLon) mod 360
+//   lon = 0°   → kompass 180° → +Z (bunn) — Greenwich/Afrika
+//   lon = 90°E → kompass 90°  → +X (høyre)
+//   lon = 180° → kompass 0°   → -Z (topp) — Stillehavet
+//   lon = 90°W → kompass 270° → -X (venstre)
 function aeProject(lat, lon) {
   const r = latToR(lat);
-  const theta = lon * Math.PI / 180;
-  // lon=0 peker mot +Z (sør på kartet er nedover skjerm i top-down view)
-  const x = r * Math.sin(theta);
-  const z = -r * Math.cos(theta);
+  // Signert lengdegrad (-180..180), så vi håndterer både ±180 og 0..360 input.
+  let signedLon = lon;
+  if (signedLon > 180)  signedLon -= 360;
+  if (signedLon < -180) signedLon += 360;
+  let compassDeg = (180 - signedLon) % 360;
+  if (compassDeg < 0) compassDeg += 360;
+  const a = (compassDeg / 360) * Math.PI * 2;
+  const x = Math.sin(a) * r;
+  const z = -Math.cos(a) * r;
   return { x, z };
 }
 
