@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.54 (2026-05-28): 5°- og 10°-tall (med E/W-suffiks) samlet på SAMME ring (R_OUTER × 1.040). Bare kardinalene (0°, 90E, 180°, 90W) ligger fortsatt på ytre ring (R_OUTER × 1.065). Resultat: én hovedring med alle tall + kardinaler utenfor som referansepunkter.
 // v16.53 (2026-05-28): GE-tallring FLYTTET UT av kompasset til egen subMap.geRing-gruppe — nå styres den KUN av layer-grid-toggelen, helt uavhengig av kompass og klokke. Kompassets gull-bakgrunnsringer (compassInnerR/compassOuterR) LAGT TILBAKE. Kompasset flyttet nærmere Antarctica igjen (ticks 1.085–1.155, tall 1.168–1.265) for å redusere overflødig luft — GE-tallene har nå sin egen plass mellom Antarctica (R_OUTER) og kompassets innerring (R_OUTER × 1.080). Nye GE-radier: 1.030–1.065 (innenfor kompassets gull-innerring).
 // v16.52 (2026-05-28): TRE UAVHENGIGE TOGGLES + omorganisert layout. (1) Kompass beholder sine 360 0–359° tall (lagt tilbake fra v16.51), men flyttet UTOVER så det er luft mellom Antarctica-ring og kompass. (2) GE-tallring flyttet til MELLOM Antarctica-ring og kompass (R_OUTER × 1.04 → 1.075), tilhører kun GE grid-toggelen. (3) Antarctica-ring beholder sin egen toggle 'layer-outerring' uavhengig. Klokkens gull-ringer (compassInnerR/compassOuterR) FJERNET så de ikke skjuler GE-tallene. Ny lagrekkefølge innenfra og ut: kart → Antarctica-ring (R_OUTER) → GE-tall (R_OUTER × 1.04–1.075) → kompass-ticks (1.105–1.175) → kompass-tall 0–359° (1.188–1.285).
 // v16.51 (2026-05-28): Konsolidert tallskala — ETT sett GE-tall plassert UTENFOR ytre ring (R_OUTER × 1.03). Fjernet alle gamle 360 grad-tall inni kompasset (kardinaler N/E/S/W, hver 1°, hver 5°, hver 10°) OG fjernet 5°-finringens 72 teal-tall inni klokken. Ticks (gull-streker for 1°/5°/10°/90° + teal 5°-ticks) beholdes som visuell skala uten tall. Formel uendret: kompass_vinkel = (180 - GE_lon) mod 360. Nå er det bare ETT tallsett som viser kompassets 360° — det ligger rett utenfor ytre ring (Antarctica 197 421 km / 31 420 km AE-radius).
@@ -1556,9 +1557,10 @@ function buildGeRing() {
     return new THREE.Mesh(geo, mat);
   }
 
-  // Tre konsentriske radier MELLOM Antarctica (R_OUTER) og kompass-innerring (R_OUTER × 1.080).
-  const geMidR      = R_OUTER * 1.030;  // 5°-mellomtall (innerst, tett på Antarctica)
-  const geMajorR    = R_OUTER * 1.050;  // hver 10°
+  // v16.54: 5°- og 10°-tall samlet på SAMME ring (geMidR). Bare kardinalene ligger på ytre ring.
+  // To konsentriske radier MELLOM Antarctica (R_OUTER) og kompass-innerring (R_OUTER × 1.080).
+  const geMidR      = R_OUTER * 1.040;  // 5° + 10°-tall samlet (litt løftet ut for mer pust)
+  const geMajorR    = R_OUTER * 1.040;  // SAMME som geMidR — 10°-tall (med E/W) ligger nå på samme ring som 5°-tall
   const geCardinalR = R_OUTER * 1.065;  // 0°, 90°E, 180°, 90°W (ytterst, like under kompasset)
 
   const yPos = 0.10;  // Y_MAP (0) + CLOCK_Y_SOL (0.05) + 0.05 buffer
