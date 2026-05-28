@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.60 (2026-05-28): Antipodal akselinje 70°W ↔ 110°E som RETT LINJE gjennom Nordpolen (senter på AE-disken). Lyserosa #ff88ff, opacity 0.85. subMap.axis70w110e-gruppe styres av filt-mer-70w ELLER filt-mer-110e (vises når minst en er på). Visuell verifikasjon: alle MR70W-pins ligger på venstre/ned-side av aksen, alle Meridian-110E-pins (EK-03/04/05/22/23) ligger på motsatt side gjennom senter. Antipodal-test bestått = AE-projeksjon korrekt.
 // v16.59 (2026-05-28): NY GRUPPE Meridian-70W (lyserosa #ff88ff) med 12 punkter langs 70°W-meridianen — MR70W-01 Póvalo Salcedo (Puno) -15.86°, MR70W-02 Orquidea Lodge -12.65°, MR70W-03 Punta Cardon +11.57°, MR70W-04 Barcadera Port Aruba +12.48°, MR70W-05 Santo Domingo +18.50°, MR70W-06 Cabot Ln Chatham MA +41.67°, MR70W-07 Topsham ME +43.93°, MR70W-08 Iqaluit +63.75°, MR70W-09 Clyde River Airport +70.49°, MR70W-10 Moriusaq Grønland +76.75°, MR70W-11 Herbert Ø 1967 +77.42°, MR70W-12 Rawlings Bay Ellesmere +80.31°. Pluss CAN-23 Hartswell Bahamas (23°27'N-presisjon), MEG-14 Auckland Island (NZ subantarktisk), EK-22 Lebo Java + EK-23 Yogyakarta Airport (110.03E). 6 duplikater hoppet over (Khatulistiwa Park=EKV-05, Beihai=EK-03, Hutou=EK-04, Xincun=EK-05, Itilleq=EK-20, Nedlung=EK-21). Total markørs: 120 (var 104).
 // v16.58 (2026-05-28): To nye markører fra Jone-Aase. EKV-07 Jardim Marco Zero (Macapá, Amapá Brasil, 0°00'02.66"N 51°04'41.27"W = +0.000739° -51.078131°) på_sirkel 82m nord for ekvator. CAP-10 Campo de Marte Airport (São Paulo SP Brasil, 23°30'26.23"S 46°38'02.14"W = -23.507286° -46.633928°) 8.2 km sør for Capricorn. Equator-teller 15→16, Capricorn-teller 10→11. Total markørs: 104 (var 102).
 // v16.57 (2026-05-28): VKM-17 Giant Crab Tropic of Capricorn (Mantos Blancos, Sierra Gorda, Antofagasta Chile, 23°29'13.72"S 70°00'00.01"W = -23.487144° -70.000003°) lagt inn etter Jone-Aase. Vendekrets-monumenter teller nå 17 (var 16). Total markørs: 102 (var 101). Huacalera-sundial (-23.447769° -65.351686°) ikke lagt inn — ligger 1 km fra eksisterende VKM-03 Monolito sin sombra Huacalera, samme monument.
@@ -348,6 +349,7 @@ const subMap = {
   squareGrid: new THREE.Group(),  // Kartesisk referanse-rutenett (1° lat = 110.593 km, GE-skala)
   gridFine: new THREE.Group(),    // v16.49: Finmasket 5°-edderkoppnett (72 meridianer + 5°-breddesirkler)
   geRing: new THREE.Group(),      // v16.53: GE-lengdegrad-tallring (0°, 5°E…) MELLOM Antarctica og kompass. Helt uavhengig av kompass/klokke.
+  axis70w110e: new THREE.Group(), // v16.60: Antipodal akselinje 70°W ↔ 110°E (rett linje gjennom Nordpolen). Styres av Meridian-70W-toggle og/eller Meridian-110E-toggle.
   daynight: new THREE.Group(),
   clockSol: new THREE.Group(),   // Sol-klokke (Enok-tid, drives av sunLonAngle)
   clockAtom: new THREE.Group(),  // Atom-klokke (sann tid, drives av Date)
@@ -685,6 +687,45 @@ function rebuildGrid(step) {
   subMap.grid.add(makeMeridians(36, 0x3a5070, 0.30));
 }
 rebuildGrid(5);
+
+// =================================================================
+// v16.60: Antipodal akselinje 70°W ↔ 110°E (rett linje gjennom Nordpolen)
+// 70°W + 110°E = 180° forskjell → antipodale meridianer.
+// På AE-disken danner de ÉN rett linje fra ytre ring (Sydhavet ved 70°W)
+// gjennom Nordpolen (senter) og videre til ytre ring (Stillehavet ved 110°E).
+// Lyserosa farge matcher Meridian-70W-pin-fargen (#ff88ff).
+// =================================================================
+function buildAxis70W110E() {
+  const grp = subMap.axis70w110e;
+  // Tøm gruppen først
+  while (grp.children.length > 0) {
+    const child = grp.children[0];
+    grp.remove(child);
+    if (child.geometry) child.geometry.dispose();
+    if (child.material) child.material.dispose();
+  }
+  // Sydende av 70°W (lat = -89.99) til senter (Nordpolen ved lat = 89.99)
+  // og videre til sydende av 110°E. Dette er ÉN rett linje gjennom origo.
+  const pSouth70W  = aeProject(-89.99, -70);
+  const pNorth     = { x: 0, z: 0 };  // Nordpolen = senter på AE-disken
+  const pSouth110E = aeProject(-89.99, 110);
+  const yLine = 0.02;  // litt over kartet for synlighet
+  const geom = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(pSouth70W.x,  yLine, pSouth70W.z),
+    new THREE.Vector3(pNorth.x,     yLine, pNorth.z),
+    new THREE.Vector3(pSouth110E.x, yLine, pSouth110E.z),
+  ]);
+  const mat = new THREE.LineBasicMaterial({
+    color: 0xff88ff,
+    transparent: true,
+    opacity: 0.85,
+    linewidth: 2,
+  });
+  grp.add(new THREE.Line(geom, mat));
+  // Default: skjult — vises når Meridian-70W eller Meridian-110E er på (binding lenger ned).
+  grp.visible = false;
+}
+buildAxis70W110E();
 
 // v16.49: FINMASKET 5°-EDDERKOPPNETT (72 meridianer + 5°-breddesirkler)
 // Aktiveres via egen toggle 'layer-grid-fine'. Uavhengig av standard-rutenettet.
@@ -2844,11 +2885,18 @@ function applyFilters() {
     // Hele pinGroup er parent (med mesh + stalk)
     if (mesh.parent) mesh.parent.visible = visible;
   }
+  // v16.60: Antipodal akselinje 70°W ↔ 110°E vises hvis MINST EN av meridian-togglene er på.
+  const m70w  = document.getElementById('filt-mer-70w');
+  const m110e = document.getElementById('filt-mer-110e');
+  const axisOn = (m70w && m70w.checked) || (m110e && m110e.checked);
+  if (subMap.axis70w110e) subMap.axis70w110e.visible = axisOn;
 }
-['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w'].forEach(id => {
+['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', applyFilters);
 });
+// v16.60: Kør applyFilters() ved oppstart slik at akselinjen 70W ↔ 110E vises som default.
+applyFilters();
 
 // Panel-toggling (venstre/høyre)
 const mainEl = document.getElementById('main');
