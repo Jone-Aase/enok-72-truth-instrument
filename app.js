@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.58 (2026-05-28): To nye markører fra Jone-Aase. EKV-07 Jardim Marco Zero (Macapá, Amapá Brasil, 0°00'02.66"N 51°04'41.27"W = +0.000739° -51.078131°) på_sirkel 82m nord for ekvator. CAP-10 Campo de Marte Airport (São Paulo SP Brasil, 23°30'26.23"S 46°38'02.14"W = -23.507286° -46.633928°) 8.2 km sør for Capricorn. Equator-teller 15→16, Capricorn-teller 10→11. Total markørs: 104 (var 102).
 // v16.57 (2026-05-28): VKM-17 Giant Crab Tropic of Capricorn (Mantos Blancos, Sierra Gorda, Antofagasta Chile, 23°29'13.72"S 70°00'00.01"W = -23.487144° -70.000003°) lagt inn etter Jone-Aase. Vendekrets-monumenter teller nå 17 (var 16). Total markørs: 102 (var 101). Huacalera-sundial (-23.447769° -65.351686°) ikke lagt inn — ligger 1 km fra eksisterende VKM-03 Monolito sin sombra Huacalera, samme monument.
 // v16.56 (2026-05-28): aeProject() oppdatert til å matche GE-tallringens formel eksakt — lon=0° (Greenwich) ligger nå NEDE på skjermen (+Z), 90°E høyre (+X), 180° oppe (-Z), 90°W venstre (-X). Alle 101 markørene flyttes automatisk til riktig posisjon på kontinent-kartet. Eksempel: Kayabwe (32°E) treffer nå Afrika ekvator i bunn-høyre, Catequilla (78W) treffer Ecuador i bunn-venstre.
 // v16.55 (2026-05-28): ALLE 72 GE-tall på SAMME ring (R_OUTER × 1.040) — også kardinalene 0°, 90E, 180°, 90W. Rektangulær canvas (3:1) + PlaneGeometry(3,1) slik at lange labels ("180°", "170W", "90E") får plass uten klipping. Kardinaler bold + lys cyan, 10°-tall medium, 5°-mellomtall mindre/mørkere.
@@ -85,6 +86,7 @@ const MARKERS = [
   { id:"EKV-04", g:"Ekvator", n:"Mitad del Mundo", lat:-0.00222, lon:-78.45583, type:"feilmonument", info:"1979-1982. Feilplassert 240 m sør." },
   { id:"EKV-05", g:"Ekvator", n:"Pontianak Tugu Khatulistiwa", lat:0.001056, lon:109.322222, type:"observatorium", info:"Solkulminasjon 21-23 mars og sept." },
   { id:"EKV-06", g:"Ekvator", n:"Quitsato Sundial", lat:0.00000, lon:-78.17500, type:"moderne-solur", info:"2006. 1 mm GPS." },
+  { id:"EKV-07", g:"Ekvator", n:"Jardim Marco Zero (Macapá)", lat:0.000739, lon:-51.078131, type:"ekvator-monument", info:"Av. Equatorial, Macapá, Amapá Brasil. 0°00'02.66\"N 51°04'41.27\"W. På_sirkel (0.08 km nord for ekvator).", src:"https://maps.google.com/?q=0.000739,-51.078131" },
   // CANCER
   { id:"CAN-01", g:"Cancer", n:"Modhera Sun Temple", lat:23.583806, lon:72.132686, type:"soltempel", info:"1026 e.Kr. UNESCO." },
   { id:"CAN-02", g:"Cancer", n:"Dholavira", lat:23.888606, lon:70.213636, type:"by", info:"Harappan 2650 f.Kr." },
@@ -104,6 +106,7 @@ const MARKERS = [
   { id:"CAP-07", g:"Capricorn", n:"Sao Paulo", lat:-23.55, lon:-46.63, type:"by", info:"Portugisisk 1554." },
   { id:"CAP-08", g:"Capricorn", n:"Antofagasta", lat:-23.65, lon:-70.40, type:"havn", info:"Chilensk." },
   { id:"CAP-09", g:"Capricorn", n:"Pretoria", lat:-25.74, lon:28.19, type:"by", info:"Sør-Afrika." },
+  { id:"CAP-10", g:"Capricorn", n:"Campo de Marte Airport (São Paulo)", lat:-23.507286, lon:-46.633928, type:"flyplass", info:"Av. Santos Dumont 1979, Santana, São Paulo SP 02012-010, Brasil. 23°30'26.23\"S 46°38'02.14\"W. 8.2 km sør for nominell Capricorn-sirkel (-23.4333\u00b0).", src:"https://maps.google.com/?q=-23.507286,-46.633928" },
   // AFRIKA-MARKORER (v16.44) - 23 punkter fra afrika-markorer-perplexity.csv (Ekvator/Cancer/Capricorn)
   { id:"AFR-005", g:"Ekvator", n:"Semliki Base", lat:0.850000, lon:30.100000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 94 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
   { id:"AFR-006", g:"Ekvator", n:"Omunturok", lat:0.300000, lon:30.050000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 33 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
