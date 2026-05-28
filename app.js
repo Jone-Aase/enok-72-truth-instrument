@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.43 (2026-05-28): Calendar-knapp flyttet fra bunn-hoyre til ovre hoyre (top:56px right:14px) - dekket zoom-indikator og statusbar. Na under toolbar, symmetrisk med View-menyen.
 // v16.42 (2026-05-28): Calendar-vindu skjult som default (apnes via Calendar-knappen, lukkes som klokke/day-night). Calendar-knapp festet fast i hjornet (ikke draggable lenger).
 // v16.41 (2026-05-28): Synlig kamera-panel (cam-panel nederst hoyre) fjernet etter Jone-Aase - kamera-kontroll finnes i View-menyen ved siden av Day/night. Calendar-knapp flyttet til bunn-hoyre der cam-panel sto.
 // v16.40 (2026-05-28): UI-rydding etter Jone-Aase: Enoch 72 og Evidence Archive flyttet fra toolbar inn i Documents-modalen som 'Quick access'-seksjon. Calendar-knapp flyttet til bunn-hoyre ved siden av kamera-panelet.
