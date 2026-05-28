@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.31 (2026-05-28): Lagt til firkantet Cartesian referanse-rutenett (GE-skala 110.593 km/°)
 // 4 lag stacket i Y-akse, fri kamera, ny radius = halve omkretsen
 // =================================================================
 import * as THREE from 'three';
@@ -196,6 +197,7 @@ const grpFirma   = new THREE.Group(); grpFirma.position.y   = Y_FIRMA;  scene.ad
 const subMap = {
   grid: new THREE.Group(), coast: new THREE.Group(), ports: new THREE.Group(),
   meridians: new THREE.Group(), latcircles: new THREE.Group(), outerring: new THREE.Group(),
+  squareGrid: new THREE.Group(),  // Kartesisk referanse-rutenett (1° lat = 110.593 km, GE-skala)
   daynight: new THREE.Group(),
   clockSol: new THREE.Group(),   // Sol-klokke (Enok-tid, drives av sunLonAngle)
   clockAtom: new THREE.Group(),  // Atom-klokke (sann tid, drives av Date)
@@ -533,6 +535,78 @@ function rebuildGrid(step) {
   subMap.grid.add(makeMeridians(36, 0x3a5070, 0.30));
 }
 rebuildGrid(5);
+
+// =================================================================
+// FIRKANTET REFERANSE-RUTENETT (kartesisk, GE-skala)
+// =================================================================
+// Skala: 1° lat = 110.593 km (Jone-Aase GE-måling: 1105.93 km mellom 0° og 10°N).
+// Lengdegrader følger samme spacing (samme km-verdi som breddegradene).
+// Rutenettet dekker hele disken (radius R_OUTER_KM = 31420.55 km).
+// Bare linje-segmenter INNENFOR disken tegnes (Bresenham-cirkel-klipping ikke nødvendig
+// fordi linjene er rette — vi klipper hver linje analytisk mot disk-radius).
+const KM_PER_DEG_GE = 110.593;  // GE-skala (Jone-Aase 2026-05-28 02:35)
+
+function makeSquareGrid(stepDeg, color, opacity, axisColor, axisOpacity) {
+  const grp = new THREE.Group();
+  const stepKm = stepDeg * KM_PER_DEG_GE;
+  const stepU  = stepKm * SCALE;          // Three.js-enheter
+  const Rdisk  = R_OUTER;                  // disk-grense (three-enheter)
+  // Antall steg fra senter til disk-grense
+  const maxStep = Math.ceil(Rdisk / stepU);
+
+  // Hjelpe-funksjon: klipp en horisontal linje (z = const) mot disk-sirkelen
+  // x^2 + z^2 <= Rdisk^2  →  |x| <= sqrt(Rdisk^2 - z^2)
+  function clipX(z) {
+    const d2 = Rdisk*Rdisk - z*z;
+    if (d2 <= 0) return null;
+    const x = Math.sqrt(d2);
+    return { x1: -x, x2: x };
+  }
+  function clipZ(x) {
+    const d2 = Rdisk*Rdisk - x*x;
+    if (d2 <= 0) return null;
+    const z = Math.sqrt(d2);
+    return { z1: -z, z2: z };
+  }
+
+  // Horisontale linjer (konstant z, varierende x) — "breddegrader" i kartesisk skala
+  for (let i = -maxStep; i <= maxStep; i++) {
+    const z = i * stepU;
+    const clip = clipX(z);
+    if (!clip) continue;
+    const isAxis = (i === 0);
+    const c = isAxis ? axisColor : color;
+    const o = isAxis ? axisOpacity : opacity;
+    const geom = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(clip.x1, 0, z),
+      new THREE.Vector3(clip.x2, 0, z),
+    ]);
+    grp.add(new THREE.Line(geom, new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: o })));
+  }
+  // Vertikale linjer (konstant x, varierende z) — "lengdegrader" i kartesisk skala
+  for (let i = -maxStep; i <= maxStep; i++) {
+    const x = i * stepU;
+    const clip = clipZ(x);
+    if (!clip) continue;
+    const isAxis = (i === 0);
+    const c = isAxis ? axisColor : color;
+    const o = isAxis ? axisOpacity : opacity;
+    const geom = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(x, 0, clip.z1),
+      new THREE.Vector3(x, 0, clip.z2),
+    ]);
+    grp.add(new THREE.Line(geom, new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: o })));
+  }
+  return grp;
+}
+
+function rebuildSquareGrid(step) {
+  subMap.squareGrid.clear();
+  // Normale linjer: lysegrå, akser: hvit og litt tydeligere
+  subMap.squareGrid.add(makeSquareGrid(step, 0xaaaaaa, 0.25, 0xffffff, 0.55));
+}
+rebuildSquareGrid(5);
+subMap.squareGrid.visible = false;  // av som default — brukeren skrur den på
 
 // Equator-ring (golden, alltid synlig på kartet)
 subMap.grid.add(makeRing(R_EQUATOR, 0xc9a247, 0.6));
@@ -1880,6 +1954,7 @@ function bindToggle(id, group, prop = 'visible') {
 }
 bindToggle('layer-magnet', grpMagnet);
 bindToggle('layer-grid', subMap.grid);
+bindToggle('layer-square-grid', subMap.squareGrid);
 bindToggle('layer-meridians', subMap.meridians);
 bindToggle('layer-latcircles', subMap.latcircles);
 bindToggle('layer-coast', subMap.coast);
@@ -2190,9 +2265,11 @@ bindToggle('layer-moon', subCel.moon);
 bindToggle('layer-polaris', subFirma.polaris);
 bindToggle('layer-stars', subFirma.stars);
 
-// Grid size
+// Grid size — oppdaterer både AE-rutenett (konsentriske ringer) og firkantet referanse-rutenett
 document.getElementById('grid-size').addEventListener('change', (e) => {
-  rebuildGrid(parseFloat(e.target.value));
+  const step = parseFloat(e.target.value);
+  rebuildGrid(step);
+  rebuildSquareGrid(step);
 });
 
 // Sun-lat slider
