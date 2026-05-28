@@ -126,9 +126,9 @@
     font-size: 12px; padding: 0;
   }
   #calbar-close:hover { background: #2a2a2a; }
-  /* v16.43: Calendar-knapp fast under toolbar i ovre hoyre, dekker ikke zoom-indikator eller statusbar */
+  /* v16.46: Calendar-knapp fast i ovre hoyre, justert til top:90px sa den ligger under toolbar (toolbar bunn=78px, ikke 46px pga embedding) */
   #btn-show-calbar {
-    position: fixed; right: 14px; top: 56px; z-index: 49;
+    position: fixed; right: 14px; top: 90px; z-index: 49;
     background: #1a1208; color: #c9a247; border: 1px solid #564018;
     padding: 6px 12px; border-radius: 3px; font-family: inherit;
     font-size: 12px; cursor: pointer; display: block;
@@ -1189,13 +1189,13 @@
 
       <div class="panel-section">
         <h2>Marker filters</h2>
-        <label class="ctrl"><input type="checkbox" id="filt-equator" checked> Equator</label>
-        <label class="ctrl"><input type="checkbox" id="filt-cancer" checked> Cancer</label>
-        <label class="ctrl"><input type="checkbox" id="filt-capricorn" checked> Capricorn</label>
+        <label class="ctrl"><input type="checkbox" id="filt-equator" checked> Equator (15)</label>
+        <label class="ctrl"><input type="checkbox" id="filt-cancer" checked> Cancer (22)</label>
+        <label class="ctrl"><input type="checkbox" id="filt-capricorn" checked> Capricorn (10)</label>
         <label class="ctrl"><input type="checkbox" id="filt-arctic" checked> Arctic circle</label>
         <label class="ctrl"><input type="checkbox" id="filt-port" checked> Ports</label>
         <label class="ctrl"><input type="checkbox" id="filt-megalithic" checked> Megalithic</label>
-        <label class="ctrl"><input type="checkbox" id="filt-vendekretsmon" checked> Vendekrets-monumenter (14)</label>
+        <label class="ctrl"><input type="checkbox" id="filt-vendekretsmon" checked> Vendekrets-monumenter (16)</label>
         <label class="ctrl"><input type="checkbox" id="filt-havn-sor" checked> Sørlige havner (EK-01..02)</label>
         <label class="ctrl"><input type="checkbox" id="filt-mer-110e" checked> Meridian 110°E (EK-03..05)</label>
         <label class="ctrl"><input type="checkbox" id="filt-mer-150e" checked> Meridian 150°E (EK-06..10)</label>

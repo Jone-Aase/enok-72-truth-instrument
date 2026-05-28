@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.46 (2026-05-28): Pin-storrelse 0.08 -> 0.13 (bedre synlighet pa utzoomet AE-disk, Afrika-punktene var for sma til a se). Calendar-knapp top:56px -> top:90px (toolbar bunn er 78px pga embedding, ikke 46px). Filter-label-tellere oppdatert: Equator (15), Cancer (22), Capricorn (10), Vendekrets-monumenter (16). Total markors: 101.
 // v16.45 (2026-05-28): VKM-15 Trópico de Cáncer Plaza del Pueblo (Cabo San Lucas, 23.447875°N -109.703106°W) og VKM-16 Trópico de Cáncer C. Centenario 8 (El Centro BCS, 23.450006°N -110.225467°W) lagt inn etter Jone-Aase. Begge på_sirkel (1.6/1.9 km fra nominell 23.4333°).
 // v16.44 (2026-05-28): Lagt inn 23 Afrika-markorer (9 Ekvator, 9 Cancer, 5 Capricorn) fra afrika-markorer-perplexity.csv. Inkluderer på_sirkel (Kayabwe Uganda, Namibia/Botswana/Limpopo/Mosambik/Madagaskar), nær_sirkel (Uganda triangulering, Aswan) og langt_fra (Sudan/Egypt triangulering). Pretoria CAP-09 og Aswan CAN-04/VKM-11 bevares.
 // v16.43 (2026-05-28): Calendar-knapp flyttet fra bunn-hoyre til ovre hoyre (top:56px right:14px) - dekket zoom-indikator og statusbar. Na under toolbar, symmetrisk med View-menyen.
@@ -731,10 +732,10 @@ function buildMarkers() {
     const color = FARGER[m.g] || 0xffffff;
     // Liten pin-stil markør (GE-stil) — sirkulær disk + tynn vertikal stilk
     const pinGroup = new THREE.Group();
-    const geom = new THREE.SphereGeometry(0.08, 12, 12);
+    const geom = new THREE.SphereGeometry(0.13, 12, 12);  // v16.46: 0.08 -> 0.13 for bedre synlighet pa utzoomet AE-disk
     const mat = new THREE.MeshBasicMaterial({ color });
     const mesh = new THREE.Mesh(geom, mat);
-    mesh.position.set(0, 0.12, 0);
+    mesh.position.set(0, 0.15, 0);
     mesh.userData = m;
     pinGroup.add(mesh);
     // Tynn vertikal pin-stilk for synlighet
