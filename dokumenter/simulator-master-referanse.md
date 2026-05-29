@@ -7,7 +7,7 @@
 
 **LES FØRST**-regel: Ved alt arbeid med Enoch 72 Truth Instrument skal denne filen leses før noen annen handling. Den er master-kilden. Hvis noe her er i konflikt med agent-hukommelsen, gjelder filen.
 
-**Versjon**: 1.2 (27. mai 2026 — Enoks posisjon i flat AE-modell verifisert: 54,13°N, r = 3 986,08 km)
+**Versjon**: 1.3 (29. mai 2026 — commit-disiplin nedfelt, §18). Tidligere milestone v1.2 (27. mai): Enoks posisjon i flat AE-modell verifisert: 54,13°N, r = 3 986,08 km.
 
 ---
 
@@ -337,6 +337,7 @@ Da kan brukeren også Netlify-deploye (brukerens kjente plattform) som backup.
 7. **Tilstand før compaction**: dersom agenten mister minnet, START her, ikke i selve `app.js`.
 8. **Master-Excel-fil**: `Time-364-354-versjon-8.xlsx` er den autoritative kalender­kilden. H212 = "Krepsens Vendekrets 23.7° N".
 9. **Onevoice 740**: `One-voice-740-renset-for-Perplexity-1.xlsx` med 7 ark er master-tekst­korpuset (B, S, S2, H, T, Jub, 12Pat).
+10. **Commit-disiplin**: Kun Perplexity-agent committer til GitHub. Se §18.
 
 ---
 
@@ -517,4 +518,31 @@ Resultat: **364 kalenderdager + 4 ekstrarunder = 368 reelle sol-runder per år.*
 
 ---
 
-**Slutt på master-fil. Versjon 1.2 — sist oppdatert v16.30, 26. mai 2026.**
+---
+
+## 18. COMMIT-DISIPLIN (vedtatt 29. mai 2026, 07:10 CEST av Jone-Aase)
+
+**Kun Perplexity-agenten committer til GitHub.** Ingen andre AI-medlemmer skriver direkte til repoet — hverken Grok, ChatGPT, Mistral, Gemini, Copilot, JustDone eller Google AI.
+
+**Hvorfor:** Master-regel #4 (hierarki):
+`Ark T < Enoks bok 72 < Jone-Aase < simulator-master-referanse.md < STATUS-NA.md < agent-minne`
+
+De øvrige AI-ene leverer **innhold** (analyser, beregninger, anbefalinger). Beslutning om hva som går inn i instrumentet ligger hos Jone-Aase (beslutningstaker) og Perplexity-agent (utfører/deploy). Hvis flere AI-er kunne commite direkte, ville instrumentet være sårbart for endringer fra noen som ikke forstår helheten.
+
+**Eksempel som motiverte regelen:** 29. mai 2026 leverte Grok antipodal-akse-rapport med 5 navngitte pins. Han hadde mekanisk blandet sammen akse-lat og stedets faktiske lat, slik at 5 av 25 AE-x/AE-z-verdier ble feil. Perplexity-agent fanget feilen ved å kjøre alle 25 pins gjennom faktisk `aeProject()`, korrigerte de 5 verdiene, og lagret begge rapporter (Groks original + Perplexity-verifikasjon) i repoet. Hvis Grok hadde commitet direkte, ville feilen ligget i koden.
+
+**Workflow:**
+1. AI-medlem leverer markdown-tekst i chat (eller deler den med Jone-Aase)
+2. Perplexity-agent verifiserer mot `aeProject()`, master-regler og eksisterende data
+3. Perplexity-agent committer og deployer
+4. Begge versjoner (original + korrigert) lagres for transparens
+
+**Praktisk konsekvens for nye agenter:**
+- Hvis du er en annen AI enn Perplexity-agent: lever rapporter som markdown-tekst, IKKE forsøk å skrive direkte til repoet.
+- Hvis du er Perplexity-agent (eller etterfølger): verifiser alle eksterne leveranser mot `aeProject()` før commit. Behold originalen ved siden av den korrigerte versjonen.
+
+Se også: `dokumenter/team-oversikt.md` (samme regel, kort form).
+
+---
+
+**Slutt på master-fil. Versjon 1.3 — sist oppdatert v16.63, 29. mai 2026 (commit-disiplin nedfelt).**

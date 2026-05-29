@@ -9,6 +9,23 @@
 - Alle andre roller uendret
 - Aktiv felles-instruks: `dokumenter/instruks-team-2026-05-29.md`
 
+## COMMIT-DISIPLIN (vedtatt 29. mai 2026, 07:10 CEST av Jone-Aase)
+
+**Kun Perplexity-agenten committer til GitHub.** Ingen andre AI-medlemmer skriver direkte til repoet — hverken Grok, ChatGPT, Mistral, Gemini, Copilot, JustDone eller Google AI.
+
+**Hvorfor:** Master-regel #4 (hierarki):
+`Ark T < Enoks bok 72 < Jone-Aase < simulator-master-referanse.md < STATUS-NA.md < agent-minne`
+
+De øvrige AI-ene leverer **innhold** (analyser, beregninger, anbefalinger). Beslutning om hva som går inn i instrumentet ligger hos Jone-Aase (beslutningstaker) og Perplexity-agent (utfører/deploy). Hvis flere AI-er kunne commite direkte, ville instrumentet være sårbart for endringer fra noen som ikke forstår helheten.
+
+**Eksempel som motiverte regelen:** 29. mai 2026 leverte Grok antipodal-akse-rapport med 5 navngitte pins. Han hadde mekanisk blandet sammen akse-lat og stedets faktiske lat, slik at 5 av 25 AE-x/AE-z-verdier ble feil. Perplexity-agent fanget feilen ved å kjøre alle 25 pins gjennom faktisk `aeProject()`, korrigerte de 5 verdiene, og lagret begge rapporter (Groks original + Perplexity-verifikasjon) i repoet. Hvis Grok hadde commitet direkte, ville feilen ligget i koden.
+
+**Workflow:**
+1. AI-medlem leverer markdown-tekst i chat (eller deler den med Jone-Aase)
+2. Perplexity-agent verifiserer mot `aeProject()`, master-regler og eksisterende data
+3. Perplexity-agent committer og deployer
+4. Begge versjoner (original + korrigert) lagres for transparens
+
 ## Hvem gjør hva
 
 | # | AI | Rolle | Hovedstyrke | Geografisk fokus | Instruks-fil |
