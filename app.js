@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.61 (2026-05-29): FEM NYE ANTIPODAL-AKSER bygget inn (matematisk garanterte rette linjer gjennom Nordpolen i AE-projeksjonen): 60°W↔120°E (gul #ffdd44), 45°W↔135°E (lysegrønn #88ff88), 30°W↔150°E (oransje #ff8844), 15°W↔165°E (rosa #ff4488), 0°↔180° (hvit #ffffff). Ny subMap.antipodalAxes-gruppe + ny master-toggle layer-antipodal-axes (default på). Visuell verifikasjon at hele rutenettet holder — venter på Groks verifikasjons-pins fra dokumenter/grok-antipodal-akser-2026-05-29.md.
 // v16.60 (2026-05-28): Antipodal akselinje 70°W ↔ 110°E som RETT LINJE gjennom Nordpolen (senter på AE-disken). Lyserosa #ff88ff, opacity 0.85. subMap.axis70w110e-gruppe styres av filt-mer-70w ELLER filt-mer-110e (vises når minst en er på). Visuell verifikasjon: alle MR70W-pins ligger på venstre/ned-side av aksen, alle Meridian-110E-pins (EK-03/04/05/22/23) ligger på motsatt side gjennom senter. Antipodal-test bestått = AE-projeksjon korrekt.
 // v16.59 (2026-05-28): NY GRUPPE Meridian-70W (lyserosa #ff88ff) med 12 punkter langs 70°W-meridianen — MR70W-01 Póvalo Salcedo (Puno) -15.86°, MR70W-02 Orquidea Lodge -12.65°, MR70W-03 Punta Cardon +11.57°, MR70W-04 Barcadera Port Aruba +12.48°, MR70W-05 Santo Domingo +18.50°, MR70W-06 Cabot Ln Chatham MA +41.67°, MR70W-07 Topsham ME +43.93°, MR70W-08 Iqaluit +63.75°, MR70W-09 Clyde River Airport +70.49°, MR70W-10 Moriusaq Grønland +76.75°, MR70W-11 Herbert Ø 1967 +77.42°, MR70W-12 Rawlings Bay Ellesmere +80.31°. Pluss CAN-23 Hartswell Bahamas (23°27'N-presisjon), MEG-14 Auckland Island (NZ subantarktisk), EK-22 Lebo Java + EK-23 Yogyakarta Airport (110.03E). 6 duplikater hoppet over (Khatulistiwa Park=EKV-05, Beihai=EK-03, Hutou=EK-04, Xincun=EK-05, Itilleq=EK-20, Nedlung=EK-21). Total markørs: 120 (var 104).
 // v16.58 (2026-05-28): To nye markører fra Jone-Aase. EKV-07 Jardim Marco Zero (Macapá, Amapá Brasil, 0°00'02.66"N 51°04'41.27"W = +0.000739° -51.078131°) på_sirkel 82m nord for ekvator. CAP-10 Campo de Marte Airport (São Paulo SP Brasil, 23°30'26.23"S 46°38'02.14"W = -23.507286° -46.633928°) 8.2 km sør for Capricorn. Equator-teller 15→16, Capricorn-teller 10→11. Total markørs: 104 (var 102).
@@ -350,6 +351,7 @@ const subMap = {
   gridFine: new THREE.Group(),    // v16.49: Finmasket 5°-edderkoppnett (72 meridianer + 5°-breddesirkler)
   geRing: new THREE.Group(),      // v16.53: GE-lengdegrad-tallring (0°, 5°E…) MELLOM Antarctica og kompass. Helt uavhengig av kompass/klokke.
   axis70w110e: new THREE.Group(), // v16.60: Antipodal akselinje 70°W ↔ 110°E (rett linje gjennom Nordpolen). Styres av Meridian-70W-toggle og/eller Meridian-110E-toggle.
+  antipodalAxes: new THREE.Group(), // v16.61: Fem nye antipodal-akser (60W→60E avvik, 45W→45E, 30W→30E—faktisk 60W↔120E osv). Master-toggle layer-antipodal-axes.
   daynight: new THREE.Group(),
   clockSol: new THREE.Group(),   // Sol-klokke (Enok-tid, drives av sunLonAngle)
   clockAtom: new THREE.Group(),  // Atom-klokke (sann tid, drives av Date)
@@ -726,6 +728,52 @@ function buildAxis70W110E() {
   grp.visible = false;
 }
 buildAxis70W110E();
+
+// =================================================================
+// v16.61: FEM NYE ANTIPODAL-AKSER (matematisk garanterte rette linjer
+// gjennom Nordpolen i AE-projeksjonen). Hver akse er et meridian-par
+// 180° fra hverandre. Master-toggle: layer-antipodal-axes.
+// =================================================================
+const ANTIPODAL_AXES_V1661 = [
+  { lonA:  -60, lonB:  120, color: 0xffdd44, label: '60°W ↔ 120°E' },  // gul
+  { lonA:  -45, lonB:  135, color: 0x88ff88, label: '45°W ↔ 135°E' },  // lysegrønn
+  { lonA:  -30, lonB:  150, color: 0xff8844, label: '30°W ↔ 150°E' },  // oransje
+  { lonA:  -15, lonB:  165, color: 0xff4488, label: '15°W ↔ 165°E' },  // rosa
+  { lonA:    0, lonB:  180, color: 0xffffff, label: '0° (Greenwich) ↔ 180° (datolinjen)' },  // hvit
+];
+function buildAntipodalAxes() {
+  const grp = subMap.antipodalAxes;
+  // Tøm gruppen først
+  while (grp.children.length > 0) {
+    const child = grp.children[0];
+    grp.remove(child);
+    if (child.geometry) child.geometry.dispose();
+    if (child.material) child.material.dispose();
+  }
+  const yLine = 0.02;
+  for (const a of ANTIPODAL_AXES_V1661) {
+    // Sydende av lonA → Nordpolen → sydende av lonB
+    const pA = aeProject(-89.99, a.lonA);
+    const pN = { x: 0, z: 0 };  // Nordpolen = senter
+    const pB = aeProject(-89.99, a.lonB);
+    const geom = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(pA.x, yLine, pA.z),
+      new THREE.Vector3(pN.x, yLine, pN.z),
+      new THREE.Vector3(pB.x, yLine, pB.z),
+    ]);
+    const mat = new THREE.LineBasicMaterial({
+      color: a.color,
+      transparent: true,
+      opacity: 0.75,
+      linewidth: 2,
+    });
+    const line = new THREE.Line(geom, mat);
+    line.userData = { axisLabel: a.label, lonA: a.lonA, lonB: a.lonB };
+    grp.add(line);
+  }
+  grp.visible = true;  // default på
+}
+buildAntipodalAxes();
 
 // v16.49: FINMASKET 5°-EDDERKOPPNETT (72 meridianer + 5°-breddesirkler)
 // Aktiveres via egen toggle 'layer-grid-fine'. Uavhengig av standard-rutenettet.
@@ -2890,8 +2938,11 @@ function applyFilters() {
   const m110e = document.getElementById('filt-mer-110e');
   const axisOn = (m70w && m70w.checked) || (m110e && m110e.checked);
   if (subMap.axis70w110e) subMap.axis70w110e.visible = axisOn;
+  // v16.61: Master-toggle for de 5 nye antipodal-aksene.
+  const antipodalEl = document.getElementById('layer-antipodal-axes');
+  if (subMap.antipodalAxes) subMap.antipodalAxes.visible = !antipodalEl || antipodalEl.checked;
 }
-['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w'].forEach(id => {
+['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w', 'layer-antipodal-axes'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', applyFilters);
 });
