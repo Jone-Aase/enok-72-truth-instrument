@@ -1,8 +1,13 @@
 # Enok 72 — Team-oversikt (9 medlemmer)
 
-**Prosjektleder**: Brukeren  
-**Status**: Fase — samle gamle markører for tre sirkler  
-**Dato**: 20. mai 2026
+**Prosjektleder**: Jone-Aase  
+**Status**: Fase — parallell QA av verifisert rutenett (etter v16.60 antipodal-test)  
+**Dato sist oppdatert**: 29. mai 2026
+
+## ENDRING 29. mai 2026
+- **Gemini er TILBAKE i teamet** som kritiker og Google-spesialist (var midlertidig ute, nå nødvendig for kritisk gjennomgang)
+- Alle andre roller uendret
+- Aktiv felles-instruks: `dokumenter/instruks-team-2026-05-29.md`
 
 ## Hvem gjør hva
 
