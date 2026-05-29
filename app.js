@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.62 (2026-05-29): 25 AKSE-VERIFIKASJONSPINS lagt inn fra Groks oppdaterte rapport (5 pins x 5 akser). Nye grupper: Akse-60W (gul), Akse-45W (lysegrønn), Akse-30W (oransje), Akse-15W (rosa), Akse-0 (hvit). Styres av layer-antipodal-axes master-toggle. AE-x/AE-z korrigert for 5 navngitte steder (Goose Bay, Nain, Rigolet, St. John's, Greenwich) — Grok brukte feilaktig akse-lat istedenfor stedets faktiske lat; 20 teoretiske pins var korrekte. Verifikasjons-rapport: dokumenter/perplexity-grok-verifikasjon-2026-05-29.md. Total markors: 145 (var 120).
 // v16.61 (2026-05-29): FEM NYE ANTIPODAL-AKSER bygget inn (matematisk garanterte rette linjer gjennom Nordpolen i AE-projeksjonen): 60°W↔120°E (gul #ffdd44), 45°W↔135°E (lysegrønn #88ff88), 30°W↔150°E (oransje #ff8844), 15°W↔165°E (rosa #ff4488), 0°↔180° (hvit #ffffff). Ny subMap.antipodalAxes-gruppe + ny master-toggle layer-antipodal-axes (default på). Visuell verifikasjon at hele rutenettet holder — venter på Groks verifikasjons-pins fra dokumenter/grok-antipodal-akser-2026-05-29.md.
 // v16.60 (2026-05-28): Antipodal akselinje 70°W ↔ 110°E som RETT LINJE gjennom Nordpolen (senter på AE-disken). Lyserosa #ff88ff, opacity 0.85. subMap.axis70w110e-gruppe styres av filt-mer-70w ELLER filt-mer-110e (vises når minst en er på). Visuell verifikasjon: alle MR70W-pins ligger på venstre/ned-side av aksen, alle Meridian-110E-pins (EK-03/04/05/22/23) ligger på motsatt side gjennom senter. Antipodal-test bestått = AE-projeksjon korrekt.
 // v16.59 (2026-05-28): NY GRUPPE Meridian-70W (lyserosa #ff88ff) med 12 punkter langs 70°W-meridianen — MR70W-01 Póvalo Salcedo (Puno) -15.86°, MR70W-02 Orquidea Lodge -12.65°, MR70W-03 Punta Cardon +11.57°, MR70W-04 Barcadera Port Aruba +12.48°, MR70W-05 Santo Domingo +18.50°, MR70W-06 Cabot Ln Chatham MA +41.67°, MR70W-07 Topsham ME +43.93°, MR70W-08 Iqaluit +63.75°, MR70W-09 Clyde River Airport +70.49°, MR70W-10 Moriusaq Grønland +76.75°, MR70W-11 Herbert Ø 1967 +77.42°, MR70W-12 Rawlings Bay Ellesmere +80.31°. Pluss CAN-23 Hartswell Bahamas (23°27'N-presisjon), MEG-14 Auckland Island (NZ subantarktisk), EK-22 Lebo Java + EK-23 Yogyakarta Airport (110.03E). 6 duplikater hoppet over (Khatulistiwa Park=EKV-05, Beihai=EK-03, Hutou=EK-04, Xincun=EK-05, Itilleq=EK-20, Nedlung=EK-21). Total markørs: 120 (var 104).
@@ -134,6 +135,37 @@ const MARKERS = [
   // Lebo og Yogyakarta International Airport: 110°02'E, ikke 110°00'E — ligger ca 4 km øst for 110E-meridianen.
   { id:"EK-22", g:"Meridian-110E", n:"Lebo (Java)", lat:-6.963539, lon:110.033475, type:"meridian-110-east-naer", info:"Lebo, Sentral-Java, Indonesia. 6\u00b057'48.74\"S 110\u00b002'00.51\"E. Nær 110E (~3.7 km øst).", src:"https://maps.google.com/?q=-6.963539,110.033475" },
   { id:"EK-23", g:"Meridian-110E", n:"Yogyakarta International Airport", lat:-7.896131, lon:110.034731, type:"meridian-110-east-naer", info:"YIA flyplass, Kulon Progo, Yogyakarta, Indonesia. 7\u00b053'46.07\"S 110\u00b002'05.03\"E. Nær 110E (~3.8 km øst).", src:"https://maps.google.com/?q=-7.896131,110.034731" },
+  // v16.62: AKSE-VERIFIKASJONSPINS fra Grok (oppdatert rapport 29. mai 2026). Korrigert AE-x/AE-z for navngitte steder etter Perplexity-verifikasjon.
+  // Akse 60°W ↔ 120°E (5 pins)
+  { id:"AX60-01", g:"Akse-60W", n:"Goose Bay, Labrador", lat:53.3192, lon:-60.4258, type:"akse-verifikasjon", info:"Grok-pin akse 60°W↔120°E. AE: x=-5568.8, z=3160.2 (Perplexity-korrigert).", src:"https://maps.google.com/?q=53.3192,-60.4258" },
+  { id:"AX60-02", g:"Akse-60W", n:"Nain, Newfoundland & Labrador", lat:56.5500, lon:-61.6833, type:"akse-verifikasjon-naer", info:"Grok-pin akse 60°W↔120°E. AE: x=-5140.3, z=2769.7 (Perplexity-korrigert). Avvik 1.68° fra 60W.", src:"https://maps.google.com/?q=56.5500,-61.6833" },
+  { id:"AX60-03", g:"Akse-60W", n:"Rigolet, NL", lat:54.1800, lon:-58.4300, type:"akse-verifikasjon-naer", info:"Grok-pin akse 60°W↔120°E. AE: x=-5327.3, z=3273.5 (Perplexity-korrigert). Avvik 1.57° fra 60W.", src:"https://maps.google.com/?q=54.1800,-58.4300" },
+  { id:"AX60-04", g:"Akse-60W", n:"Akse-test 40°N -60°W (Atlanterhavet)", lat:40.0000, lon:-60.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 60°W↔120°E. AE: x=-7558.6, z=4364.0.", src:"https://maps.google.com/?q=40,-60" },
+  { id:"AX60-05", g:"Akse-60W", n:"Akse-test 0°N -60°W (Atlanterhavet)", lat:0.0000, lon:-60.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 60°W↔120°E ved ekvator. AE: x=-13605.5, z=7855.1.", src:"https://maps.google.com/?q=0,-60" },
+  // Akse 45°W ↔ 135°E (5 pins)
+  { id:"AX45-01", g:"Akse-45W", n:"St. John's, Newfoundland", lat:47.5615, lon:-52.7126, type:"akse-verifikasjon-naer", info:"Grok-pin akse 45°W↔135°E. AE: x=-5893.9, z=4487.9 (Perplexity-korrigert). Avvik 7.7° fra 45W — nyttig som transatlantisk referanse.", src:"https://maps.google.com/?q=47.5615,-52.7126" },
+  { id:"AX45-02", g:"Akse-45W", n:"Akse-test 60°N -45°W", lat:60.0000, lon:-45.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 45°W↔135°E ved Grønland sør-spiss. AE: x=-3702.9, z=3702.9.", src:"https://maps.google.com/?q=60,-45" },
+  { id:"AX45-03", g:"Akse-45W", n:"Akse-test 40°N -45°W", lat:40.0000, lon:-45.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 45°W↔135°E. AE: x=-6171.6, z=6171.6.", src:"https://maps.google.com/?q=40,-45" },
+  { id:"AX45-04", g:"Akse-45W", n:"Akse-test 20°N -45°W", lat:20.0000, lon:-45.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 45°W↔135°E. AE: x=-8640.2, z=8640.2.", src:"https://maps.google.com/?q=20,-45" },
+  { id:"AX45-05", g:"Akse-45W", n:"Akse-test 0°N -45°W", lat:0.0000, lon:-45.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 45°W↔135°E ved ekvator. AE: x=-11108.8, z=11108.8.", src:"https://maps.google.com/?q=0,-45" },
+  // Akse 30°W ↔ 150°E (5 pins)
+  { id:"AX30-01", g:"Akse-30W", n:"Akse-test 80°N -30°W", lat:80.0000, lon:-30.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 30°W↔150°E. AE: x=-872.8, z=1511.7.", src:"https://maps.google.com/?q=80,-30" },
+  { id:"AX30-02", g:"Akse-30W", n:"Akse-test 60°N -30°W", lat:60.0000, lon:-30.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 30°W↔150°E. AE: x=-2618.4, z=4535.2.", src:"https://maps.google.com/?q=60,-30" },
+  { id:"AX30-03", g:"Akse-30W", n:"Akse-test 40°N -30°W", lat:40.0000, lon:-30.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 30°W↔150°E. AE: x=-4364.0, z=7558.6.", src:"https://maps.google.com/?q=40,-30" },
+  { id:"AX30-04", g:"Akse-30W", n:"Akse-test 20°N -30°W", lat:20.0000, lon:-30.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 30°W↔150°E. AE: x=-6109.6, z=10582.1.", src:"https://maps.google.com/?q=20,-30" },
+  { id:"AX30-05", g:"Akse-30W", n:"Akse-test 0°N -30°W", lat:0.0000, lon:-30.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 30°W↔150°E ved ekvator. AE: x=-7855.1, z=13605.5.", src:"https://maps.google.com/?q=0,-30" },
+  // Akse 15°W ↔ 165°E (5 pins)
+  { id:"AX15-01", g:"Akse-15W", n:"Akse-test 80°N -15°W", lat:80.0000, lon:-15.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 15°W↔165°E. AE: x=-451.8, z=1686.1.", src:"https://maps.google.com/?q=80,-15" },
+  { id:"AX15-02", g:"Akse-15W", n:"Akse-test 60°N -15°W", lat:60.0000, lon:-15.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 15°W↔165°E. AE: x=-1355.4, z=5058.3.", src:"https://maps.google.com/?q=60,-15" },
+  { id:"AX15-03", g:"Akse-15W", n:"Akse-test 40°N -15°W", lat:40.0000, lon:-15.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 15°W↔165°E. AE: x=-2259.0, z=8430.5.", src:"https://maps.google.com/?q=40,-15" },
+  { id:"AX15-04", g:"Akse-15W", n:"Akse-test 20°N -15°W", lat:20.0000, lon:-15.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 15°W↔165°E. AE: x=-3162.5, z=11802.7.", src:"https://maps.google.com/?q=20,-15" },
+  { id:"AX15-05", g:"Akse-15W", n:"Akse-test 0°N -15°W", lat:0.0000, lon:-15.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 15°W↔165°E ved ekvator. AE: x=-4066.1, z=15175.0.", src:"https://maps.google.com/?q=0,-15" },
+  // Akse 0° (Greenwich) ↔ 180° (datolinjen) (5 pins)
+  { id:"AX0-01", g:"Akse-0", n:"Royal Observatory, Greenwich", lat:51.4779, lon:0.0000, type:"akse-verifikasjon", info:"Grok-pin akse 0°↔180°. Hovedmeridianens opprinnelse 1851. AE: x=0.0, z=6724.4 (Perplexity-korrigert).", src:"https://maps.google.com/?q=51.4779,0" },
+  { id:"AX0-02", g:"Akse-0", n:"Akse-test 80°N 0°", lat:80.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180°. AE: x=0.0, z=1745.6.", src:"https://maps.google.com/?q=80,0" },
+  { id:"AX0-03", g:"Akse-0", n:"Akse-test 60°N 0°", lat:60.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180°. AE: x=0.0, z=5236.8.", src:"https://maps.google.com/?q=60,0" },
+  { id:"AX0-04", g:"Akse-0", n:"Akse-test 40°N 0°", lat:40.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180°. AE: x=0.0, z=8727.9.", src:"https://maps.google.com/?q=40,0" },
+  { id:"AX0-05", g:"Akse-0", n:"Akse-test 0°N 0° (Atlanterhavet)", lat:0.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180° ved ekvator (Null-øya). AE: x=0.0, z=15710.3.", src:"https://maps.google.com/?q=0,0" },
   // AFRIKA-MARKORER (v16.44) - 23 punkter fra afrika-markorer-perplexity.csv (Ekvator/Cancer/Capricorn)
   { id:"AFR-005", g:"Ekvator", n:"Semliki Base", lat:0.850000, lon:30.100000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 94 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
   { id:"AFR-006", g:"Ekvator", n:"Omunturok", lat:0.300000, lon:30.050000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 33 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
@@ -241,6 +273,12 @@ const FARGER = {
   "Meridian-150E": "#88ffaa",  // lysegrønn — 150°E (Russland-aksen)
   "Meridian-149W": "#ffaa44",  // oransje — 149.5°W (Alaska / Polynesia-aksen)
   "Meridian-70W":  "#ff88ff",  // lyserosa/lilla — 70°W (Peru/Karibien/Maine/Ellesmere-aksen) v16.59
+  // v16.62: Akse-verifikasjonspins fra Groks rapport. Samme farger som tilsvarende akselinjer i ANTIPODAL_AXES_V1661.
+  "Akse-60W":      "#ffdd44",  // gul — akse 60°W↔120°E
+  "Akse-45W":      "#88ff88",  // lysegrønn — akse 45°W↔135°E
+  "Akse-30W":      "#ff8844",  // oransje — akse 30°W↔150°E
+  "Akse-15W":      "#ff4488",  // rosa — akse 15°W↔165°E
+  "Akse-0":        "#ffffff",  // hvit — akse 0°↔180°
 };
 
 const FILTER_KEY = {
@@ -256,6 +294,12 @@ const FILTER_KEY = {
   "Meridian-150E": "filt-mer-150e",
   "Meridian-149W": "filt-mer-149w",
   "Meridian-70W":  "filt-mer-70w",  // v16.59
+  // v16.62: Akse-verifikasjonspins styres av samme master-toggle som akselinjene.
+  "Akse-60W":      "layer-antipodal-axes",
+  "Akse-45W":      "layer-antipodal-axes",
+  "Akse-30W":      "layer-antipodal-axes",
+  "Akse-15W":      "layer-antipodal-axes",
+  "Akse-0":        "layer-antipodal-axes",
 };
 
 // =================================================================
