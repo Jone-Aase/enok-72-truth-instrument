@@ -1,0 +1,25 @@
+{
+  "description": "Forskningsstasjoner og havner langs Antarktis-isringen. Koordinater fra offisielle kilder. Plottes som markor pa AE-disken via lat/lon transformasjon.",
+  "bases": [
+    {"name": "Amundsen-Scott (USA)", "lat": -90.00, "lon": 0.0, "country": "USA", "note": "Sorpolen - alle lengdegrader moetes"},
+    {"name": "McMurdo (USA)", "lat": -77.85, "lon": 166.67, "country": "USA", "note": "Ross-oya, storste forskningsstasjon"},
+    {"name": "Vostok (Russland)", "lat": -78.46, "lon": 106.84, "country": "RU", "note": "Russisk innlandsstasjon, kuldepol"},
+    {"name": "Esperanza (Argentina)", "lat": -63.40, "lon": -56.99, "country": "AR", "note": "Antarktis-halvoya"},
+    {"name": "Mawson (Australia)", "lat": -67.60, "lon": 62.87, "country": "AU", "note": "Dronning Maud Land, sors-iden av Indiahavet"},
+    {"name": "Davis (Australia)", "lat": -68.58, "lon": 77.97, "country": "AU", "note": "Vestfold Hills"},
+    {"name": "Halley VI (UK)", "lat": -75.58, "lon": -26.50, "country": "GB", "note": "Brunt-isheelv"},
+    {"name": "Rothera (UK)", "lat": -67.57, "lon": -68.13, "country": "GB", "note": "Antarktis-halvoya"},
+    {"name": "Casey (Australia)", "lat": -66.28, "lon": 110.53, "country": "AU", "note": "Wilkes Land"},
+    {"name": "Concordia (FR/IT)", "lat": -75.10, "lon": 123.33, "country": "FR/IT", "note": "Dome C innlandsstasjon"},
+    {"name": "Syowa (Japan)", "lat": -69.00, "lon": 39.58, "country": "JP", "note": "Dronning Maud Land kyst"},
+    {"name": "Troll (Norge)", "lat": -72.01, "lon": 2.53, "country": "NO", "note": "Jutulsessen, Dronning Maud Land"},
+    {"name": "Maitri (India)", "lat": -70.77, "lon": 11.74, "country": "IN", "note": "Schirmacher-oasen"},
+    {"name": "King Sejong (Sor-Korea)", "lat": -62.22, "lon": -58.78, "country": "KR", "note": "King George Island"},
+    {"name": "Bellingshausen (Russland)", "lat": -62.20, "lon": -58.96, "country": "RU", "note": "King George Island"},
+    {"name": "Palmer (USA)", "lat": -64.77, "lon": -64.05, "country": "USA", "note": "Anvers Island"},
+    {"name": "Zhongshan (Kina)", "lat": -69.37, "lon": 76.37, "country": "CN", "note": "Larsemann Hills"},
+    {"name": "Kunlun (Kina)", "lat": -80.42, "lon": 77.12, "country": "CN", "note": "Dome A innlandsstasjon"},
+    {"name": "Princess Elisabeth (Belgia)", "lat": -71.95, "lon": 23.35, "country": "BE", "note": "Sor-pol-luftstasjon"},
+    {"name": "Neumayer III (Tyskland)", "lat": -70.67, "lon": -8.27, "country": "DE", "note": "Ekstrom-isheelva"}
+  ]
+}

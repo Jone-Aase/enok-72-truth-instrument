@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.65 (2026-05-30): 8192 HYPSOMETRISK KART (Natural Earth HYP_HR_SR_OB_DR.tif) + 20 ANTARKTIS-BASER. Nytt un-map.webp (2.97 MB) bygget med build_k2_8192_v5.py: 10800x5400 hypsometri-projeksjon i AE 90N, hypsometri fra 90N ned til -60S, deretter ren hvit isring (Enok-modellens ismur) ut til R_OUTER med gradient #d8e8f0 -> #ffffff. Lagt inn 20 Antarktis-baser ANT-01..ANT-20 (Amundsen-Scott, McMurdo, Vostok, Esperanza, Mawson, Davis, Halley VI, Rothera, Casey, Concordia, Syowa, Troll, Maitri, King Sejong, Bellingshausen, Palmer, Zhongshan, Kunlun, Princess Elisabeth, Neumayer III) med offisielle koordinater, farge cyan #00d4ff, togglebar via layer-antarctica-bases. UN_MAP_RADIUS uendret = R_OUTER (kartet fyller hele AE-disken). Backup: un-map-4096-backup.png. Total markors: 165 (var 145).
 // v16.64 (2026-05-30): KART OPPGRADERT til 4096x4096 (fra 2048x2048). Samme K2 Naturlig fra cartopy + Natural Earth 10m, men 4x pikselantall = mye skarpere kystlinjer, elver, grenser ved zoom. Tilfoyd urban-omrader (storre byer som morkere bruntoner). Filstorrelse 2.8 MB (var 1.1 MB). un-map-2048-backup.png lagret som backup.
 // v16.63 (2026-05-30): KART-SKALA FIKSET. Det nye K2 Naturlig-kartet dekker hele AE-projeksjonen (0° til -90°S), ikke bare til -60°S som det gamle FN-emblemet. UN_MAP_RADIUS endret fra R_OUTER × 150/180 (= 26.184) til R_OUTER (= 31.42), slik at kartet fyller hele disken ut til Antarktis-yttergrensen (197 421 km / 31 420 km AE-radius). Kontinenter ligger nå på korrekt avstand fra Nordpolen iht. AE-projeksjon.
 // v16.62 (2026-05-29): 25 AKSE-VERIFIKASJONSPINS lagt inn fra Groks oppdaterte rapport (5 pins x 5 akser). Nye grupper: Akse-60W (gul), Akse-45W (lysegrønn), Akse-30W (oransje), Akse-15W (rosa), Akse-0 (hvit). Styres av layer-antipodal-axes master-toggle. AE-x/AE-z korrigert for 5 navngitte steder (Goose Bay, Nain, Rigolet, St. John's, Greenwich) — Grok brukte feilaktig akse-lat istedenfor stedets faktiske lat; 20 teoretiske pins var korrekte. Verifikasjons-rapport: dokumenter/perplexity-grok-verifikasjon-2026-05-29.md. Total markors: 145 (var 120).
@@ -168,6 +169,31 @@ const MARKERS = [
   { id:"AX0-03", g:"Akse-0", n:"Akse-test 60°N 0°", lat:60.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180°. AE: x=0.0, z=5236.8.", src:"https://maps.google.com/?q=60,0" },
   { id:"AX0-04", g:"Akse-0", n:"Akse-test 40°N 0°", lat:40.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180°. AE: x=0.0, z=8727.9.", src:"https://maps.google.com/?q=40,0" },
   { id:"AX0-05", g:"Akse-0", n:"Akse-test 0°N 0° (Atlanterhavet)", lat:0.0000, lon:0.0000, type:"akse-teoretisk", info:"Teoretisk verifikasjonspunkt på akse 0°↔180° ved ekvator (Null-øya). AE: x=0.0, z=15710.3.", src:"https://maps.google.com/?q=0,0" },
+  // =================================================================
+  // ANTARKTIS-BASER (v16.65) - 20 forskningsstasjoner langs isringen.
+  // Plasseres som ankerpunkter pa rett lengdegrad i Enok-modellens ismur.
+  // Lat/lon fra offisielle kilder (COMNAP, nasjonale antarktisprogrammer).
+  // =================================================================
+  { id:"ANT-01", g:"Antarktis-Base", n:"Amundsen-Scott", lat:-89.9999, lon:0.0, type:"antarktis-base", info:"USA. Sorpolen - alle lengdegrader motes her. Hele aret bemannet.", src:"https://www.nsf.gov/geo/opp/support/southp.jsp" },
+  { id:"ANT-02", g:"Antarktis-Base", n:"McMurdo Station", lat:-77.85, lon:166.67, type:"antarktis-base", info:"USA. Ross-oya. Storste forskningsstasjon i Antarktis (1200 personer sommer).", src:"https://www.usap.gov/" },
+  { id:"ANT-03", g:"Antarktis-Base", n:"Vostok", lat:-78.46, lon:106.84, type:"antarktis-base", info:"Russland. Innlandsstasjon, kuldepol (-89.2C registrert 1983).", src:"https://www.aari.ru/" },
+  { id:"ANT-04", g:"Antarktis-Base", n:"Esperanza", lat:-63.40, lon:-56.99, type:"antarktis-base", info:"Argentina. Antarktis-halvoya. Forste barn fodt i Antarktis (1978).", src:"https://www.dna.gob.ar/" },
+  { id:"ANT-05", g:"Antarktis-Base", n:"Mawson", lat:-67.60, lon:62.87, type:"antarktis-base", info:"Australia. Eldste kontinuerlig bemannede stasjon sor for polarsirkelen (1954).", src:"https://www.antarctica.gov.au/" },
+  { id:"ANT-06", g:"Antarktis-Base", n:"Davis", lat:-68.58, lon:77.97, type:"antarktis-base", info:"Australia. Vestfold Hills, Princess Elizabeth Land.", src:"https://www.antarctica.gov.au/" },
+  { id:"ANT-07", g:"Antarktis-Base", n:"Halley VI", lat:-75.58, lon:-26.50, type:"antarktis-base", info:"Storbritannia. Brunt-isheelv. Flyttbar pa skier.", src:"https://www.bas.ac.uk/" },
+  { id:"ANT-08", g:"Antarktis-Base", n:"Rothera", lat:-67.57, lon:-68.13, type:"antarktis-base", info:"Storbritannia. Antarktis-halvoya. BAS hovedbase.", src:"https://www.bas.ac.uk/" },
+  { id:"ANT-09", g:"Antarktis-Base", n:"Casey", lat:-66.28, lon:110.53, type:"antarktis-base", info:"Australia. Wilkes Land.", src:"https://www.antarctica.gov.au/" },
+  { id:"ANT-10", g:"Antarktis-Base", n:"Concordia", lat:-75.10, lon:123.33, type:"antarktis-base", info:"Frankrike/Italia. Dome C innlandsstasjon, 3233m.o.h. Mars-analog.", src:"https://www.institut-polaire.fr/" },
+  { id:"ANT-11", g:"Antarktis-Base", n:"Syowa", lat:-69.00, lon:39.58, type:"antarktis-base", info:"Japan. Dronning Maud Land kyst, East Ongul Island.", src:"https://www.nipr.ac.jp/" },
+  { id:"ANT-12", g:"Antarktis-Base", n:"Troll", lat:-72.01, lon:2.53, type:"antarktis-base", info:"Norge. Jutulsessen, Dronning Maud Land. Bla-is-rullebane.", src:"https://www.npolar.no/" },
+  { id:"ANT-13", g:"Antarktis-Base", n:"Maitri", lat:-70.77, lon:11.74, type:"antarktis-base", info:"India. Schirmacher-oasen, Dronning Maud Land.", src:"https://ncpor.res.in/" },
+  { id:"ANT-14", g:"Antarktis-Base", n:"King Sejong", lat:-62.22, lon:-58.78, type:"antarktis-base", info:"Sor-Korea. King George Island, Sor-Shetland.", src:"https://kopri.re.kr/" },
+  { id:"ANT-15", g:"Antarktis-Base", n:"Bellingshausen", lat:-62.20, lon:-58.96, type:"antarktis-base", info:"Russland. King George Island, Sor-Shetland.", src:"https://www.aari.ru/" },
+  { id:"ANT-16", g:"Antarktis-Base", n:"Palmer", lat:-64.77, lon:-64.05, type:"antarktis-base", info:"USA. Anvers Island, Antarktis-halvoya.", src:"https://www.usap.gov/" },
+  { id:"ANT-17", g:"Antarktis-Base", n:"Zhongshan", lat:-69.37, lon:76.37, type:"antarktis-base", info:"Kina. Larsemann Hills, Princess Elizabeth Land.", src:"https://www.chinare.gov.cn/" },
+  { id:"ANT-18", g:"Antarktis-Base", n:"Kunlun", lat:-80.42, lon:77.12, type:"antarktis-base", info:"Kina. Dome A innlandsstasjon, 4087m.o.h. - hoyeste punkt på isen.", src:"https://www.chinare.gov.cn/" },
+  { id:"ANT-19", g:"Antarktis-Base", n:"Princess Elisabeth", lat:-71.95, lon:23.35, type:"antarktis-base", info:"Belgia. Forste null-utslipps-forskningsstasjon.", src:"https://www.antarcticstation.org/" },
+  { id:"ANT-20", g:"Antarktis-Base", n:"Neumayer III", lat:-70.67, lon:-8.27, type:"antarktis-base", info:"Tyskland. Ekstrom-isheelva, Dronning Maud Land.", src:"https://www.awi.de/" },
   // AFRIKA-MARKORER (v16.44) - 23 punkter fra afrika-markorer-perplexity.csv (Ekvator/Cancer/Capricorn)
   { id:"AFR-005", g:"Ekvator", n:"Semliki Base", lat:0.850000, lon:30.100000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 94 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
   { id:"AFR-006", g:"Ekvator", n:"Omunturok", lat:0.300000, lon:30.050000, type:"triangulering", info:"Uganda. 1908. Smith 2005 FIG. Avstand til sirkel: 33 km (nær_sirkel).", src:"https://www.fig.net/resources/proceedings/fig_proceedings/cairo/papers/wshs_03/wshs03_01_smith.pdf" },
@@ -281,6 +307,8 @@ const FARGER = {
   "Akse-30W":      "#ff8844",  // oransje — akse 30°W↔150°E
   "Akse-15W":      "#ff4488",  // rosa — akse 15°W↔165°E
   "Akse-0":        "#ffffff",  // hvit — akse 0°↔180°
+  // v16.65: Antarktis-baser — lys cyan, godt synlig på hvit isring
+  "Antarktis-Base": "#00d4ff",
 };
 
 const FILTER_KEY = {
@@ -302,6 +330,8 @@ const FILTER_KEY = {
   "Akse-30W":      "layer-antipodal-axes",
   "Akse-15W":      "layer-antipodal-axes",
   "Akse-0":        "layer-antipodal-axes",
+  // v16.65: Antarktis-baser styres av egen toggle
+  "Antarktis-Base": "layer-antarctica-bases",
 };
 
 // =================================================================
@@ -656,7 +686,10 @@ let unMapRotationDeg = 0;
 let unMapDiskRef = null;  // referanse til mesh slik at sliderene kan endre rotasjon uten ombygging
 {
   const loader = new THREE.TextureLoader();
-  loader.load('un-map.png', (tex) => {
+  // v16.65: 8192x8192 hypsometrisk kart (WebP q85). Sahara sand, Amazonas grønn,
+  // Himalaya hvit, hav-batymetri. Ren hvit isring fra -60S ut til disk-yttergrense
+  // (Enok-modellens 'ismur rundt jordens ende').
+  loader.load('un-map.webp', (tex) => {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 8;
     // FN-emblemet (azimuthal equidistant, sentrert på Nordpolen) har
@@ -2989,7 +3022,7 @@ function applyFilters() {
   const antipodalEl = document.getElementById('layer-antipodal-axes');
   if (subMap.antipodalAxes) subMap.antipodalAxes.visible = !antipodalEl || antipodalEl.checked;
 }
-['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w', 'layer-antipodal-axes'].forEach(id => {
+['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w', 'layer-antipodal-axes', 'layer-antarctica-bases'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', applyFilters);
 });
