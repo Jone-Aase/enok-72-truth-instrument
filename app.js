@@ -709,7 +709,7 @@ let unMapDiskRef = null;  // referanse til mesh slik at sliderene kan endre rota
   // v16.65: 8192x8192 hypsometrisk kart (WebP q85). Sahara sand, Amazonas grønn,
   // Himalaya hvit, hav-batymetri. Ren hvit isring fra -60S ut til disk-yttergrense
   // (Enok-modellens 'ismur rundt jordens ende').
-  loader.load('un-map.webp', (tex) => {
+  loader.load('un-map.webp?v=16.74', (tex) => {
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 8;
     // FN-emblemet (azimuthal equidistant, sentrert på Nordpolen) har
