@@ -3033,16 +3033,15 @@ function applyFilters() {
     // Hele pinGroup er parent (med mesh + stalk)
     if (mesh.parent) mesh.parent.visible = visible;
   }
-  // v16.60: Antipodal akselinje 70°W ↔ 110°E vises hvis MINST EN av meridian-togglene er på.
-  const m70w  = document.getElementById('filt-mer-70w');
-  const m110e = document.getElementById('filt-mer-110e');
-  const axisOn = (m70w && m70w.checked) || (m110e && m110e.checked);
-  if (subMap.axis70w110e) subMap.axis70w110e.visible = axisOn;
+  // v16.71: Dedikert toggle for 70°W ↔ 110°E aksen (Carvajal-Casey verifikasjonsakse).
+  // Var tidligere koblet til Meridian-70W ELLER Meridian-110E (v16.60) - nå frittstående.
+  const axis70wEl = document.getElementById('layer-axis-70w-110e');
+  if (subMap.axis70w110e) subMap.axis70w110e.visible = !axis70wEl || axis70wEl.checked;
   // v16.61: Master-toggle for de 5 nye antipodal-aksene.
   const antipodalEl = document.getElementById('layer-antipodal-axes');
   if (subMap.antipodalAxes) subMap.antipodalAxes.visible = !antipodalEl || antipodalEl.checked;
 }
-['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w', 'layer-antipodal-axes', 'layer-antarctica-bases'].forEach(id => {
+['filt-equator', 'filt-cancer', 'filt-capricorn', 'filt-arctic', 'filt-port', 'filt-megalithic', 'filt-vendekretsmon', 'filt-havn-sor', 'filt-mer-110e', 'filt-mer-150e', 'filt-mer-149w', 'filt-mer-70w', 'layer-antipodal-axes', 'layer-axis-70w-110e', 'layer-antarctica-bases'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', applyFilters);
 });
