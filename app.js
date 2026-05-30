@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.63 (2026-05-30): KART-SKALA FIKSET. Det nye K2 Naturlig-kartet dekker hele AE-projeksjonen (0° til -90°S), ikke bare til -60°S som det gamle FN-emblemet. UN_MAP_RADIUS endret fra R_OUTER × 150/180 (= 26.184) til R_OUTER (= 31.42), slik at kartet fyller hele disken ut til Antarktis-yttergrensen (197 421 km / 31 420 km AE-radius). Kontinenter ligger nå på korrekt avstand fra Nordpolen iht. AE-projeksjon.
 // v16.62 (2026-05-29): 25 AKSE-VERIFIKASJONSPINS lagt inn fra Groks oppdaterte rapport (5 pins x 5 akser). Nye grupper: Akse-60W (gul), Akse-45W (lysegrønn), Akse-30W (oransje), Akse-15W (rosa), Akse-0 (hvit). Styres av layer-antipodal-axes master-toggle. AE-x/AE-z korrigert for 5 navngitte steder (Goose Bay, Nain, Rigolet, St. John's, Greenwich) — Grok brukte feilaktig akse-lat istedenfor stedets faktiske lat; 20 teoretiske pins var korrekte. Verifikasjons-rapport: dokumenter/perplexity-grok-verifikasjon-2026-05-29.md. Total markors: 145 (var 120).
 // v16.61 (2026-05-29): FEM NYE ANTIPODAL-AKSER bygget inn (matematisk garanterte rette linjer gjennom Nordpolen i AE-projeksjonen): 60°W↔120°E (gul #ffdd44), 45°W↔135°E (lysegrønn #88ff88), 30°W↔150°E (oransje #ff8844), 15°W↔165°E (rosa #ff4488), 0°↔180° (hvit #ffffff). Ny subMap.antipodalAxes-gruppe + ny master-toggle layer-antipodal-axes (default på). Visuell verifikasjon at hele rutenettet holder — venter på Groks verifikasjons-pins fra dokumenter/grok-antipodal-akser-2026-05-29.md.
 // v16.60 (2026-05-28): Antipodal akselinje 70°W ↔ 110°E som RETT LINJE gjennom Nordpolen (senter på AE-disken). Lyserosa #ff88ff, opacity 0.85. subMap.axis70w110e-gruppe styres av filt-mer-70w ELLER filt-mer-110e (vises når minst en er på). Visuell verifikasjon: alle MR70W-pins ligger på venstre/ned-side av aksen, alle Meridian-110E-pins (EK-03/04/05/22/23) ligger på motsatt side gjennom senter. Antipodal-test bestått = AE-projeksjon korrekt.
@@ -641,12 +642,13 @@ grpCelest.add(subCel.ports);
 // =================================================================
 
 // =================================================================
-// FN-AE-KART (tekstur å legge på Lag 1)
+// AE-KART (tekstur å legge på Lag 1)
 // =================================================================
-// FN-emblemet er azimuthal equidistant projeksjon, sentrert på Nordpolen.
-// Ytre kart-grense på emblemet = 60°S.
-// Etter buestreng-uretting (v16): r(-60°) = R_OUTER × 150/180 = 26.184.
-const UN_MAP_RADIUS = R_OUTER * 150 / 180;  // 26.184 — 60°S i buestreng-skala
+// v16.63 (2026-05-30): Byttet fra FN-emblem (60°S yttergrense) til K2 Naturlig
+// fra cartopy + Natural Earth 10m. Kartet dekker hele AE-projeksjonen fra
+// Nordpolen (sentrum) til Sydpolen / Antarktis-yttergrense (-90°S) = R_OUTER.
+// Tidligere: UN_MAP_RADIUS = R_OUTER * 150/180 (FN-emblemets 60°S-grense).
+const UN_MAP_RADIUS = R_OUTER;  // 31.42 — kartet fyller hele disken ut til Antarktis-ytterring
 // v16.49: FN-kart-rotasjon (grader). Positiv = mot klokken når sett ovenfra.
 // Justerbart via UI-slider for å matche kartets Greenwich-meridian mot våre AE-koordinater.
 let unMapRotationDeg = 0;
