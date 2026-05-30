@@ -1,13 +1,36 @@
 # STATUS-NA.md — Nåværende tilstand
 
-Sist oppdatert: 2026-05-28 02:05 CEST
+Sist oppdatert: 2026-05-30 02:55 CEST
+
+## START HER hvis du er ny agent
+
+Les **`AGENT-START-HER.md`** i repo-roten først. Den inneholder oppdaterte master-regler og kritisk avklaring om team-strukturen (avklart 2026-05-30).
 
 ## Prosjekt
 
 - **Navn:** enok-72-truth-instrument
 - **Formål:** Enok 72 / AE-projeksjon simulator og sannhetsinstrument
-- **Gjeldende versjon:** v16.30 (deployet 26. mai 2026)
-- **Status:** Stabil baseline. Buestreng-uretting er implementert. Forbereder Grok-pipeline mot v17.
+- **Gjeldende versjon:** v16.30 (deployet 26. mai 2026, nå også på Vercel)
+- **Status:** Fase 1 (Astronomiske bok grunntekst) ferdig. Venter på Jone-Aases valg om team-koordinering.
+
+## Neste skritt (2026-05-30)
+
+**Fase 1 er ferdig** — alle Trinn 1.1–1.3 (a, b, c) levert og pushet til repoet.
+
+Jone-Aase må velge mellom tre alternativer for hvordan team-arbeidet utføres:
+
+- **Alt 1:** Sende instrukser til ekte eksterne AI-er (gemini.google.com, chatgpt.com, grok.com) og kopiere svar tilbake
+- **Alt 2:** Perplexity-agenten gjør alle tre rollene selv
+- **Alt 3 (anbefalt):** Hybrid — Perplexity-agent gjør Grok+ChatGPT-arbeidet, ekstern AI gjør kritiker-rollen
+
+Når valg er gjort: Start Trinn 2 i Fase 1 (vers-til-Excel-mapping og QA), så gå til Fase 2 (strukturert vers-uttrekk).
+
+## Vercel-deploy (NYTT 2026-05-30)
+
+- Live: https://enok-72-truth-instrument.vercel.app
+- Passord-port: **`enok364`** (JavaScript sessionStorage)
+- `noindex` på alle søkemotorer + `robots.txt` med `Disallow: /`
+- Re-deploy: `npx --yes vercel deploy --prod --yes --token $VERCEL_TOKEN` fra `/home/user/workspace/simulator-v16.30-deploy/enok-72-truth-instrument/`
 
 ## Masterregel
 
