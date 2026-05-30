@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.70 (2026-05-30): RENE FLATE FARGER. Hav: marin blaa RGB(0,0,196) over hele havet. Land: dyp groenn RGB(118,181,49) over alle kontinenter og oeyer. Antarktis: ren hvit (255,255,255). Kystlinje: moerk (40,40,60) width=4. Bygget fra Natural Earth ne_10m_land via build_k2_8192_v12.py. Backup: un-map-v16.69-backup.webp.
 // v16.69 (2026-05-30): IS-GRENSE PAA KYSTLINJEN. Antarktis hvit-fyll er bygget som VIFTE-POLYGON fra kystkurven ut til R_FULL (ikke en fast sirkel). Hav-blaa (126,176,203 - GE-stil samplet fra hypso r=0.70R) fylles fra lat=-51S helt inn til kystlinjen. Resultat: hav moeter kystlinjen direkte, hvit is moeter kystlinjen direkte. Ingen mellom-gradient. Kystlinje (40,40,60) width=4. Bygget med build_k2_8192_v11.py. Backup: un-map-v16.68-backup.webp.
 // v16.68 (2026-05-30): GE-FARGER + REN HVIT SYDPOL. Hav-blaa palett fra hypso-basis (GE-stil) ut til lat=-66S. Antarktis-kystlinje strukket langs lengdegrad, og fra kystlinjen ut til R_FULL fylles med REN HVIT (selve sydpolen/ismuren). Kystlinjen tegnes som tynn morkebla strek. Bygget med build_k2_8192_v9.py. Backup: un-map-v16.67-backup.webp.
 // v16.67 (2026-05-30): HAVET STREKKER SEG NA SAMMENHENGENDE HELT UT TIL R_FULL.
