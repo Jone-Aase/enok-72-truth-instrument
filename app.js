@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.68 (2026-05-30): GE-FARGER + REN HVIT SYDPOL. Hav-blaa palett fra hypso-basis (GE-stil) ut til lat=-66S. Antarktis-kystlinje strukket langs lengdegrad, og fra kystlinjen ut til R_FULL fylles med REN HVIT (selve sydpolen/ismuren). Kystlinjen tegnes som tynn morkebla strek. Bygget med build_k2_8192_v9.py. Backup: un-map-v16.67-backup.webp.
 // v16.67 (2026-05-30): HAVET STREKKER SEG NA SAMMENHENGENDE HELT UT TIL R_FULL.
 // Hypsometri-basisbildets hvite fade-out-ring fra ca -60S er erstattet med ren hav-bla (125,180,212).
 // Antarktis-polygonene tegnes som KUN morke kystlinjer (width=6, farge 25,50,90), ingen fyll.
