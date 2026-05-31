@@ -1,5 +1,6 @@
 // =================================================================
 // ENOCH 72 — THE TRUTH INSTRUMENT v2.0 (3D)
+// v16.78 (2026-05-31): HYPSOMETRISK HOYDE + KONTURLINJER (togglable). Fire nye lag bygget fra ETOPO1 i AE-projeksjon via build_combo_v1k_layers.py: hypsometric_overlay.webp (0.94 MB, atlas-stil gronn-gul-brun-hvit), contours_100m.webp (0.28 MB), contours_500m.webp (0.29 MB), contours_1000m.webp (0.21 MB). Hvert lag toggles uavhengig via nye checkboxer 'layer-hypso', 'layer-c100', 'layer-c500', 'layer-c1000'. Lagene ligger over un-map.webp med y-offset 0.005 mellom hver for a unnga z-fighting. Alle defaultet AV slik at standard atlas-utseendet beholdes. ETOPO1_AE.npy (134 MB) lagret i map-candidates/v16.78-layers/ for senere bruk.
 // v16.70 (2026-05-30): RENE FLATE FARGER. Hav: marin blaa RGB(0,0,196) over hele havet. Land: dyp groenn RGB(118,181,49) over alle kontinenter og oeyer. Antarktis: ren hvit (255,255,255). Kystlinje: moerk (40,40,60) width=4. Bygget fra Natural Earth ne_10m_land via build_k2_8192_v12.py. Backup: un-map-v16.69-backup.webp.
 // v16.69 (2026-05-30): IS-GRENSE PAA KYSTLINJEN. Antarktis hvit-fyll er bygget som VIFTE-POLYGON fra kystkurven ut til R_FULL (ikke en fast sirkel). Hav-blaa (126,176,203 - GE-stil samplet fra hypso r=0.70R) fylles fra lat=-51S helt inn til kystlinjen. Resultat: hav moeter kystlinjen direkte, hvit is moeter kystlinjen direkte. Ingen mellom-gradient. Kystlinje (40,40,60) width=4. Bygget med build_k2_8192_v11.py. Backup: un-map-v16.68-backup.webp.
 // v16.68 (2026-05-30): GE-FARGER + REN HVIT SYDPOL. Hav-blaa palett fra hypso-basis (GE-stil) ut til lat=-66S. Antarktis-kystlinje strukket langs lengdegrad, og fra kystlinjen ut til R_FULL fylles med REN HVIT (selve sydpolen/ismuren). Kystlinjen tegnes som tynn morkebla strek. Bygget med build_k2_8192_v9.py. Backup: un-map-v16.67-backup.webp.
@@ -737,6 +738,45 @@ let unMapDiskRef = null;  // referanse til mesh slik at sliderene kan endre rota
     console.warn('UN map texture failed to load:', err);
   });
 }
+
+// =================================================================
+// v16.78: TOGGLABLE HOYDE-LAG (hypsometrisk + konturlinjer)
+// =================================================================
+// Fire nye lag generert fra ETOPO1 i AE-projeksjon, lastet over un-map:
+//   - hypsometric_overlay.webp (0.94 MB) - klassisk atlas-hypsometri
+//   - contours_100m.webp  (0.28 MB) - tynne 100 m-kontur
+//   - contours_500m.webp  (0.29 MB) - medium 500 m-kontur
+//   - contours_1000m.webp (0.21 MB) - tykke 1000 m-kontur
+// Hvert lag toggles uavhengig via checkboxer i venstre panel.
+// Y-offset 0.005 mellom hvert lag forhindrer z-fighting.
+const v1678Layers = {};
+function loadV1678Layer(file, key, opacity, yOffset, defaultVisible) {
+  const loader = new THREE.TextureLoader();
+  loader.load(file + '?v=16.78', (tex) => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 8;
+    const geom = new THREE.CircleGeometry(UN_MAP_RADIUS, 128);
+    const mat = new THREE.MeshBasicMaterial({
+      map: tex, transparent: true, opacity,
+      side: THREE.DoubleSide, depthWrite: false,
+    });
+    const mesh = new THREE.Mesh(geom, mat);
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.rotation.z = unMapRotationDeg * Math.PI / 180;
+    mesh.position.y = 0.04 + yOffset;
+    mesh.userData.isV1678Layer = true;
+    mesh.userData.v1678Key = key;
+    mesh.visible = !!defaultVisible;
+    v1678Layers[key] = mesh;
+    subMap.coast.add(mesh);
+  }, undefined, (err) => {
+    console.warn('v16.78 layer failed to load:', file, err);
+  });
+}
+loadV1678Layer('hypsometric_overlay.webp', 'hypso',   0.75, 0.005, false);
+loadV1678Layer('contours_100m.webp',       'c100',    1.00, 0.010, false);
+loadV1678Layer('contours_500m.webp',       'c500',    1.00, 0.015, false);
+loadV1678Layer('contours_1000m.webp',      'c1000',   1.00, 0.020, false);
 
 // =================================================================
 // BYGG LAG 1 — ENOK-KARTET
@@ -2559,6 +2599,29 @@ bindToggle('layer-coast', subMap.coast);
 }
 bindToggle('layer-ports', subMap.ports);
 bindToggle('layer-outerring', subMap.outerring);
+
+// v16.78: Togglehandlere for hypsometrisk + konturlinje-lag.
+// Lagene lastes asynkront — vi binder direkte til v1678Layers-objektet og
+// sjekker existence i handleren (lag som ikke er ferdig lastet ignoreres).
+function bindV1678Toggle(checkboxId, key) {
+  const cb = document.getElementById(checkboxId);
+  if (!cb) return;
+  cb.addEventListener('change', () => {
+    const mesh = v1678Layers[key];
+    if (mesh) mesh.visible = cb.checked;
+  });
+  // Hvis laget allerede er lastet ved init: synk med checkbox-state
+  const sync = () => {
+    const mesh = v1678Layers[key];
+    if (mesh) mesh.visible = cb.checked;
+    else setTimeout(sync, 250);
+  };
+  sync();
+}
+bindV1678Toggle('layer-hypso',  'hypso');
+bindV1678Toggle('layer-c100',   'c100');
+bindV1678Toggle('layer-c500',   'c500');
+bindV1678Toggle('layer-c1000',  'c1000');
 
 // =================================================================
 // SOL-SIKTLINJE PÅ JEVNØDGN
