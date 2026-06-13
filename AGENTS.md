@@ -1,6 +1,11 @@
 # AGENTS.md — Enok 72 Truth Instrument
 # For bruk av lokale AI-agenter i VS Code (Continue, Cline, GitHub Copilot)
-# Sist oppdatert: 2026-06-13 av Perplexity Agent
+# Sist oppdatert: 2026-06-13 av Perplexity Agent + GPT-5.5
+
+---
+
+## VIKTIG: Denne filen overstyrer
+Ved konflikt etter 2026-06-13 overstyrer denne `AGENTS.md` eldre `STATUS-NA.md` og `AGENT-START-HER.md`, med mindre Jone-Aase eksplisitt sier noe annet.
 
 ---
 
@@ -35,7 +40,62 @@ Når det er konflikt mellom din vurdering og Perplexity-agentens instrukser, fø
 
 ---
 
-## 2. PROSJEKTOVERSIKT
+## 2. VIKTIG REPO-SKILLE
+
+| Repo | Rolle |
+|------|-------|
+| `enok-72-truth-instrument` | Hovedsimulator og deploy-repo (Vercel). IKKE aktiv kartmotor-utvikling. |
+| `enok-72-grok` | Aktiv kartmotor og GE-nett arbeidsoriginal. All kartmotor-utvikling skjer her. |
+
+Forveksl ikke disse to. Kodeendringer i kartmotoren gjøres i `enok-72-grok`, ikke her.
+
+---
+
+## 3. KATASTROFE-GJENOPPRETTING
+
+Hvis alt chatminne forsvinner, er dette minimumsprosedyren.
+
+Aktiv arbeidsoriginal for kartmotor/GE-nett er **ikke** `main` i dette repoet. Aktiv arbeidsoriginal ligger i:
+
+- **Repo:** `Jone-Aase/enok-72-grok`
+- **Branch:** `arbeidsoriginal/ge-nett-0e-2026-06-13`
+- **Full HEAD:** `f15591cf07bbdf2194d7d09c8e75c2668dc0d8fd`
+- **Kort commit:** `f15591c`
+- **Commit-melding:** `Include equator in GE latitude grid`
+
+### Commit-kjede
+- `3e87f51` — `Record solar circle GE lock`
+- `f18197e` — `Marker gjeldende arbeidsoriginal`
+- `f15591c` — `Include equator in GE latitude grid`
+
+### Hva f15591c gjorde (smalt unntak — ikke geometriendring)
+Commit `f15591c` gjorde kun en visuell GE-grid-fix:
+- Ekvator vises nå som del av GE latitude grid (ikke lenger hoppet over)
+- cache-buster i `index.html` oppdatert til `ge-grid-lat-equator-gap-fix-1`
+- Ingen geometri, anker, transform, aeProject, kartmotor eller clean-motor ble endret
+
+### Gjenopprettingskommandoer
+```bash
+cd C:\Users\a7788\Desktop
+git clone https://github.com/Jone-Aase/enok-72-grok.git enok-72-grok-controlled-base
+cd enok-72-grok-controlled-base
+git checkout arbeidsoriginal/ge-nett-0e-2026-06-13
+git status
+git rev-parse HEAD
+```
+Forventet HEAD: `f15591cf07bbdf2194d7d09c8e75c2668dc0d8fd`
+
+### Første 5 minutter for ny agent
+1. Les `AGENTS.md`
+2. Bekreft repo og branch
+3. Kjør `git status`
+4. Kjør `git rev-parse HEAD`
+5. Ikke endre filer
+6. Rapporter til Jone-Aase før arbeid starter
+
+---
+
+## 4. PROSJEKTOVERSIKT
 
 ### Hva dette er
 Enok 72 Truth Instrument er et interaktivt forskningsverktøy basert på Enoks bok kapittel 72 og den 364-dagers solkalenderen. Prosjektet bygger en geometrisk modell av solens bevegelse slik den beskrives i den Astronomiske boken (1 Enok), og verifiserer denne mot:
@@ -50,13 +110,13 @@ Enok 72 Truth Instrument er et interaktivt forskningsverktøy basert på Enoks b
 | `enok-72-truth-instrument` | Hoved-simulator, Vercel-deployed |
 | `enok-atlas-flat` | Flatt verdenskart (Equal Earth + Equirectangular) |
 | `enok-72-norge` | Kartverket WMTS + norske byer (SSR) |
-| `enok-72-grok` | Hoved kartmotor-repo (aktiv utvikling, multi-agent) |
+| `enok-72-grok` | Aktiv kartmotor/GE-nett (arbeidsoriginal) |
 | `Tidslinjen-versjon-12` | AM-kronologi (Jubileumsboken, kanoniske tekster) |
 | `enok-orakel-simulator` | Tidlig orakel-simulator (HTML) |
 
 ---
 
-## 3. TEKNISK ARKITEKTUR
+## 5. TEKNISK ARKITEKTUR
 
 ### Teknologistack
 - **Språk:** Vanilla JavaScript (ES6+), HTML5, CSS3
@@ -83,7 +143,7 @@ Filene `un-map-v16.65` til `un-map-v16.76` er versjonerte backups. Ikke slett no
 
 ---
 
-## 4. KODESTIL OG PREFERANSER
+## 6. KODESTIL OG PREFERANSER
 
 - **Kommentarer:** Norsk i kommentarer der det er naturlig, engelsk i tekniske funksjoner
 - **Variabelnavn:** camelCase for JavaScript
@@ -94,7 +154,7 @@ Filene `un-map-v16.65` til `un-map-v16.76` er versjonerte backups. Ikke slett no
 
 ---
 
-## 5. FASEPLAN
+## 7. FASEPLAN
 
 | Fase | Status | Beskrivelse |
 |------|--------|-------------|
@@ -110,16 +170,8 @@ Filene `un-map-v16.65` til `un-map-v16.76` er versjonerte backups. Ikke slett no
 
 ---
 
-## 6. GJELDENDE ARBEIDSORIGINAL — enok-72-grok (per 2026-06-13)
+## 8. GJELDENDE GE-NETT STATUS (LÅST)
 
-Codex har ferdigstilt GE-nett som koordinatfundament. Dette er nåværende arbeidsbase:
-
-- **Repo:** `Jone-Aase/enok-72-grok`
-- **Branch:** `arbeidsoriginal/ge-nett-0e-2026-06-13`
-- **Siste commit:** `f15591c` — "Include equator in GE latitude grid"
-- **Lokal kopi:** `C:\Users\a7788\Desktop\enok-72-grok-controlled-base`
-
-### GE-nett status (LÅST — ikke rør)
 | Komponent | Status |
 |-----------|--------|
 | GE-GRID-0A: Meridianer/lengdegrader | Låst |
@@ -135,10 +187,12 @@ Codex har ferdigstilt GE-nett som koordinatfundament. Dette er nåværende arbei
 2. **SOL-SIRKLER-1A:** inventar og verifikasjon for solsirkel-punkter/objekter
 3. Lage Kartverket-firkantnett basert på spesifikasjon
 
-### Arbeidsgrenser — IKKE endre uten eksplisitt GO fra Jone-Aase
+**Første handling etter ny agentstart skal være plan/inventar, ikke motorendring. Ingen motorendring før plan er godkjent av Jone-Aase.**
+
+### Arbeidsgrenser — IKKE endre uten eksplisitt GO
 - GE-nett, solsirkler, geometri, anker, transform, aeProject, kartmotor, clean-motor
 
-### Viktige hukommelseskilder i enok-72-grok
+### Hukommelseskilder i enok-72-grok
 - `dokumenter/MEMORY/AGENT-ONBOARDING.md`
 - `dokumenter/MEMORY/GE-GRID-MEMORY.md`
 - `dokumenter/MEMORY/SMOKE-TEST-STATUS.md`
@@ -148,22 +202,43 @@ Codex har ferdigstilt GE-nett som koordinatfundament. Dette er nåværende arbei
 
 ---
 
-## 7. INFRASTRUKTUR OG LENKER
+## 9. AI-KOST OG AGENTBRUK
 
-- **GitHub repo:** https://github.com/Jone-Aase/enok-72-truth-instrument
+Ikke bruk Codex/GPT-5.5 til å lese hele repoet fritt.
+
+Arbeidsmåte:
+- Små oppdrag
+- Maks 1–3 filer per oppdrag
+- Ingen brede refaktoreringer
+- Ingen commit eller push uten eksplisitt GO fra Jone-Aase
+- Stopp etter `git diff` og rapporter
+
+---
+
+## 10. SANNHETSLAGER (prioritert rekkefølge)
+
+1. GitHub commits og markdown-filer i repo
+2. `AGENTS.md` (denne filen)
+3. `ARBEIDSORIGINAL.md` i aktiv branch
+4. `dokumenter/MEMORY/*`
+5. Chatdialoger — kun støtte, kan være ufullstendige, er ikke sannhetslager
+
+---
+
+## 11. INFRASTRUKTUR OG LENKER
+
+- **GitHub (dette repoet):** https://github.com/Jone-Aase/enok-72-truth-instrument
 - **Vercel (live, passord `enok364`):** https://enok-72-truth-instrument.vercel.app
-- **Backup-URL:** https://jone-aase.github.io/enok-72-truth-instrument/
 - **enok-72-grok arbeidsoriginal:** https://github.com/Jone-Aase/enok-72-grok/tree/arbeidsoriginal/ge-nett-0e-2026-06-13
 
 ### Git-arbeidsflyt
 - `main` — alltid deploy-klar, Vercel deployer automatisk herfra
 - Feature-branches navngis: `feature/beskrivelse` eller `fix/beskrivelse`
 - Merge via Pull Request, aldri direkte push til main under aktiv utvikling
-- Commit-meldinger på norsk eller engelsk, alltid beskrivende
 
 ---
 
-## 8. AI-AGENT ROLLER (multi-agent koordinering)
+## 12. AI-AGENT ROLLER
 
 | Agent | Plattform | Rolle |
 |-------|-----------|-------|
@@ -174,37 +249,36 @@ Codex har ferdigstilt GE-nett som koordinatfundament. Dette er nåværende arbei
 | Grok | grok.com (eksternt) | Excel-analyse, kritisk gjennomgang |
 | Gemini | gemini.google.com (eksternt) | Kritiker-rolle |
 
-**Viktig:** Continue og Cline i VS Code er lokale agenter. De har ikke direkte GitHub-tilgang via MCP — bruk `git`-kommandoer i terminalen for commits og push.
-
 **Backup-strategi:** Jone-Aase kjører Perplexity og GPT-5.5 parallelt. AGENTS.md er felles sannhetskilde — ny agent starter alltid med å lese denne filen.
 
 ---
 
-## 9. LESEPLAN FOR NY AGENT
+## 13. LESEPLAN FOR NY AGENT
 
 Når du starter, les disse filene i rekkefølge:
 1. Denne filen (`AGENTS.md`) — FERDIG
-2. `AGENT-START-HER.md` — fullstendig prosjekthistorikk
-3. `STATUS-NA.md` — siste tekniske status
-4. `dokumenter/simulator-master-referanse.md` — hvis du skal gjøre simulator-arbeid
-5. For kartmotor-arbeid: les `ARBEIDSORIGINAL.md` i `enok-72-grok` branchen `arbeidsoriginal/ge-nett-0e-2026-06-13`
+2. `AGENT-START-HER.md` — historikk (men AGENTS.md overstyrer ved konflikt etter 2026-06-13)
+3. `STATUS-NA.md` — teknisk status (men AGENTS.md overstyrer ved konflikt etter 2026-06-13)
+4. For kartmotor-arbeid: `ARBEIDSORIGINAL.md` i `enok-72-grok` branch `arbeidsoriginal/ge-nett-0e-2026-06-13`
+5. `dokumenter/MEMORY/*` — detaljert hukommelse
 
-Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 8 master-reglene kort. Spør hva han vil gjøre nå.
+Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 8 master-reglene. Spør hva han vil gjøre nå.
 
 ---
 
-## 10. HVA DU IKKE SKAL GJØRE
+## 14. HVA DU IKKE SKAL GJØRE
 
-- IKKE analyser Excel-arkene (B, S, S2, Jub, 12Pat, EK_Data, E_Kart) i detalj — det er Fase 4
+- IKKE analyser Excel-arkene i detalj — det er Fase 4
 - IKKE sammenlign med kulemodell eller flat-modell — det er Fase 7
-- IKKE bytt geometri, port-system, kalender, projeksjon uten Jone-Aases godkjenning
-- IKKE rør GE-nett, solsirkler, anker eller kartmotor uten eksplisitt GO
+- IKKE rør GE-nett, solsirkler, anker, geometri eller kartmotor uten eksplisitt GO
 - IKKE commit til main direkte under aktiv utvikling
 - IKKE bruk emojis
 - IKKE bruk engelsk i kommunikasjon med Jone-Aase
 - IKKE installer npm-pakker eller rammeverk uten godkjenning
 - IKKE slett backup-filer (un-map-v16.xx)
+- IKKE start motorendring før plan er godkjent
+- IKKE les hele repoet fritt — følg små-oppdrag-regelen
 
 ---
 
-*Denne filen vedlikeholdes av Perplexity-agenten. Sist oppdatert: 2026-06-13.*
+*Denne filen vedlikeholdes av Perplexity-agenten i samarbeid med GPT-5.5. Sist oppdatert: 2026-06-13.*
