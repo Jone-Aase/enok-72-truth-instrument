@@ -97,7 +97,7 @@ STEG 1 — PLAN
   Lager eksakt kode-instruks til Grok Build
   Godkjennes av Jone-Aase før Grok starter
 
-STEG 2 — UTFRØR
+STEG 2 — UTFØR
   Grok Build (penn)
   Utfører eksakt instruks — maks 1-3 filer
   Stopper etter: git status --short / git diff --stat / git diff
@@ -228,7 +228,7 @@ Primær lokal kodeagent er Grok Build.
 
 Din rolle er backup-reservepenn.
 Ligg i hvile. Ikke endre filer.
-Not endre filer uten eksplisitt SKRIVE-MODUS og ordre:
+Ikke endre filer uten eksplisitt SKRIVE-MODUS og ordre:
 "Claude overtar Grok-rollen."
 
 Bekreft at du har lest AGENTS.md og er i hvilemodus.
