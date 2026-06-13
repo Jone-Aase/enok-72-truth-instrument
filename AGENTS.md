@@ -110,11 +110,50 @@ Filene `un-map-v16.65` til `un-map-v16.76` er versjonerte backups. Ikke slett no
 
 ---
 
-## 6. INFRASTRUKTUR OG LENKER
+## 6. GJELDENDE ARBEIDSORIGINAL — enok-72-grok (per 2026-06-13)
+
+Codex har ferdigstilt GE-nett som koordinatfundament. Dette er nåværende arbeidsbase:
+
+- **Repo:** `Jone-Aase/enok-72-grok`
+- **Branch:** `arbeidsoriginal/ge-nett-0e-2026-06-13`
+- **Siste commit:** `f15591c` — "Include equator in GE latitude grid"
+- **Lokal kopi:** `C:\Users\a7788\Desktop\enok-72-grok-controlled-base`
+
+### GE-nett status (LÅST — ikke rør)
+| Komponent | Status |
+|-----------|--------|
+| GE-GRID-0A: Meridianer/lengdegrader | Låst |
+| GE-GRID-0B: Breddegrad-ringer + polarsirkel | Låst |
+| GE-GRID-0C: Lik avstand breddegrad | Låst, smoke-testet |
+| GE-GRID-0D: 1 lengdegrad = 1 vinkelgrad | Låst, smoke-testet |
+| GE-GRID-0E: Intern posisjonskonvertering | Låst, pass200mm = true |
+| Ekvator i breddegradsgrid | Fikset og verifisert |
+| Solsirkler låst mot GE-nett | Besluttet |
+
+### Neste trygge fase (i prioritert rekkefølge)
+1. Ferdigstille GE-nett lokasjon/navigering
+2. **SOL-SIRKLER-1A:** inventar og verifikasjon for solsirkel-punkter/objekter
+3. Lage Kartverket-firkantnett basert på spesifikasjon
+
+### Arbeidsgrenser — IKKE endre uten eksplisitt GO fra Jone-Aase
+- GE-nett, solsirkler, geometri, anker, transform, aeProject, kartmotor, clean-motor
+
+### Viktige hukommelseskilder i enok-72-grok
+- `dokumenter/MEMORY/AGENT-ONBOARDING.md`
+- `dokumenter/MEMORY/GE-GRID-MEMORY.md`
+- `dokumenter/MEMORY/SMOKE-TEST-STATUS.md`
+- `dokumenter/MEMORY/NESTE-STEG.md`
+- `dokumenter/MEMORY/AKTIVE-GRENSER.md`
+- `dokumenter/SOL-SIRKLER-GE-LAAS.md`
+
+---
+
+## 7. INFRASTRUKTUR OG LENKER
 
 - **GitHub repo:** https://github.com/Jone-Aase/enok-72-truth-instrument
 - **Vercel (live, passord `enok364`):** https://enok-72-truth-instrument.vercel.app
 - **Backup-URL:** https://jone-aase.github.io/enok-72-truth-instrument/
+- **enok-72-grok arbeidsoriginal:** https://github.com/Jone-Aase/enok-72-grok/tree/arbeidsoriginal/ge-nett-0e-2026-06-13
 
 ### Git-arbeidsflyt
 - `main` — alltid deploy-klar, Vercel deployer automatisk herfra
@@ -124,39 +163,42 @@ Filene `un-map-v16.65` til `un-map-v16.76` er versjonerte backups. Ikke slett no
 
 ---
 
-## 7. AI-AGENT ROLLER (multi-agent koordinering)
+## 8. AI-AGENT ROLLER (multi-agent koordinering)
 
 | Agent | Plattform | Rolle |
 |-------|-----------|-------|
 | Perplexity-agent | perplexity.ai | Arkitekt, koordinator, GitHub-tilgang |
+| GPT-5.5 | chatgpt.com | Backup-arkitekt, parallell koordinering |
 | Continue/Cline | VS Code lokalt | Kodeeksekutor, lokal filbehandling |
 | Codex CLI | VS Code terminal | Lokal filoperasjoner og git-arbeid |
 | Grok | grok.com (eksternt) | Excel-analyse, kritisk gjennomgang |
-| ChatGPT | chatgpt.com (eksternt) | QA og kvalitetssjekk |
 | Gemini | gemini.google.com (eksternt) | Kritiker-rolle |
 
 **Viktig:** Continue og Cline i VS Code er lokale agenter. De har ikke direkte GitHub-tilgang via MCP — bruk `git`-kommandoer i terminalen for commits og push.
 
+**Backup-strategi:** Jone-Aase kjører Perplexity og GPT-5.5 parallelt. AGENTS.md er felles sannhetskilde — ny agent starter alltid med å lese denne filen.
+
 ---
 
-## 8. LESEPLAN FOR NY AGENT
+## 9. LESEPLAN FOR NY AGENT
 
 Når du starter, les disse filene i rekkefølge:
 1. Denne filen (`AGENTS.md`) — FERDIG
 2. `AGENT-START-HER.md` — fullstendig prosjekthistorikk
 3. `STATUS-NA.md` — siste tekniske status
 4. `dokumenter/simulator-master-referanse.md` — hvis du skal gjøre simulator-arbeid
-5. `fase1-kildemateriale/FASE1-PLAN.md` — Fase 1 plan
+5. For kartmotor-arbeid: les `ARBEIDSORIGINAL.md` i `enok-72-grok` branchen `arbeidsoriginal/ge-nett-0e-2026-06-13`
 
 Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 8 master-reglene kort. Spør hva han vil gjøre nå.
 
 ---
 
-## 9. HVA DU IKKE SKAL GJØRE
+## 10. HVA DU IKKE SKAL GJØRE
 
 - IKKE analyser Excel-arkene (B, S, S2, Jub, 12Pat, EK_Data, E_Kart) i detalj — det er Fase 4
 - IKKE sammenlign med kulemodell eller flat-modell — det er Fase 7
 - IKKE bytt geometri, port-system, kalender, projeksjon uten Jone-Aases godkjenning
+- IKKE rør GE-nett, solsirkler, anker eller kartmotor uten eksplisitt GO
 - IKKE commit til main direkte under aktiv utvikling
 - IKKE bruk emojis
 - IKKE bruk engelsk i kommunikasjon med Jone-Aase
