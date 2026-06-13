@@ -1,6 +1,6 @@
 # AGENTS.md — Enok 72 Truth Instrument
 # For bruk av lokale AI-agenter i VS Code (Continue, Cline, GitHub Copilot)
-# Sist oppdatert: 2026-06-12 av Perplexity Agent
+# Sist oppdatert: 2026-06-13 av Perplexity Agent
 
 ---
 
@@ -28,11 +28,10 @@ Når det er konflikt mellom din vurdering og Perplexity-agentens instrukser, fø
    4. `simulator-master-referanse.md`
    5. `STATUS-NA.md`
    6. Agent-minne (svakest)
-5. **Solen slutter ikke å lyse.** (Aksiom for modellen — ikke diskuter dette.)
-6. **Lokasjoner skal IKKE flyttes.** Geografiske data er kanoniske og låst.
-7. **Ingen endring i geometri, portsystem, kalender eller projeksjon uten Jone-Aases eksplisitte godkjenning.**
-8. **Fase 1: Modellen bygges KUN fra den Astronomiske boken.** Ingen sammenligning med kule/flat-modell før Fase 7.
-9. **IKKE commit direkte til main midt i en pågående fase.** Bruk feature-branch og PR.
+5. **Lokasjoner skal IKKE flyttes.** Geografiske data er kanoniske og låst.
+6. **Ingen endring i geometri, portsystem, kalender eller projeksjon uten Jone-Aases eksplisitte godkjenning.**
+7. **Fase 1: Modellen bygges KUN fra den Astronomiske boken.** Ingen sammenligning med kule/flat-modell før Fase 7.
+8. **IKKE commit direkte til main midt i en pågående fase.** Bruk feature-branch og PR.
 
 ---
 
@@ -51,7 +50,7 @@ Enok 72 Truth Instrument er et interaktivt forskningsverktøy basert på Enoks b
 | `enok-72-truth-instrument` | Hoved-simulator, Vercel-deployed |
 | `enok-atlas-flat` | Flatt verdenskart (Equal Earth + Equirectangular) |
 | `enok-72-norge` | Kartverket WMTS + norske byer (SSR) |
-| `enok-72-grok` | Grok-arbeidskopi (eksperimentell branch) |
+| `enok-72-grok` | Hoved kartmotor-repo (aktiv utvikling, multi-agent) |
 | `Tidslinjen-versjon-12` | AM-kronologi (Jubileumsboken, kanoniske tekster) |
 | `enok-orakel-simulator` | Tidlig orakel-simulator (HTML) |
 
@@ -131,6 +130,7 @@ Filene `un-map-v16.65` til `un-map-v16.76` er versjonerte backups. Ikke slett no
 |-------|-----------|-------|
 | Perplexity-agent | perplexity.ai | Arkitekt, koordinator, GitHub-tilgang |
 | Continue/Cline | VS Code lokalt | Kodeeksekutor, lokal filbehandling |
+| Codex CLI | VS Code terminal | Lokal filoperasjoner og git-arbeid |
 | Grok | grok.com (eksternt) | Excel-analyse, kritisk gjennomgang |
 | ChatGPT | chatgpt.com (eksternt) | QA og kvalitetssjekk |
 | Gemini | gemini.google.com (eksternt) | Kritiker-rolle |
@@ -148,7 +148,7 @@ Når du starter, les disse filene i rekkefølge:
 4. `dokumenter/simulator-master-referanse.md` — hvis du skal gjøre simulator-arbeid
 5. `fase1-kildemateriale/FASE1-PLAN.md` — Fase 1 plan
 
-Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 9 master-reglene kort. Spør hva han vil gjøre nå.
+Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 8 master-reglene kort. Spør hva han vil gjøre nå.
 
 ---
 
@@ -165,4 +165,4 @@ Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 9 master-reglen
 
 ---
 
-*Denne filen vedlikeholdes av Perplexity-agenten. Sist oppdatert: 2026-06-12.*
+*Denne filen vedlikeholdes av Perplexity-agenten. Sist oppdatert: 2026-06-13.*
