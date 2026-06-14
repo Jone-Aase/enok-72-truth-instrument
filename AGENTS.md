@@ -1,6 +1,6 @@
 # AGENTS.md — Enok 72 Truth Instrument
 # For bruk av lokale AI-agenter i VS Code (Continue, Cline, GitHub Copilot)
-# Sist oppdatert: 2026-06-13 av Perplexity Agent + GPT-5.5
+# Sist oppdatert: 2026-06-14 av Perplexity + ChatGPT
 
 ---
 
@@ -434,4 +434,45 @@ Si til Jone-Aase: "Jeg har lest AGENTS.md og er klar." Gjengi de 8 master-reglen
 
 ---
 
-*Denne filen vedlikeholdes av Perplexity-agenten i samarbeid med GPT-5.5. Sist oppdatert: 2026-06-13.*
+## 19. SKY-WORKFLOW — BEKREFTET 2026-06-14
+
+Bekreftet via Vercel preview smoke-test (enok-72-grok PR #4, 2026-06-14).
+
+### Ny hovedworkflow
+GitHub feature-branch → Vercel preview → diff-review → Jone GO → merge.
+
+### Steg
+
+1. Plan: Jone + ChatGPT + Perplexity
+2. Koding: Perplexity/Grok på GitHub feature-branch. Kun én agent skriver.
+3. Preview: Vercel preview-URL genereres automatisk fra feature-branch.
+4. Review: ChatGPT + Perplexity. Gemini/Codex som ekstra kontroll ved behov.
+5. GO: Jone-Aase
+6. Merge: Etter eksplisitt GO
+7. Lokal VS Code / Live Server: Kun reserve, nødkontroll og debug.
+
+### Codex
+- Codex sky = foretrukket release-gate når tilgjengelig.
+- Codex CLI lokalt = reserve/nødkontroll.
+
+### Lovable
+- Lovable = backup-demo / UI-prototype.
+- Lovable får aldri definere fasit.
+- Lovable er ikke release-gate.
+- Lovable er ikke standard kodeagent på arbeidsoriginal før separat test
+  viser trygg GitHub-branch-flyt.
+
+### Skriverregel
+- Kun én agent skriver.
+- Flere kan reviewe.
+- Jone-Aase gir endelig GO.
+
+### PR #4
+- Er kun Vercel smoke-test på enok-72-grok.
+- Skal ikke merges inn i arbeidsoriginal.
+
+*Oppdatert: 2026-06-14 av Perplexity + ChatGPT.*
+
+---
+
+*Denne filen vedlikeholdes av Perplexity-agenten i samarbeid med GPT-5.5. Sist oppdatert: 2026-06-14.*
